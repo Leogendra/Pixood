@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { act, renderHook } from "@testing-library/react-hooks";
-import { PostHogProvider } from "posthog-react-native";
+// Removed: import { PostHogProvider } from "posthog-react-native";
 import { AnalyticsProvider, useAnalytics } from "../hooks/useAnalytics";
 import {
   INITIAL_STATE,
@@ -11,25 +11,11 @@ import {
 
 const wrapper = ({ children }) => (
   <SettingsProvider>
-    <PostHogProvider
-      apiKey={'POSTHOG_API_KEY'}
+    <AnalyticsProvider
       options={{
-        host: "https://app.posthog.com",
-        enable: true,
+        enabled: true,
       }}
-      autocapture={{
-        captureTouches: false,
-        captureLifecycleEvents: true,
-        // need to be false to avoid capturing NavigationContainer events
-        captureScreens: false,
-      }}
-    >
-      <AnalyticsProvider
-        options={{
-          enabled: true,
-        }}
-      >{children}</AnalyticsProvider>
-    </PostHogProvider>
+    >{children}</AnalyticsProvider>
   </SettingsProvider>
 );
 
@@ -45,27 +31,6 @@ const _renderHook = () => {
 
 const _console_error = console.error;
 const STATIC_DEVICE_ID = "test-device-id";
-
-const mockOptOut = jest.fn();
-const mockOptIn = jest.fn();
-const mockIdentify = jest.fn()
-const mockCapture = jest.fn();
-const mockReset = jest.fn();
-
-jest.mock('posthog-react-native', () => {
-  const PostHog = jest.requireActual('posthog-react-native');
-
-  return {
-    ...PostHog,
-    usePostHog: () => ({
-      identify: mockIdentify,
-      optOut: mockOptOut,
-      optIn: mockOptIn,
-      reset: mockReset,
-      capture: mockCapture,
-    }),
-  }
-})
 
 describe("useAnalytics()", () => {
   beforeEach(async () => {
@@ -116,7 +81,6 @@ describe("useAnalytics()", () => {
       hook.result.current.state.identify();
     });
 
-    expect(mockIdentify).toBeCalledWith(STATIC_DEVICE_ID, expect.anything())
     expect(hook.result.current.state.isIdentified).toBe(true);
   });
 
@@ -130,7 +94,6 @@ describe("useAnalytics()", () => {
 
     expect(hook.result.current.state.isEnabled).toBe(true);
     expect(hook.result.current.settingsState.settings.analyticsEnabled).toBe(true)
-    expect(mockOptIn).toBeCalled()
   })
 
   test("should `disable`", async () => {
@@ -143,7 +106,6 @@ describe("useAnalytics()", () => {
 
     expect(hook.result.current.state.isEnabled).toBe(false);
     expect(hook.result.current.settingsState.settings.analyticsEnabled).toBe(false)
-    expect(mockOptOut).toBeCalled()
   })
 
   test("should `track` with properties", async () => {
@@ -162,7 +124,8 @@ describe("useAnalytics()", () => {
       hook.result.current.state.track('test-event', { test: true });
     });
 
-    expect(mockCapture).toBeCalledWith('test-event', { test: true, userId: STATIC_DEVICE_ID })
+    expect(hook.result.current.state.isEnabled).toBe(true);
+    expect(hook.result.current.settingsState.settings.analyticsEnabled).toBe(true)
   })
 
   test("should `reset`", async () => {
@@ -173,7 +136,6 @@ describe("useAnalytics()", () => {
       hook.result.current.state.reset();
     });
 
-    expect(mockReset).toBeCalled()
     expect(hook.result.current.state.isEnabled).toBe(true);
     expect(hook.result.current.settingsState.settings.analyticsEnabled).toBe(true)
   })

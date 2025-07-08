@@ -12,7 +12,6 @@ import {
   useMemo,
   useReducer,
 } from "react";
-import * as Sentry from "sentry-expo";
 import { v4 as uuidv4 } from "uuid";
 import z from "zod";
 import { AtLeast } from "../../types";
@@ -185,7 +184,7 @@ function LogsProvider({ children }: { children: React.ReactNode }) {
           });
         }
       } catch (error) {
-        Sentry.Native.captureException(error);
+        // Sentry.Native.captureException(error); // Removed Sentry usage
       }
     })();
   }, []);

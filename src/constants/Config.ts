@@ -1,5 +1,3 @@
-import * as Updates from 'expo-updates';
-
 export const MIN_TAG_LENGTH = 3;
 export const MAX_TAG_LENGTH = 30;
 
@@ -35,4 +33,4 @@ export const TRACKING_ENABLED = !__DEV__;
 export const CHANGELOG_URL = 'https://pixy.hellonext.co/embed/c?no_header=true'
 export const FEEDBACK_FEATURES_URL = 'https://pixy.hellonext.co/embed/b/feedback?no_header=true'
 
-export const IS_PROD = Updates.channel === 'production';
+export const IS_PROD = true;

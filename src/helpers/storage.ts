@@ -1,5 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Sentry from 'sentry-expo';
 
 export const store = async <State>(key: string, state: State) => {
   try {
@@ -28,12 +27,9 @@ export const load = async <ReturnValue>(key: string, feedback: any): Promise<Ret
         }),
         email: "team@pixy.day",
         source: "error",
-        onCancel: () => {
-        },
-        onOk: () => {
-        }
+        onCancel: () => {},
+        onOk: () => {}
       })
-    Sentry.Native.captureException(error);
   }
 
   return null

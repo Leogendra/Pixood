@@ -16,7 +16,6 @@ import useFeedbackModal from '../../hooks/useFeedbackModal';
 import pkg from '../../../package.json';
 import { RootStackScreenProps } from '../../../types';
 import { UserDataImportList } from './UserData';
-import * as Updates from 'expo-updates';
 import { Github, Tag } from 'lucide-react-native';
 
 export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>) => {
@@ -230,7 +229,6 @@ export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>)
           }}
         >
           <Text style={{ fontSize: 14, marginTop: 5, color: colors.textSecondary }}>Pixy v{pkg.version}</Text>
-          {Updates.channel && <Text style={{ fontSize: 14, marginTop: 5, color: colors.textSecondary }}>{Updates.channel}</Text>}
         </View>
 
         {__DEV__ && <UserDataImportList />}

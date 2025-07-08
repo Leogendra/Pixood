@@ -6,7 +6,6 @@ import useColors from '@/hooks/useColors';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
-import * as Updates from 'expo-updates';
 import { Platform, Pressable, View } from 'react-native';
 import { SettingsScreen, StatisticsScreen } from '../screens';
 import CalendarScreen from '../screens/Calendar';

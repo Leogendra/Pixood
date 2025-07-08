@@ -16,10 +16,6 @@
         "backgroundColor": "#171717"
       }
     },
-    "updates": {
-      "fallbackToCacheTimeout": 0,
-      "url": "https://u.expo.dev/8917be91-f1cc-4276-a252-674a28490ac3"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -42,10 +38,10 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.devmood.pixymoodtracker"
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.devmood.pixymoodtracker",
+      "minSdkVersion": 16
     },
     "plugins": [
-      "sentry-expo",
       "expo-notifications",
       "expo-localization",
       [

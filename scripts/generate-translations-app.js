@@ -1,6 +1,4 @@
-const { Translate } = require("@google-cloud/translate").v2;
 const fs = require("fs");
-const credentials = require("../credentials/google-cloud-service-account.json");
 
 const path = __dirname + "/../assets/locales/";
 const filesArray = fs
@@ -38,17 +36,7 @@ enKeys.forEach((key) => {
 });
 
 const translate = async (text, target) => {
-  const translate = new Translate({
-    credentials,
-    projectId: "pixy-mood-tracker",
-  });
-
-  const [translation] = await translate.translate(text, target);
-
-  console.log(`Text: ${text}`);
-  console.log(`Translation: ${translation}`);
-
-  return translation;
+  throw new Error('Translation is disabled: @google-cloud/translate removed.');
 };
 
 (async () => {
