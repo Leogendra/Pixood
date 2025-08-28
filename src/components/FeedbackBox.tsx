@@ -1,4 +1,4 @@
-import { t } from 'i18n-js';
+// Removed t from i18n-js import
 import { Text, View, ViewStyle } from 'react-native';
 import LinkButton from './LinkButton';
 import useColors from '@/hooks/useColors';

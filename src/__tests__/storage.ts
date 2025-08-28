@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// Removed AsyncStorage import
 import { load, store } from '../helpers/storage';
 
 const TEST_KEY = 'test-key';

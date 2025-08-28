@@ -1,12 +1,10 @@
 import * as Localization from 'expo-localization';
-import i18n from 'i18n-js';
+// Removed i18n-js import
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 
-import en from '../../assets/locales/en.json';
-
-i18n.translations = {
+const translations: Record<string, Record<string, string>> = {
   ar: require('../../assets/locales/ar.json'),
   zh: require('../../assets/locales/zh.json'),
   hr: require('../../assets/locales/hr.json'),
@@ -103,11 +101,16 @@ const dayjs_locales = {
   vi: require('dayjs/locale/vi'),
 }
 
-i18n.locale = Localization.locale;
-i18n.fallbacks = true;
 
-export const locale = i18n.locale;
-export const language = i18n.locale.split('-')[0];
+const getLocale = () => {
+  let locale = Localization.locale || 'en';
+  if (locale.includes('-')) locale = locale.split('-')[0];
+  if (!translations[locale]) locale = 'en';
+  return locale;
+};
+
+export const locale = getLocale();
+export const language = locale;
 
 const _getFirstDayOfWeek = (region: string): number => {
   for (const dayStr in firstDayOfWeek) {
@@ -137,6 +140,14 @@ export const initializeDayjs = () => {
   dayjs.extend(localizedFormat)
 }
 
-export const t = (key: keyof typeof en | string, options?: any) => {
-  return i18n.t(key, options);
-};
+export function t(key: string, options?: Record<string, any>): string {
+  const locale = getLocale();
+  const dict = translations[locale] || {};
+  let value = dict[key] || key;
+  if (options) {
+    Object.keys(options).forEach(k => {
+      value = value.replace(`{{${k}}}`, options[k]);
+    });
+  }
+  return value;
+}

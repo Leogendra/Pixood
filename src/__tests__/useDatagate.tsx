@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// Removed AsyncStorage import
 import { act, renderHook } from "@testing-library/react-hooks";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";

@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
+// Removed AsyncStorage import
 import { act, renderHook } from '@testing-library/react-hooks'
 import _ from 'lodash'
 import { INITIAL_STATE, SettingsProvider, STORAGE_KEY, useSettings } from '../hooks/useSettings'

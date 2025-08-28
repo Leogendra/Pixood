@@ -1,8 +1,8 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// Removed AsyncStorage import
 
 export const store = async <State>(key: string, state: State) => {
   try {
-    await AsyncStorage.setItem(key, JSON.stringify(state));
+    localStorage.setItem(key, JSON.stringify(state));
   } catch (e) {
     console.error(e);
   }
@@ -10,15 +10,15 @@ export const store = async <State>(key: string, state: State) => {
 
 export const load = async <ReturnValue>(key: string, feedback: any): Promise<ReturnValue | null> => {
   try {
-    const data = await AsyncStorage.getItem(key);
+    const data = localStorage.getItem(key);
     if (!data) {
       return null;
     }
     return JSON.parse(data);
   } catch (error) {
     console.error(error);
-    feedback
-      .send({
+    if (feedback && typeof feedback.send === 'function') {
+      feedback.send({
         type: "issue",
         message: JSON.stringify({
           title: "Error loading logs",
@@ -29,8 +29,8 @@ export const load = async <ReturnValue>(key: string, feedback: any): Promise<Ret
         source: "error",
         onCancel: () => {},
         onOk: () => {}
-      })
+      });
+    }
+    return null;
   }
-
-  return null
 };

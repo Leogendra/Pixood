@@ -3,7 +3,7 @@ import useColors from '@/hooks/useColors';
 import { LogItem } from '@/hooks/useLogs';
 import { Emotion } from '@/types';
 import { useNavigation } from '@react-navigation/native';
-import { t } from 'i18n-js';
+// Removed t from i18n-js import
 import _ from 'lodash';
 import { Text, View } from 'react-native';
 import { SectionHeader } from './SectionHeader';
