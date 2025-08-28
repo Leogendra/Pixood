@@ -5,20 +5,19 @@ const TEST_KEY = 'test-key';
 
 describe('Storage', () => {
   it('should `load`', async () => {
-    AsyncStorage.getItem = jest.fn().mockReturnValueOnce(Promise.resolve('{"test": "test"}'));
-    const result = await load(TEST_KEY);
+  localStorage.setItem(TEST_KEY, '{"test": "test"}');
+  const result = await load(TEST_KEY, { send: () => {} });
     expect(result).toEqual({ test: 'test' });
   });
 
   it('should `load` with null', async () => {
-    const result = await load(TEST_KEY);
+  const result = await load(TEST_KEY, { send: () => {} });
     expect(result).toEqual(null);
   })
 
   it('should `store`', async () => {
-    AsyncStorage.setItem = jest.fn(() => Promise.resolve());
-    await store(TEST_KEY, { foo: '123' });
-    expect(AsyncStorage.setItem).toHaveBeenCalledWith(TEST_KEY, '{"foo":"123"}');
+  await store(TEST_KEY, { foo: '123' });
+  expect(localStorage.getItem(TEST_KEY)).toEqual('{"foo":"123"}');
   })
 
 })

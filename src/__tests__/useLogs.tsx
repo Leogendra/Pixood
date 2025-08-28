@@ -49,8 +49,8 @@ describe('useLogs()', () => {
 
   afterEach(async () => {
     console.error = _console_error
-    const keys = await AsyncStorage.getAllKeys()
-    await AsyncStorage.multiRemove(keys)
+  // Clear all localStorage for test cleanup
+  localStorage.clear();
   });
 
   test('should have `loaded` prop', async () => {
@@ -64,7 +64,7 @@ describe('useLogs()', () => {
   })
 
   test('should load `state` from async storage', async () => {
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ items: testItems }))
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ items: testItems }))
 
     const hook = _renderHook()
     await hook.waitForNextUpdate()
@@ -79,7 +79,7 @@ describe('useLogs()', () => {
   })
 
   test('should initiate `state` with empty `items` when async storage is falsely', async () => {
-    AsyncStorage.setItem(STORAGE_KEY, '🐇')
+  localStorage.setItem(STORAGE_KEY, '🐇')
     const hook = _renderHook()
     await hook.waitForNextUpdate()
     expect(console.error).toHaveBeenCalled();
@@ -128,7 +128,7 @@ describe('useLogs()', () => {
   })
 
   test('should updateLogs', async () => {
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ items: [] }))
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ items: [] }))
 
     const hook = _renderHook()
     await hook.waitForNextUpdate()
@@ -169,7 +169,7 @@ describe('useLogs()', () => {
   })
 
   test('should reset', async () => {
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ items: [] }))
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ items: [] }))
 
     const hook = _renderHook()
     await hook.waitForNextUpdate()

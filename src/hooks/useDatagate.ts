@@ -39,11 +39,11 @@ export const useDatagate = (): {
   const analytics = useAnalytics();
 
   const dangerouslyImportDirectlyToAsyncStorage = async (data: ImportData) => {
-    await AsyncStorage.removeItem(STORAGE_KEY_TAGS);
-    await AsyncStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify({
+  localStorage.removeItem(STORAGE_KEY_TAGS);
+  localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify({
       items: data.items,
     }));
-    await AsyncStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify({
+  localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify({
       ...data.settings,
       actionsDone: [{
         date: new Date().toISOString(),

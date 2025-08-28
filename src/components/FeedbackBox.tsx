@@ -1,3 +1,4 @@
+import { t } from '../helpers/translation';
 // Removed t from i18n-js import
 import { Text, View, ViewStyle } from 'react-native';
 import LinkButton from './LinkButton';

@@ -1,3 +1,4 @@
+import { t } from '../../helpers/translation';
 import useColors from '@/hooks/useColors';
 import { LogItem } from '@/hooks/useLogs';
 import { useNavigation } from '@react-navigation/native';

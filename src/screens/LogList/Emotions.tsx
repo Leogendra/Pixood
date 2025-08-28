@@ -1,3 +1,4 @@
+import { t } from '../../helpers/translation';
 import { EMOTIONS } from '@/components/Logger/config';
 import useColors from '@/hooks/useColors';
 import { LogItem } from '@/hooks/useLogs';

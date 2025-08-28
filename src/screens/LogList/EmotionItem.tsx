@@ -1,3 +1,4 @@
+import { t } from '../../helpers/translation';
 import { EmotionIndicator } from '@/components/Logger/slides/SlideEmotions/EmotionsIndicator';
 import useColors from '@/hooks/useColors';
 // Removed t from i18n-js import

@@ -1,3 +1,4 @@
+import { t } from '../../helpers/translation';
 import { SlideSleepButton } from '@/components/Logger/slides/SlideSleepButton';
 import { LogItem } from '@/hooks/useLogs';
 import { useNavigation } from '@react-navigation/native';
