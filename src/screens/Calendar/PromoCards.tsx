@@ -5,32 +5,13 @@ import { DATE_FORMAT, STATISTIC_MIN_LOGS } from "@/constants/Config";
 import { t } from "@/helpers/translation";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useSettings } from "@/hooks/useSettings";
+import { CHANGELOG_ENTRIES } from "@/data/changelog";
 import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
-import React, { ReactElement, useEffect, useState } from "react";
-import { View } from "react-native";
+import React, { ReactElement, useMemo } from "react";
+import { Alert, View } from "react-native";
 import useColors from "../../hooks/useColors";
 import { useLogState } from "../../hooks/useLogs";
-import * as rssParser from 'react-native-rss-parser';
-import * as WebBrowser from 'expo-web-browser';
-
-type RssItem = {
-  title: string,
-  links: {
-    url: string,
-    rel: string,
-  }[],
-  description: string,
-  id: string,
-  authors: string[],
-  categories: string[],
-  published: string,
-  enclosures: string[],
-  itunes: {
-    authors: string[],
-  }
-  slug: string,
-}
 
 export const PromoCards = () => {
   const navigation = useNavigation();
@@ -48,27 +29,12 @@ export const PromoCards = () => {
   const hasYearPromo = enoughtLogsForYearPromo && isDecember && statisticsUnlocked && !hasActionDone(YEAR_REPORT_SLUG)
   const hasSleepTrackingPromo = logState.items.length > 4 && !hasActionDone('promo_sleep_tracking_closed')
 
-  const [mostRecentRssItem, setMostRecentRssItem] = useState<RssItem | null>(null)
-
-  const hasMostRecentRssItem = !!mostRecentRssItem && !hasActionDone(mostRecentRssItem.slug)
-
-  useEffect(() => {
-    fetch('https://pixy.hellonext.co/rss/changelog.xml')
-      .then(response => response.text())
-      .then(str => rssParser.parse(str))
-      .then(rss => {
-        const items = rss.items
-          .filter(item => dayjs(item.published).isAfter('2023-01-09'))
-          .map(item => ({
-            ...item,
-            slug: item.id.replace(/[^a-z0-9]/gi, '_').toLowerCase(),
-          }))
-
-        if (items.length !== 0) {
-          setMostRecentRssItem(items[0])
-        }
-      })
-  }, [])
+  const mostRecentChangelog = useMemo(() => {
+    return CHANGELOG_ENTRIES
+      .slice()
+      .sort((a, b) => dayjs(b.published).valueOf() - dayjs(a.published).valueOf())
+      .find(entry => !hasActionDone(entry.slug)) || null
+  }, [hasActionDone])
 
   const promoCards: ReactElement[] = []
 
@@ -104,16 +70,16 @@ export const PromoCards = () => {
     )
   }
 
-  if (hasMostRecentRssItem) {
+  if (mostRecentChangelog) {
     promoCards.push(
       <PromoCard
         colorName="pink"
-        slug={mostRecentRssItem.slug}
+        slug={mostRecentChangelog.slug}
         subtitle={t('new_release')}
-        title={mostRecentRssItem.title}
+        title={mostRecentChangelog.title}
         onPress={() => {
           analytics.track('promo_changelog_clicked')
-          WebBrowser.openBrowserAsync(mostRecentRssItem.id);
+          Alert.alert(mostRecentChangelog.title, mostRecentChangelog.summary)
         }}
       />
     )

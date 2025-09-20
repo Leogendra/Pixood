@@ -15,6 +15,7 @@ import {
   LogEdit,
   NotFoundScreen,
   PrivacyScreen,
+  ChangelogScreen,
   ReminderScreen, SettingsScreen, StatisticsHighlights, TagCreate, TagEdit, SettingsTags, SettingsTagsArchive
 } from '../screens';
 
@@ -59,6 +60,7 @@ const NAVIGATION_LINKING = {
       Data: 'settings/data',
       Reminder: 'settings/reminder',
       Privacy: 'settings/privacy',
+      Changelog: 'settings/changelog',
       DevelopmentTools: 'settings/development-tools',
       // PasscodeLocked: 'passcode-locked',;
       // Tags: 'settings/tags',;
@@ -367,6 +369,14 @@ function RootNavigator() {
             component={PrivacyScreen}
             options={{
               title: t('privacy'),
+              ...defaultPageOptions,
+            }}
+          />
+          <Stack.Screen
+            name="Changelog"
+            component={ChangelogScreen}
+            options={{
+              title: t('changelog'),
               ...defaultPageOptions,
             }}
           />

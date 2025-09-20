@@ -1,8 +1,6 @@
-import * as WebBrowser from 'expo-web-browser';
 import { ScrollView, Switch, View } from 'react-native';
 import { Shield } from 'react-native-feather';
 import Markdown from 'react-native-markdown-display';
-import LinkButton from '@/components/LinkButton';
 import useColors from '../hooks/useColors';
 import { useAnalytics } from '../hooks/useAnalytics';
 import { t } from '@/helpers/translation';
@@ -14,13 +12,6 @@ import TextInfo from '@/components/TextInfo';
 export const PrivacyScreen = () => {
   const colors = useColors()
   const analytics = useAnalytics()
-
-  const _handlePressButtonAsync = async () => {
-    await WebBrowser.openBrowserAsync('https://pixy.day/privacy', {
-      readerMode: true
-    });
-    analytics.track('privacy_policy_opened')
-  };
 
   return (
     <PageWithHeaderLayout
@@ -83,12 +74,6 @@ export const PrivacyScreen = () => {
           </MenuList>
           <TextInfo>{t('behavioral_data_help')}</TextInfo>
 
-          <LinkButton
-            style={{
-              marginTop: 16,
-            }}
-            onPress={_handlePressButtonAsync}
-          >{t('privacy_policy')}</LinkButton>
         </View>
       </ScrollView>
     </PageWithHeaderLayout>

@@ -1,17 +1,14 @@
 import MenuList from "@/components/MenuList";
 import MenuListHeadline from "@/components/MenuListHeadline";
 import MenuListItem from "@/components/MenuListItem";
-import { ImportData } from "@/helpers/Import";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { CheckCircle, Repeat, UploadCloud } from "react-native-feather";
 import useColors from "../../hooks/useColors";
 import { useDatagate } from "../../hooks/useDatagate";
+import { OFFLINE_IMPORT_USERS, OfflineImportUser } from "@/data/offlineImports";
 
-interface User {
-  id: string;
-  importData: ImportData;
-}
+type User = OfflineImportUser;
 
 export const UserDataImportList = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -24,22 +21,11 @@ export const UserDataImportList = () => {
   const loadUsers = () => {
     setLoading(true);
 
-    fetch("http://192.168.1.254:3000/persons", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((res: User[]) => {
-        setUsers(res);
-        setLoadedUserIds([]);
-      })
-      .catch(() => {
-        console.log("Error: Didn't load user list");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    setTimeout(() => {
+      setUsers(OFFLINE_IMPORT_USERS);
+      setLoadedUserIds([]);
+      setLoading(false);
+    }, 250);
   };
 
   useEffect(() => {

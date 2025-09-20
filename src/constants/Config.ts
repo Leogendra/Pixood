@@ -30,7 +30,4 @@ export const TAG_COLOR_NAMES = [
 
 export const TRACKING_ENABLED = !__DEV__;
 
-export const CHANGELOG_URL = 'https://pixy.hellonext.co/embed/c?no_header=true'
-export const FEEDBACK_FEATURES_URL = 'https://pixy.hellonext.co/embed/b/feedback?no_header=true'
-
 export const IS_PROD = true;

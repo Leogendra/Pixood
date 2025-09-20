@@ -1,4 +1,5 @@
-import { QUESTIONS_PULL_URL, QUESTION_SUBMIT_URL } from "@/constants/API"
+import { OFFLINE_QUESTION_RESPONSE_STORAGE_KEY } from "@/constants/API"
+import { OFFLINE_QUESTION_BANK } from "@/data/questions"
 import { language, locale } from "@/helpers/translation"
 import dayjs from "dayjs"
 import { useEffect, useRef, useState } from "react"
@@ -7,24 +8,10 @@ import semver from 'semver'
 import pkg from '../../package.json'
 import { useAnalytics } from "./useAnalytics"
 import { useSettings } from "./useSettings"
+import { appendOfflineEntry } from "@/lib/offlineQueue"
+import { QuestionDefinition } from "@/types/questioner"
 
-export interface IQuestion {
-  id: string;
-  appVersion: string;
-  text: {
-    en: string;
-    de?: string;
-  };
-  type: 'single' | 'multiple';
-  answers: {
-    id: string;
-    emoji: string;
-    text: {
-      en: string;
-      de?: string;
-    } | null;
-  }[]
-}
+export type IQuestion = QuestionDefinition;
 
 export const useQuestioner = () => {
   const analytics = useAnalytics()
@@ -43,32 +30,23 @@ export const useQuestioner = () => {
       return Promise.resolve(null)
     }
 
-    return fetch(QUESTIONS_PULL_URL)
-      .then(response => response.json())
-      .then(data => {
-        if (!data) return null;
+    const question = OFFLINE_QUESTION_BANK.find((question) => {
+      const satisfiesVersion = question.appVersion ? semver.satisfies(pkg.version, question.appVersion) : true
+      const hasBeenAnswered = hasActionDone(`question_slide_${question.id}`)
+      const localizedText = question.text[language] || question.text['en']
 
-        const question = data.find((question: IQuestion) => {
-          const satisfiesVersion = question.appVersion ? semver.satisfies(pkg.version, question.appVersion) : true
-          const hasBeenAnswered = hasActionDone(`question_slide_${question.id}`)
-          const isInMyLanguage = question.text[language] !== undefined;
+      if (!satisfiesVersion) console.log('Question not shown because version does not match', question.appVersion, pkg.version)
+      if (hasBeenAnswered) console.log('Question not shown because it has been answered', question.id)
+      if (!localizedText) console.log('Question not shown because it has no translation', question.text)
 
-          if (!satisfiesVersion) console.log('Question not shown because version does not match', question.appVersion, pkg.version)
-          if (hasBeenAnswered) console.log('Question not shown because it has been answered', question.id)
-          if (!isInMyLanguage) console.log('Question not shown because it is not in my language', question.text)
+      return (
+        satisfiesVersion &&
+        !hasBeenAnswered &&
+        !!localizedText
+      )
+    })
 
-          return (
-            satisfiesVersion &&
-            !hasBeenAnswered &&
-            isInMyLanguage
-          )
-        })
-
-        return question || null
-      })
-      .catch(error => {
-        return null;
-      })
+    return Promise.resolve(question || null)
   }
 
   const submit = (question: IQuestion, answers: IQuestion['answers']) => {
@@ -109,18 +87,12 @@ export const useQuestioner = () => {
     console.log('Sending Question Feedback', body)
 
     if (__DEV__) {
-      console.log('Not sending Question Feedback in dev mode')
+      console.log('Not queueing Question Feedback in dev mode')
       addActionDone(`question_slide_${question.id}`)
       return
     }
 
-    return fetch(QUESTION_SUBMIT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    })
+    return appendOfflineEntry(OFFLINE_QUESTION_RESPONSE_STORAGE_KEY, body)
       .then(() => {
         addActionDone(`question_slide_${question.id}`)
       })

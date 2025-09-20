@@ -1,14 +1,12 @@
 import * as Linking from 'expo-linking';
 import * as StoreReview from 'expo-store-review';
-import * as WebBrowser from 'expo-web-browser';
 import { ScrollView, Text, View } from 'react-native';
-import { ArrowUpCircle, Award, Bell, BookOpen, CheckCircle, Database, Droplet, Flag, PieChart, Shield, Smartphone, Star } from 'react-native-feather';
+import { Award, Bell, BookOpen, CheckCircle, Database, Droplet, Flag, PieChart, Shield, Smartphone, Star } from 'react-native-feather';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MenuList from '@/components/MenuList';
 import MenuListHeadline from '@/components/MenuListHeadline';
 import MenuListItem from '@/components/MenuListItem';
 import TextInfo from '@/components/TextInfo';
-import { CHANGELOG_URL, FEEDBACK_FEATURES_URL } from '@/constants/Config';
 import { t } from '@/helpers/translation';
 import { useAnalytics } from '../../hooks/useAnalytics';
 import useColors from '../../hooks/useColors';
@@ -16,7 +14,7 @@ import useFeedbackModal from '../../hooks/useFeedbackModal';
 import pkg from '../../../package.json';
 import { RootStackScreenProps } from '../../../types';
 import { UserDataImportList } from './UserData';
-import { Github, Tag } from 'lucide-react-native';
+import { Tag } from 'lucide-react-native';
 
 export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>) => {
   const insets = useSafeAreaInsets();
@@ -158,19 +156,10 @@ export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>)
           }}
         >
           <MenuListItem
-            title={t('vote_features')}
-            onPress={async () => {
-              analytics.track('settings_vote_features')
-              await WebBrowser.openBrowserAsync(FEEDBACK_FEATURES_URL);
-            }}
-            iconLeft={<ArrowUpCircle width={18} color={colors.menuListItemIcon} />}
-            testID='vote_features'
-          />
-          <MenuListItem
             title={t('changelog')}
-            onPress={async () => {
+            onPress={() => {
               analytics.track('settings_changelog')
-              await WebBrowser.openBrowserAsync(CHANGELOG_URL);
+              navigation.navigate('Changelog')
             }}
             iconLeft={<BookOpen width={18} color={colors.menuListItemIcon} />}
             testID='changelog'
@@ -203,13 +192,6 @@ export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>)
             iconLeft={<PieChart width={18} color={colors.menuListItemIcon} />}
             onPress={() => navigation.navigate('DevelopmentTools')}
             isLink
-          />
-          <MenuListItem
-            title={t('app_is_open_source')}
-            onPress={() => {
-              Linking.openURL('https://github.com/mrzmyr/pixy-mood-tracker-app')
-            }}
-            iconLeft={<Github width={18} color={colors.menuListItemIcon} />}
           />
           <MenuListItem
             title={t('licenses')}

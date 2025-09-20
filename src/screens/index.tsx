@@ -14,3 +14,4 @@ export * from './Statistics/Highlights';
 export * from './BotLogger';
 export * from './LogList'
 export * from './Settings/Tags'
+export * from './Changelog';
