@@ -11,7 +11,6 @@
     "test": "jest --watchAll --env=jsdom",
     "test:ci": "jest --env=jsdom",
     "disclaimer": "echo \"export default \\`$(yarn licenses generate-disclaimer | sed 's/\\`/\\\\`/g')\\`\" > disclaimer.js",
-  // ...existing code...
     "translate-app": "node scripts/generate-translations-app.js",
     "type-check": "tsc"
   },
@@ -77,7 +76,6 @@
     "react-native-modal-datetime-picker": "^14.0.0",
     "react-native-reanimated": "~2.14.4",
     "react-native-reanimated-carousel": "^3.3.0",
-    "react-native-rss-parser": "^1.5.1",
     "react-native-safe-area-context": "4.5.0",
     "react-native-screens": "~3.20.0",
     "react-native-style-utilities": "^1.0.1",

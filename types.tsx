@@ -24,6 +24,7 @@ export type RootStackParamList = {
   Data: undefined;
   Reminder: undefined;
   Privacy: undefined;
+  Changelog: undefined;
   Steps: undefined;
   // PasscodeLocked: undefined;
   Tags: undefined;

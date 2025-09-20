@@ -1,4 +1,4 @@
-// Removed AsyncStorage import
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import dayjs from "dayjs";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
@@ -39,18 +39,30 @@ export const useDatagate = (): {
   const analytics = useAnalytics();
 
   const dangerouslyImportDirectlyToAsyncStorage = async (data: ImportData) => {
-  localStorage.removeItem(STORAGE_KEY_TAGS);
-  localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify({
-      items: data.items,
-    }));
-  localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify({
-      ...data.settings,
-      actionsDone: [{
-        date: new Date().toISOString(),
-        title: 'onboarding',
-      }],
-      tags: data.tags
-    }));
+    await AsyncStorage.multiRemove([
+      STORAGE_KEY_TAGS,
+      STORAGE_KEY_LOGS,
+      STORAGE_KEY_SETTINGS,
+    ]);
+
+    await AsyncStorage.setItem(
+      STORAGE_KEY_LOGS,
+      JSON.stringify({
+        items: data.items,
+      })
+    );
+
+    await AsyncStorage.setItem(
+      STORAGE_KEY_SETTINGS,
+      JSON.stringify({
+        ...data.settings,
+        actionsDone: [{
+          date: new Date().toISOString(),
+          title: 'onboarding',
+        }],
+        tags: data.tags ?? [],
+      })
+    );
   };
 
   const _import = async (data: ImportData, options: { muted: boolean } = { muted: false }) => {

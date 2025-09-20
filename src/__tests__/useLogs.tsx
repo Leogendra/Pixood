@@ -1,4 +1,4 @@
-// Removed AsyncStorage import
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { act, renderHook } from '@testing-library/react-hooks'
 import { AnalyticsProvider } from '../hooks/useAnalytics'
 import { LogsProvider, LogsState, STORAGE_KEY, useLogState, useLogUpdater } from '../hooks/useLogs'
@@ -45,13 +45,13 @@ describe('useLogs()', () => {
 
   beforeEach(async () => {
     console.error = jest.fn()
+    await AsyncStorage.clear()
   })
 
   afterEach(async () => {
     console.error = _console_error
-  // Clear all localStorage for test cleanup
-  localStorage.clear();
-  });
+    await AsyncStorage.clear()
+  })
 
   test('should have `loaded` prop', async () => {
     const hook = _renderHook()
@@ -64,7 +64,7 @@ describe('useLogs()', () => {
   })
 
   test('should load `state` from async storage', async () => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ items: testItems }))
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ items: testItems }))
 
     const hook = _renderHook()
     await hook.waitForNextUpdate()
@@ -79,7 +79,7 @@ describe('useLogs()', () => {
   })
 
   test('should initiate `state` with empty `items` when async storage is falsely', async () => {
-  localStorage.setItem(STORAGE_KEY, '🐇')
+    await AsyncStorage.setItem(STORAGE_KEY, '🐇')
     const hook = _renderHook()
     await hook.waitForNextUpdate()
     expect(console.error).toHaveBeenCalled();
@@ -128,7 +128,7 @@ describe('useLogs()', () => {
   })
 
   test('should updateLogs', async () => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ items: [] }))
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ items: [] }))
 
     const hook = _renderHook()
     await hook.waitForNextUpdate()
@@ -169,7 +169,7 @@ describe('useLogs()', () => {
   })
 
   test('should reset', async () => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ items: [] }))
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ items: [] }))
 
     const hook = _renderHook()
     await hook.waitForNextUpdate()

@@ -1,4 +1,4 @@
-import { STATISTICS_FEEDBACK_URL } from '@/constants/API';
+import { OFFLINE_STATISTICS_FEEDBACK_STORAGE_KEY } from '@/constants/API';
 import { locale, t } from '@/helpers/translation';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import useColors from '@/hooks/useColors';
@@ -10,6 +10,7 @@ import { ActivityIndicator, Image, Platform, Pressable, Text, View, ViewStyle } 
 import pkg from '../../../package.json';
 import Button from '../Button';
 import TextArea from '../TextArea';
+import { appendOfflineEntry } from '@/lib/offlineQueue';
 
 const EMOJI_SCALE_IMAGES_DEFAULT = [{
   emoji: '😍',
@@ -124,13 +125,7 @@ export const CardFeedback = ({
 
     analytics.track('statistics_feedback', body);
 
-    return fetch(STATISTICS_FEEDBACK_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    })
+    return appendOfflineEntry(OFFLINE_STATISTICS_FEEDBACK_STORAGE_KEY, body)
       .finally(() => onSendDone())
   }
 

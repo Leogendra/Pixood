@@ -1,7 +1,8 @@
 import * as Localization from 'expo-localization';
 import { Alert, Platform } from 'react-native';
-import { FEEDBACK_URL } from '@/constants/API';
+import { OFFLINE_FEEDBACK_STORAGE_KEY } from '@/constants/API';
 import { t } from '@/helpers/translation';
+import { appendOfflineEntry } from '@/lib/offlineQueue';
 import pkg from '../../package.json';
 import { useAnalytics } from './useAnalytics';
 import { useSettings } from './useSettings';
@@ -47,14 +48,8 @@ export const useFeedback = () => {
 
     analytics.track('feedback_send', body)
 
-    return fetch(FEEDBACK_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    }).then(resp => {
-      if (resp.ok) {
+    return appendOfflineEntry(OFFLINE_FEEDBACK_STORAGE_KEY, body)
+      .then(() => {
         if (onOk) {
           onOk()
         } else {
@@ -67,7 +62,8 @@ export const useFeedback = () => {
             { cancelable: false }
           )
         }
-      } else {
+      })
+      .catch(() => {
         if (onCancel) {
           onCancel()
         } else {
@@ -80,21 +76,7 @@ export const useFeedback = () => {
             { cancelable: false }
           )
         }
-      }
-    }).catch(() => {
-      if (onCancel) {
-        onCancel()
-      } else {
-        Alert.alert(
-          t('feedback_error_title'),
-          t('feedback_error_message'),
-          [
-            { text: t('ok') }
-          ],
-          { cancelable: false }
-        )
-      }
-    })
+      })
   }
 
   return {
