@@ -25,9 +25,11 @@ import { SlideMood } from './slides/SlideMood';
 import { SlideReminder } from './slides/SlideReminder';
 import { SlideTags } from './slides/SlideTags';
 import { SlideSleep } from './slides/SlideSleep';
+import { UnifiedLoggerSlide } from './slides/UnifiedLoggerSlide';
 import { StackActions } from '@react-navigation/native';
 
 export type LoggerMode = 'create' | 'edit'
+export type LoggerInterface = 'carousel' | 'unified'
 
 const EMOTIONS_INDEX_MAPPING = {
   extremely_bad: 0,
@@ -107,9 +109,11 @@ const getAvailableStepsForEdit = ({
 export const LoggerEdit = ({
   id,
   initialStep,
+  interfaceType = 'unified',
 }: {
   id: string
   initialStep?: LoggerStep
+  interfaceType?: LoggerInterface
 }) => {
   const logState = useLogState()
   const initialItem = logState?.items.find(item => item.id === id)
@@ -133,6 +137,7 @@ export const LoggerEdit = ({
       initialItem={initialItem}
       initialStep={initialStep}
       avaliableSteps={avaliableSteps}
+      interfaceType={interfaceType}
     />
   )
 }
@@ -141,10 +146,12 @@ export const LoggerCreate = ({
   dateTime,
   initialStep,
   avaliableSteps,
+  interfaceType = 'unified',
 }: {
   dateTime: string
   initialStep?: LoggerStep
   avaliableSteps?: LoggerStep[]
+  interfaceType?: LoggerInterface
 }) => {
   const _id = useRef(uuidv4())
   const createdAt = useRef(dayjs().toISOString())
@@ -176,6 +183,7 @@ export const LoggerCreate = ({
       initialStep={initialStep}
       avaliableSteps={avaliableSteps}
       question={questioner.question}
+      interfaceType={interfaceType}
     />
   )
 }
@@ -186,12 +194,14 @@ export const Logger = ({
   avaliableSteps,
   mode,
   question,
+  interfaceType = 'carousel',
 }: {
   initialItem: TemporaryLogState,
   initialStep?: LoggerStep;
   avaliableSteps: LoggerStep[];
   mode: LoggerMode
   question?: IQuestion | null
+  interfaceType?: LoggerInterface
 }) => {
   const navigation = useNavigation();
   const colors = useColors()
@@ -267,6 +277,72 @@ export const Logger = ({
     analytics.track('log_cancled')
     close()
   }
+
+  // Interface unifiée - tout sur une seule page scrollable
+  if (interfaceType === 'unified') {
+    return (
+      <View style={{
+        flex: 1,
+        backgroundColor: colors.logBackground,
+        position: 'relative',
+      }}>
+        <View
+          style={{
+            flex: 1,
+            paddingTop: Platform.OS === 'android' ? insets.top : 0,
+          }}
+        >
+          <View
+            style={{
+              paddingHorizontal: 20,
+              paddingTop: 12,
+            }}
+          >
+            <SlideHeader
+              backVisible={false}
+              isDeleteable={isEditing}
+              onClose={() => {
+                if (tempLog.isDirty) {
+                  askToCancel().then(() => cancel()).catch(() => { })
+                } else {
+                  cancel()
+                }
+              }}
+              onDelete={() => {
+                if (
+                  tempLog.data.message.length > 0 ||
+                  tempLog.data.tags.length > 0
+                ) {
+                  askToRemove().then(() => remove())
+                } else {
+                  remove()
+                }
+              }}
+            />
+          </View>
+          <UnifiedLoggerSlide
+            onRatingChange={(rating) => tempLog.update({ rating })}
+            onEmotionsChange={(emotions) => tempLog.update({ emotions: emotions.map(e => e.key) })}
+            onTagsChange={(tags) => tempLog.update({ tags })}
+            onSleepChange={(quality) => tempLog.update({ sleep: { ...tempLog.data.sleep, quality } })}
+            onMessageChange={(message) => tempLog.update({ message })}
+            showDisable={showDisable}
+            onDisableStep={() => {
+              askToDisableStep().then(() => {
+                // Logique pour désactiver une étape
+              })
+            }}
+          />
+        </View>
+        <SlideAction 
+          type="save" 
+          onPress={() => save(tempLog.data)} 
+        />
+      </View>
+    )
+  }
+
+  // Interface originale avec carousel
 
   const next = () => {
     if (slideIndex + 1 === content.length - 1) {
