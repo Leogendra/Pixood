@@ -1,4 +1,5 @@
 // Removed AsyncStorage import
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { act, renderHook } from "@testing-library/react-hooks";
 // Removed: import { PostHogProvider } from "posthog-react-native";
 import { AnalyticsProvider, useAnalytics } from "../hooks/useAnalytics";

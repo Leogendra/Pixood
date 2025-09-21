@@ -10,6 +10,7 @@ export * from './Settings';
 export * from './Statistics';
 export * from './TagEdit';
 export * from './TagCreate';
+export * from './TagCategories';
 export * from './Statistics/Highlights';
 export * from './BotLogger';
 export * from './LogList'

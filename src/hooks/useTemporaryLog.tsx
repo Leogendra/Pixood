@@ -5,7 +5,9 @@ export type TemporaryLogState = Omit<LogItem, 'rating' | 'sleep'> & {
   rating: LogItem['rating'] | null,
   sleep: {
     quality: LogItem['sleep']['quality'] | null,
-  }
+  },
+  // Nouveau système de tags categorisés
+  selectedCategorizedTagIds?: string[];
 }
 
 export interface TemporaryLogValue {

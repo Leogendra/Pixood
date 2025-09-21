@@ -28,6 +28,7 @@ export type RootStackParamList = {
   Steps: undefined;
   // PasscodeLocked: undefined;
   Tags: undefined;
+  TagCategories: undefined;
   DevelopmentTools: undefined;
 
   BotLogger: {

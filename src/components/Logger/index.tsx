@@ -322,9 +322,7 @@ export const Logger = ({
           </View>
           <UnifiedLoggerSlide
             onRatingChange={(rating) => tempLog.update({ rating })}
-            onEmotionsChange={(emotions) => tempLog.update({ emotions: emotions.map(e => e.key) })}
-            onTagsChange={(tags) => tempLog.update({ tags })}
-            onSleepChange={(quality) => tempLog.update({ sleep: { ...tempLog.data.sleep, quality } })}
+            onTagsChange={(tagIds) => tempLog.update({ selectedCategorizedTagIds: tagIds })}
             onMessageChange={(message) => tempLog.update({ message })}
             showDisable={showDisable}
             onDisableStep={() => {

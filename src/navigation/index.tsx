@@ -16,7 +16,7 @@ import {
   NotFoundScreen,
   PrivacyScreen,
   ChangelogScreen,
-  ReminderScreen, SettingsScreen, StatisticsHighlights, TagCreate, TagEdit, SettingsTags, SettingsTagsArchive
+  ReminderScreen, SettingsScreen, StatisticsHighlights, TagCreate, TagEdit, TagCategories, SettingsTags, SettingsTagsArchive
 } from '../screens';
 
 import Providers from '@/components/Providers';
@@ -401,6 +401,14 @@ function RootNavigator() {
             component={SettingsTags}
             options={{
               title: t('tags'),
+              ...defaultPageOptions,
+            }}
+          />
+          <Stack.Screen
+            name="TagCategories"
+            component={TagCategories}
+            options={{
+              title: t('tag_categories_management'),
               ...defaultPageOptions,
             }}
           />

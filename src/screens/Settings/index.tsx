@@ -97,6 +97,12 @@ export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>)
             isLink
           />
           <MenuListItem
+            title={t('tag_categories_management')}
+            iconLeft={<Tag width={18} color={colors.menuListItemIcon} />}
+            onPress={() => navigation.navigate('TagCategories')}
+            isLink
+          />
+          <MenuListItem
             title={t('steps')}
             iconLeft={<CheckCircle width={18} color={colors.menuListItemIcon} />}
             onPress={() => navigation.navigate('Steps')}

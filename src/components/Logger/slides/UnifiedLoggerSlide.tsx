@@ -1,32 +1,25 @@
 import { getLogEditMarginTop } from "@/helpers/responsive";
 import { t } from "@/helpers/translation";
 import useColors from "@/hooks/useColors";
-import { LogItem, RATING_KEYS, SLEEP_QUALITY_KEYS } from "@/hooks/useLogs";
+import { LogItem, RATING_KEYS } from "@/hooks/useLogs";
 import { useTemporaryLog } from "@/hooks/useTemporaryLog";
-import { Emotion, TagReference } from "@/types";
 import { ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { SlideHeadline } from "../components/SlideHeadline";
 import { SlideMoodButton } from "../components/SlideMoodButton";
-import { SlideEmotions } from "./SlideEmotions";
-import { SlideTags } from "./SlideTags";
-import { SlideSleepButton } from "./SlideSleepButton";
+import { CategoryTagSelector } from "./CategoryTagSelector";
 import TextArea from "../../TextArea";
 import { useRef } from "react";
 
 export const UnifiedLoggerSlide = ({
   onRatingChange,
-  onEmotionsChange,
   onTagsChange,
-  onSleepChange,
   onMessageChange,
   showDisable,
   onDisableStep = () => {},
 }: {
   onRatingChange: (rating: LogItem['rating']) => void;
-  onEmotionsChange: (emotions: Emotion[]) => void;
-  onTagsChange: (tags: TagReference[]) => void;
-  onSleepChange: (quality: LogItem['sleep']['quality']) => void;
+  onTagsChange: (tagIds: string[]) => void;
   onMessageChange: (message: string) => void;
   showDisable: boolean;
   onDisableStep?: () => void;
@@ -82,78 +75,7 @@ export const UnifiedLoggerSlide = ({
           </View>
         </View>
 
-        {/* Section Emotions */}
-        <View style={{ marginBottom: 40 }}>
-          <SlideHeadline style={{ marginBottom: 8 }}>
-            {t('log_modal_emotions_question')}
-          </SlideHeadline>
-          <Text style={{
-            color: colors.textSecondary,
-            fontSize: 16,
-            marginBottom: 16,
-          }}>
-            {t('log_modal_emotions_description')}
-          </Text>
-          <SlideEmotions
-            onChange={onEmotionsChange}
-            showDisable={showDisable}
-            onDisableStep={onDisableStep}
-            showFooter={false}
-          />
-        </View>
-
-        {/* Section Sleep Quality */}
-        <View style={{ marginBottom: 40 }}>
-          <SlideHeadline style={{ marginBottom: 8 }}>
-            {t('log_sleep_question')}
-          </SlideHeadline>
-          <Text style={{
-            color: colors.textSecondary,
-            fontSize: 16,
-            marginBottom: 16,
-          }}>
-            {t('logger_step_sleep_description')}
-          </Text>
-          <View style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: 8,
-          }}>
-            {SLEEP_QUALITY_KEYS.slice().reverse().map((key) => (
-              <SlideSleepButton
-                key={key}
-                value={key}
-                selected={tempLog.data.sleep?.quality === key}
-                onPress={() => onSleepChange(key)}
-              />
-            ))}
-          </View>
-          <View style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-            <Text style={{
-              fontSize: 14,
-              color: colors.textSecondary,
-              textAlign: 'center',
-              flex: 1,
-            }}>
-              {t('logger_step_sleep_low')}
-            </Text>
-            <Text style={{
-              fontSize: 14,
-              color: colors.textSecondary,
-              textAlign: 'center',
-              flex: 1,
-            }}>
-              {t('logger_step_sleep_high')}
-            </Text>
-          </View>
-        </View>
-
-        {/* Section Tags */}
+        {/* Section Tags par Catégories */}
         <View style={{ marginBottom: 40 }}>
           <SlideHeadline style={{ marginBottom: 8 }}>
             {t('log_modal_tags_question')}
@@ -165,11 +87,11 @@ export const UnifiedLoggerSlide = ({
           }}>
             {t('log_modal_tags_description')}
           </Text>
-          <SlideTags
-            onChange={onTagsChange}
+          <CategoryTagSelector
+            selectedTagIds={tempLog.data.selectedCategorizedTagIds || []}
+            onTagsChange={onTagsChange}
             showDisable={showDisable}
             onDisableStep={onDisableStep}
-            showFooter={false}
           />
         </View>
 

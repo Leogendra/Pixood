@@ -23,7 +23,7 @@ export const YLabels = ({
           >
             <Mask
               id={`mask0_1_5${index}`}
-              style={{ maskType: 'alpha' }}
+              // style={{ maskType: 'alpha' }} // Removed - not supported in React Native SVG
               // @ts-ignore
               maskUnits="userSpaceOnUse"
               x="0"

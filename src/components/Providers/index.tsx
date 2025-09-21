@@ -6,6 +6,7 @@ import { LogsProvider } from "@/hooks/useLogs";
 import { SettingsProvider } from "@/hooks/useSettings";
 import { StatisticsProvider } from "@/hooks/useStatistics";
 import { TagsProvider } from "@/hooks/useTags";
+import { TagCategoriesProvider } from "@/hooks/useTagCategories";
 import { TemporaryLogProvider } from "@/hooks/useTemporaryLog";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
@@ -16,11 +17,13 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
         <AnalyticsProvider options={{ enabled: TRACKING_ENABLED }}>
           <LogsProvider>
             <TagsProvider>
-              <TemporaryLogProvider>
-                <CalendarFiltersProvider>
-                  <StatisticsProvider>{children}</StatisticsProvider>
-                </CalendarFiltersProvider>
-              </TemporaryLogProvider>
+              <TagCategoriesProvider>
+                <TemporaryLogProvider>
+                  <CalendarFiltersProvider>
+                    <StatisticsProvider>{children}</StatisticsProvider>
+                  </CalendarFiltersProvider>
+                </TemporaryLogProvider>
+              </TagCategoriesProvider>
             </TagsProvider>
           </LogsProvider>
         </AnalyticsProvider>
