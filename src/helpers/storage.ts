@@ -63,7 +63,7 @@ export const load = async <ReturnValue>(key: string, feedback?: any): Promise<Re
           description: error?.message,
           trace: error?.stack,
         }),
-        email: 'team@pixy.day',
+        email: 'team@pixood.app',
         source: 'error',
         onCancel: () => {},
         onOk: () => {},

@@ -216,7 +216,7 @@ export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>)
             marginBottom: 40,
           }}
         >
-          <Text style={{ fontSize: 14, marginTop: 5, color: colors.textSecondary }}>Pixy v{pkg.version}</Text>
+          <Text style={{ fontSize: 14, marginTop: 5, color: colors.textSecondary }}>Pixood v{pkg.version}</Text>
         </View>
 
         {__DEV__ && <UserDataImportList />}

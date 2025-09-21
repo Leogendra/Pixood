@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Pixy",
-    "slug": "pixy-mood-tracker",
+    "name": "Pixood",
+    "slug": "pixood",
     "version": "1.86.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "pixy",
+    "scheme": "pixood",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -19,17 +19,8 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "bundleIdentifier": "com.devmood.pixymoodtracker",
-      "buildNumber": "1.86.0",
-      "supportsTablet": false,
-      "appStoreUrl": "https://apps.apple.com/de/app/pixy-mood-tracker/id1605327124",
-      "infoPlist": {
-        "NSFaceIDUsageDescription": "Pixy uses Face ID to lock the app and protect your data."
-      }
-    },
     "android": {
-      "package": "com.devmood.pixymoodtracker",
+      "package": "com.pixood.app",
       "versionCode": 480018600,
       "allowBackup": false,
       "permissions": [],
@@ -38,7 +29,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.devmood.pixymoodtracker",
+      "playStoreUrl": "",
       "minSdkVersion": 16
     },
     "plugins": [

@@ -106,7 +106,7 @@ export const BigCard = ({
       .then((uri) => {
         setShareLoading(false);
         Sharing.shareAsync("file://" + uri, {
-          dialogTitle: 'Hey I use this app called "Pixy Mood Tracker" and I wanted to share this with you!',
+          dialogTitle: 'Hey I use this app called "Pixood" and I wanted to share this with you!',
         })
           .then(() => {
             analytics.track('statstics_shared', {
@@ -221,7 +221,7 @@ export const BigCard = ({
                 color: colors.sharingLogoText,
               }}
             >
-              Pixy Mood Tracker
+              Pixood
             </Text>
           </View>
         </View>

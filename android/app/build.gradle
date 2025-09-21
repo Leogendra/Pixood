@@ -113,9 +113,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.devmood.pixymoodtracker"
+    namespace "com.pixood.app"
     defaultConfig {
-        applicationId 'com.devmood.pixymoodtracker'
+        applicationId "com.pixood.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 480018600

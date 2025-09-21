@@ -1,4 +1,4 @@
-package com.devmood.pixymoodtracker;
+package com.pixood.app;
 
 import android.app.Application;
 import android.content.res.Configuration;

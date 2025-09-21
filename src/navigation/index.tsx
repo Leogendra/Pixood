@@ -45,7 +45,7 @@ enableScreens();
 
 const NAVIGATION_LINKING = {
   prefixes: [
-    'pixy://',
+    'pixood://',
     Linking.createURL('/'),
   ],
   config: {

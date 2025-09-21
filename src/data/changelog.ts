@@ -9,7 +9,7 @@ export const CHANGELOG_ENTRIES: ChangelogEntry[] = [
   {
     slug: 'offline-mode-initial-release',
     title: 'Offline mode is here',
-    summary: 'Pixy no longer requires an internet connection. Feedback, surveys and statistics are stored securely on your device.',
+    summary: 'Pixood no longer requires an internet connection. Feedback, surveys and statistics are stored securely on your device.',
     published: '2024-05-01',
   },
   {
