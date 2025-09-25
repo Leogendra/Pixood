@@ -26,7 +26,6 @@ export type RootStackParamList = {
   Privacy: undefined;
   Changelog: undefined;
   Steps: undefined;
-  // PasscodeLocked: undefined;
   Tags: undefined;
   TagCategories: undefined;
   DevelopmentTools: undefined;

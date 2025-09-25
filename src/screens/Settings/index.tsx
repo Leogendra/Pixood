@@ -30,24 +30,6 @@ export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>)
     if (storeUrl !== null) Linking.openURL(storeUrl)
   }
 
-  // const { settings, setSettings } = useSettings()
-  // const passcodeSupported = supportedSecurityLevel > 0;
-  // const [passcodeEnabled, setPasscodeEnabled] = useState(settings.passcodeEnabled);
-  // const [supportedSecurityLevel, setSupportedSecurityLevel] = useState<LocalAuthentication.SecurityLevel>(0);
-
-  // useEffect(() => {
-  //   analytics.track('passcode_enable', { enabled: passcodeEnabled })
-  //   setSettings((settings) => ({ ...settings, passcodeEnabled }))
-  // }, [passcodeEnabled])
-
-  // useEffect(() => {
-  //   LocalAuthentication
-  //     .getEnrolledLevelAsync()
-  //     .then(level => {
-  //       setSupportedSecurityLevel(level)
-  //     })
-  // })
-
   return (
     <View style={{
       paddingTop: insets.top,
@@ -109,36 +91,6 @@ export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>)
             isLink
             isLast
           />
-          {/* <MenuListItem
-            title={t('passcode')}
-            deactivated={!passcodeSupported}
-            iconLeft={
-              passcodeEnabled ? 
-              <Lock width={18} color={colors.menuListItemIcon} /> :
-              <Unlock width={18} color={colors.menuListItemIcon} />
-            }
-            iconRight={
-              <Switch
-                ios_backgroundColor={colors.backgroundSecondary}
-                disabled={!passcodeSupported}
-                onValueChange={() => {
-                  analytics.track('passcode_toggle', { enabled: !passcodeEnabled })
-                  if(passcodeEnabled) {
-                    setPasscodeEnabled(false)
-                  } else {
-                    LocalAuthentication.authenticateAsync().then((result) => {
-                      setPasscodeEnabled(result.success)
-                    })
-                  }
-                }}
-                value={passcodeEnabled}
-                testID={`passcode-enabled`}
-              />
-            }
-            testID='passcode'
-            isLast
-          /> */}
-
         </MenuList>
 
         <MenuListHeadline>{t('settings_feedback')}</MenuListHeadline>

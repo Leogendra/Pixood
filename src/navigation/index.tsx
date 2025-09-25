@@ -62,8 +62,6 @@ const NAVIGATION_LINKING = {
       Privacy: 'settings/privacy',
       Changelog: 'settings/changelog',
       DevelopmentTools: 'settings/development-tools',
-      // PasscodeLocked: 'passcode-locked',;
-      // Tags: 'settings/tags',;
       Statistics: 'statistics',
       StatisticsHighlights: 'statistics/highlights',
       StatisticsMonth: 'statistics/month/:date',
@@ -113,7 +111,6 @@ function RootNavigator() {
   const logState = useLogState();
   const { tags } = useTagsState();
   const { anonymizeTag } = useAnonymizer();
-  // const passcode = usePasscode()
 
   const defaultOptions = {
     headerTintColor: colors.text,
@@ -153,23 +150,7 @@ function RootNavigator() {
     headerLeft: () => Platform.OS === 'ios' ? null : <BackButton testID={'settings-back-button'} />
   }
 
-  // if(passcode.isEnabled === null) return null;
-
   return (
-
-    // (passcode.isEnabled && !passcode.isAuthenticated) ? (
-    //   <Stack.Navigator
-    //     screenOptions={{
-    //       animation: 'none'
-    //     }}
-    //   >
-    //     <Stack.Screen 
-    //       options={{ headerShown: false }} 
-    //       name="PasscodeLocked" 
-    //       component={PasscodeLocked} 
-    //     />
-    //   </Stack.Navigator>
-    // ) : (
     <View
       style={{
         flex: 1,

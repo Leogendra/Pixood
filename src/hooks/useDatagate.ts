@@ -12,16 +12,18 @@ import pkg from '../../package.json';
 import { useAnalytics } from "./useAnalytics";
 import { LogsState, STORAGE_KEY as STORAGE_KEY_LOGS, useLogState, useLogUpdater } from "./useLogs";
 import { ExportSettings, STORAGE_KEY as STORAGE_KEY_SETTINGS, useSettings } from "./useSettings";
+import { transformToExportFormat } from "@/types/logFormat";
 import { STORAGE_KEY as STORAGE_KEY_TAGS, Tag, useTagsState, useTagsUpdater } from "./useTags";
 
 type ResetType = "factory" | "data"
 
-type ExportData = {
-  version: string;
-  tags: Tag[];
-  items: LogsState['items'];
-  settings: ExportSettings;
-}
+// Ancien format d'export - maintenant remplacé par le format simplifié dans logFormat.ts
+// type ExportData = {
+//   version: string;
+//   tags: Tag[];
+//   items: LogsState['items'];
+//   settings: ExportSettings;
+// }
 
 export const useDatagate = (): {
   openExportDialog: () => Promise<void>;
@@ -150,22 +152,8 @@ export const useDatagate = (): {
   };
 
   const openExportDialog = async () => {
-    const data: ExportData = {
-      version: pkg.version,
-      items: logState.items,
-      tags: tags,
-      settings: {
-        passcodeEnabled: settings.passcodeEnabled,
-        passcode: settings.passcode,
-        scaleType: settings.scaleType,
-        reminderEnabled: settings.reminderEnabled,
-        reminderTime: settings.reminderTime,
-        trackBehaviour: settings.trackBehaviour,
-        analyticsEnabled: settings.analyticsEnabled,
-        actionsDone: settings.actionsDone,
-        steps: settings.steps,
-      },
-    };
+    // Utiliser le nouveau format d'export simplifié
+    const data = transformToExportFormat(logState.items, tags);
 
     analytics.track("data_export_started");
 
@@ -173,11 +161,11 @@ export const useDatagate = (): {
       return Alert.alert("Not supported on web");
     }
 
-    const filename = `pixel-tracker-${dayjs().format("YYYY-MM-DD")}${__DEV__ ? '-DEV' : ''}.json`;
+    const filename = `pixood-export-${dayjs().format("YYYY-MM-DD")}${__DEV__ ? '-DEV' : ''}.json`;
 
     await FileSystem.writeAsStringAsync(
       FileSystem.documentDirectory + filename,
-      JSON.stringify(data)
+      JSON.stringify(data, null, 2) // Pretty print pour lisibilité
     );
 
     if (!(await Sharing.isAvailableAsync())) {

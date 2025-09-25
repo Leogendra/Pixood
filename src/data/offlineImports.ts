@@ -7,8 +7,6 @@ export interface OfflineImportUser {
 }
 
 const baseSettings = {
-  passcodeEnabled: INITIAL_STATE.passcodeEnabled,
-  passcode: INITIAL_STATE.passcode,
   scaleType: INITIAL_STATE.scaleType,
   reminderEnabled: INITIAL_STATE.reminderEnabled,
   reminderTime: INITIAL_STATE.reminderTime,
