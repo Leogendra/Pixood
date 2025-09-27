@@ -48,12 +48,19 @@ export const Onboarding = ({ navigation }: RootStackScreenProps<'Onboarding'>) =
   const slides = [
     <IndexSlide
       onPress={(answer) => {
-        analytics.track('onboarding_question_1', {
-          answer: answer === 0 ?
-            'used_mood_tracker_before' :
-            'never_used_mood_tracker'
-        })
-        setIndex(1)
+        if (answer === 0) {
+          // Skip tutorial
+          analytics.track('onboarding_question_1', {
+            answer: 'skip_tutorial'
+          })
+          skip()
+        } else {
+          // Show tutorial
+          analytics.track('onboarding_question_1', {
+            answer: 'show_tutorial'
+          })
+          setIndex(1)
+        }
       }}
     />,
     <CalendarSlide onSkip={skip} index={1} setIndex={setIndex} />,
