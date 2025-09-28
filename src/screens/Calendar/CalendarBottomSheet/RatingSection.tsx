@@ -8,9 +8,11 @@ import { useSettings } from '../../../hooks/useSettings';
 export const RatingSection = ({
   value,
   onChange,
+  allowMultiple = false,
 }: {
   value: LogItem['rating'][];
   onChange: (value: LogItem['rating']) => void;
+  allowMultiple?: boolean;
 }) => {
   const { settings } = useSettings();
 
@@ -21,7 +23,12 @@ export const RatingSection = ({
       }}
     >
       <TextHeadline style={{ marginBottom: 12 }}>{t('mood')}</TextHeadline>
-      <Scale value={value} onPress={onChange} type={settings.scaleType} />
+      <Scale 
+        value={value} 
+        onPress={onChange} 
+        type={settings.scaleType} 
+        allowMultiple={allowMultiple}
+      />
     </View>
   );
 };

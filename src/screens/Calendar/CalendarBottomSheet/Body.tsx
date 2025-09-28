@@ -62,6 +62,7 @@ export const Body = () => {
         <RatingSection
           value={calendarFilters.data.ratings}
           onChange={onPressRating}
+          allowMultiple={true}
         />
         <TagsSection
           tags={_tags}
