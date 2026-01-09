@@ -20,7 +20,7 @@
             "**/*"
         ],
         "android": {
-            "package": "com.pixood.app",
+            "package": "com.gatienh.pixood",
             "versionCode": 480018600,
             "allowBackup": false,
             "permissions": [],

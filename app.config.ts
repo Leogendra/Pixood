@@ -11,8 +11,8 @@ export default ({ config }: ConfigContext): ExpoConfig => {
 
     if (isDevClient) {
         _config.name = 'Pixood Dev';
-        _config.ios!.bundleIdentifier = `com.pixood.dev`
-        _config.android!.package = `com.pixood.dev`
+        _config.ios!.bundleIdentifier = `com.gatienh.pixood.dev`
+        _config.android!.package = `com.gatienh.pixood.dev`
         _config.android!.icon = _config.icon = './assets/images/icon-dev.png';
     }
 
