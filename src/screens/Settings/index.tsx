@@ -1,7 +1,7 @@
 import * as Linking from 'expo-linking';
 import * as StoreReview from 'expo-store-review';
 import { ScrollView, Text, View } from 'react-native';
-import { Award, Bell, BookOpen, CheckCircle, Database, Droplet, Flag, PieChart, Shield, Smartphone, Star } from 'react-native-feather';
+import { Bell, BookOpen, CheckCircle, Database, Droplet, Flag, PieChart, Smartphone, Star } from 'react-native-feather';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MenuList from '@/components/MenuList';
 import MenuListHeadline from '@/components/MenuListHeadline';
@@ -126,12 +126,7 @@ export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>)
             title={t('rate_this_app')}
             onPress={() => askToRateApp()}
             iconLeft={<Star width={18} color={colors.menuListItemIcon} />}
-          />
-          <MenuListItem
-            title={t('privacy')}
-            onPress={() => navigation.navigate('Privacy')}
-            iconLeft={<Shield width={18} color={colors.menuListItemIcon} />}
-            isLink
+            isLast
           />
         </MenuList>
 
@@ -149,12 +144,6 @@ export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>)
             title={`${t('settings_development_statistics')}`}
             iconLeft={<PieChart width={18} color={colors.menuListItemIcon} />}
             onPress={() => navigation.navigate('DevelopmentTools')}
-            isLink
-          />
-          <MenuListItem
-            title={t('licenses')}
-            iconLeft={<Award width={18} color={colors.menuListItemIcon} />}
-            onPress={() => navigation.navigate('Licenses')}
             isLink
             isLast
           />

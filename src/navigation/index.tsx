@@ -6,17 +6,15 @@ import { useEffect } from 'react';
 import { Platform, View, useColorScheme } from 'react-native';
 import { RootStackParamList } from '../../types';
 import {
-  BotLogger,
-  ColorsScreen,
-  DataScreen,
-  LogList,
-  LicensesScreen,
-  LogCreate,
-  LogEdit,
-  NotFoundScreen,
-  PrivacyScreen,
-  ChangelogScreen,
-  ReminderScreen, SettingsScreen, StatisticsHighlights, TagCreate, TagEdit, TagCategories, SettingsTags, SettingsTagsArchive
+    BotLogger,
+    ColorsScreen,
+    DataScreen,
+    LogList,
+    LogCreate,
+    LogEdit,
+    NotFoundScreen,
+    ChangelogScreen,
+    ReminderScreen, SettingsScreen, StatisticsHighlights, TagCreate, TagEdit, TagCategories, SettingsTags, SettingsTagsArchive
 } from '../screens';
 
 import Providers from '@/components/Providers';
@@ -44,390 +42,372 @@ import { BotLoggerTags } from '@/screens/BotLogger/Tags';
 enableScreens();
 
 const NAVIGATION_LINKING = {
-  prefixes: [
-    'pixood://',
-    Linking.createURL('/'),
-  ],
-  config: {
-    screens: {
-      Calendar: 'calendar',
-      Onboarding: 'onboarding',
+    prefixes: [
+        'pixood://',
+        Linking.createURL('/'),
+    ],
+    config: {
+        screens: {
+            Calendar: 'calendar',
+            Onboarding: 'onboarding',
 
-      Settings: 'settings',
-      Colors: 'settings/colors',
-      Licenses: 'settings/licenses',
-      Steps: 'settings/steps',
-      Data: 'settings/data',
-      Reminder: 'settings/reminder',
-      Privacy: 'settings/privacy',
-      Changelog: 'settings/changelog',
-      DevelopmentTools: 'settings/development-tools',
-      Statistics: 'statistics',
-      StatisticsHighlights: 'statistics/highlights',
-      StatisticsMonth: 'statistics/month/:date',
-      StatisticsYear: 'statistics/year/:date',
-      LogList: 'days/:date',
-      LogCreate: 'logs/create/:dateTime',
-      LogEdit: 'logs/:id/edit',
+            Settings: 'settings',
+            Colors: 'settings/colors',
+            Steps: 'settings/steps',
+            Data: 'settings/data',
+            Reminder: 'settings/reminder',
+            Changelog: 'settings/changelog',
+            DevelopmentTools: 'settings/development-tools',
+            Statistics: 'statistics',
+            StatisticsHighlights: 'statistics/highlights',
+            StatisticsMonth: 'statistics/month/:date',
+            StatisticsYear: 'statistics/year/:date',
+            LogList: 'days/:date',
+            LogCreate: 'logs/create/:dateTime',
+            LogEdit: 'logs/:id/edit',
 
-      Tags: 'tags',
-      TagEdit: 'tags/:id',
-      TagCreate: 'tags/create',
+            Tags: 'tags',
+            TagEdit: 'tags/:id',
+            TagCreate: 'tags/create',
+        },
     },
-  },
 };
 
 export default function Navigation() {
-  const scheme = useColorScheme();
+    const scheme = useColorScheme();
 
-  return (
-    <NavigationContainer
-      linking={NAVIGATION_LINKING}
-      // @ts-ignore
-      theme={
-        scheme === 'dark' ? {
-          dark: true,
-          colors: Colors.dark,
-        } : {
-          dark: false,
-          colors: Colors.light,
-        }
-      }
-    >
-      <Providers>
-        <RootNavigator />
-      </Providers>
-    </NavigationContainer>
-  );
+    return (
+        <NavigationContainer
+            linking={NAVIGATION_LINKING}
+            // @ts-ignore
+            theme={
+                scheme === 'dark' ? {
+                    dark: true,
+                    colors: Colors.dark,
+                } : {
+                    dark: false,
+                    colors: Colors.light,
+                }
+            }
+        >
+            <Providers>
+                <RootNavigator />
+            </Providers>
+        </NavigationContainer>
+    );
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
-  const colors = useColors();
-  const { settings, hasActionDone } = useSettings()
-  const navigation = useNavigation()
-  const analytics = useAnalytics()
-  const logState = useLogState();
-  const { tags } = useTagsState();
-  const { anonymizeTag } = useAnonymizer();
+    const colors = useColors();
+    const { settings, hasActionDone } = useSettings()
+    const navigation = useNavigation()
+    const analytics = useAnalytics()
+    const logState = useLogState();
+    const { tags } = useTagsState();
+    const { anonymizeTag } = useAnonymizer();
 
-  const defaultOptions = {
-    headerTintColor: colors.text,
-    headerStyle: {
-      backgroundColor: colors.background,
-    },
-    headerShadowVisible: Platform.OS !== 'web',
-  }
-
-  useEffect(() => {
-    if (settings.loaded && !hasActionDone('onboarding')) {
-      navigation.navigate('Onboarding')
-    }
-    if (settings.loaded && !analytics.isIdentified) {
-      analytics.identify({
-        tags: tags.map(tag => anonymizeTag(tag)),
-        tagsCount: tags.length,
-
-        itemsCount: logState.items.length,
-        itemsCoverage: getItemsCoverage(logState.items),
-        itemsCountPerDayAverage: getItemsCountPerDayAverage(logState.items),
-      })
+    const defaultOptions = {
+        headerTintColor: colors.text,
+        headerStyle: {
+            backgroundColor: colors.background,
+        },
+        headerShadowVisible: Platform.OS !== 'web',
     }
 
-    initializeDayjs();
+    useEffect(() => {
+        if (settings.loaded && !hasActionDone('onboarding')) {
+            navigation.navigate('Onboarding')
+        }
+        if (settings.loaded && !analytics.isIdentified) {
+            analytics.identify({
+                tags: tags.map(tag => anonymizeTag(tag)),
+                tagsCount: tags.length,
 
-    if (!__DEV__) {
-      // Sentry.init({
-      //   dsn: 'https://d98d0f519b324d9cb0c947b8f29cd0cf@o1112922.ingest.sentry.io/6142792',
-      //   enableInExpoDevelopment: false,
-      // });
+                itemsCount: logState.items.length,
+                itemsCoverage: getItemsCoverage(logState.items),
+                itemsCountPerDayAverage: getItemsCountPerDayAverage(logState.items),
+            })
+        }
+
+        initializeDayjs();
+
+        if (!__DEV__) {
+            // Sentry.init({
+            //   dsn: 'https://d98d0f519b324d9cb0c947b8f29cd0cf@o1112922.ingest.sentry.io/6142792',
+            //   enableInExpoDevelopment: false,
+            // });
+        }
+    }, [settings.loaded])
+
+
+    const defaultPageOptions = {
+        headerLeft: () => Platform.OS === 'ios' ? null : <BackButton testID={'settings-back-button'} />
     }
-  }, [settings.loaded])
 
-
-  const defaultPageOptions = {
-    headerLeft: () => Platform.OS === 'ios' ? null : <BackButton testID={'settings-back-button'} />
-  }
-
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.background,
-      }}
-    >
-      <Stack.Navigator
-        initialRouteName="tabs"
-        screenOptions={{
-          navigationBarColor: colors.tabsBackground,
-        }}
-      >
-        <Stack.Screen
-          name="tabs"
-          component={BottomTabs}
-          options={{
-            headerShown: false,
-          }}
-        />
-
-        <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-
-        <>
-          <Stack.Group
-            screenOptions={{
-              title: '',
-              presentation: 'modal',
-              headerShown: false,
-              gestureEnabled: false,
+    return (
+        <View
+            style={{
+                flex: 1,
+                backgroundColor: colors.background,
             }}
-          >
-            <Stack.Screen
-              name="BotLogger"
-              component={BotLogger}
-            />
-          </Stack.Group>
-          <Stack.Group
-            screenOptions={{
-              title: '',
-              presentation: 'modal',
-              headerShown: false,
-              gestureEnabled: false,
-            }}
-          >
-            <Stack.Screen
-              name="BotLoggerEmotions"
-              component={BotLoggerEmotions}
-            />
-          </Stack.Group>
-          <Stack.Group
-            screenOptions={{
-              title: '',
-              presentation: 'modal',
-              headerShown: false,
-              gestureEnabled: false,
-            }}
-          >
-            <Stack.Screen
-              name="BotLoggerTags"
-              component={BotLoggerTags}
-            />
-          </Stack.Group>
-        </>
-
-        <Stack.Group
-          screenOptions={{
-            title: '',
-            presentation: 'modal',
-            gestureEnabled: false,
-            headerShown: false,
-          }}
         >
-          <Stack.Screen
-            name="LogCreate"
-            component={LogCreate}
-          />
-        </Stack.Group>
+            <Stack.Navigator
+                initialRouteName="tabs"
+                screenOptions={{
+                    navigationBarColor: colors.tabsBackground,
+                }}
+            >
+                <Stack.Screen
+                    name="tabs"
+                    component={BottomTabs}
+                    options={{
+                        headerShown: false,
+                    }}
+                />
 
-        <Stack.Group
-          screenOptions={{
-            title: '',
-            presentation: 'modal',
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen
-            name="LogList"
-            component={LogList}
-          />
-        </Stack.Group>
+                <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
 
-        <Stack.Group
-          screenOptions={{
-            title: '',
-            presentation: 'modal',
-            gestureEnabled: false,
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen
-            name="LogEdit"
-            component={LogEdit}
-          />
-        </Stack.Group>
+                <>
+                    <Stack.Group
+                        screenOptions={{
+                            title: '',
+                            presentation: 'modal',
+                            headerShown: false,
+                            gestureEnabled: false,
+                        }}
+                    >
+                        <Stack.Screen
+                            name="BotLogger"
+                            component={BotLogger}
+                        />
+                    </Stack.Group>
+                    <Stack.Group
+                        screenOptions={{
+                            title: '',
+                            presentation: 'modal',
+                            headerShown: false,
+                            gestureEnabled: false,
+                        }}
+                    >
+                        <Stack.Screen
+                            name="BotLoggerEmotions"
+                            component={BotLoggerEmotions}
+                        />
+                    </Stack.Group>
+                    <Stack.Group
+                        screenOptions={{
+                            title: '',
+                            presentation: 'modal',
+                            headerShown: false,
+                            gestureEnabled: false,
+                        }}
+                    >
+                        <Stack.Screen
+                            name="BotLoggerTags"
+                            component={BotLoggerTags}
+                        />
+                    </Stack.Group>
+                </>
 
-        <Stack.Group
-          screenOptions={{
-            title: '',
-            presentation: 'modal',
-            gestureEnabled: false,
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen
-            name="Onboarding"
-            component={Onboarding}
-          />
-        </Stack.Group>
+                <Stack.Group
+                    screenOptions={{
+                        title: '',
+                        presentation: 'modal',
+                        gestureEnabled: false,
+                        headerShown: false,
+                    }}
+                >
+                    <Stack.Screen
+                        name="LogCreate"
+                        component={LogCreate}
+                    />
+                </Stack.Group>
 
-        <Stack.Group
-          screenOptions={{
-            presentation: 'formSheet',
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen
-            name="Tags"
-            component={Tags}
-          />
-          <Stack.Screen
-            name="TagCreate"
-            component={TagCreate}
-          />
-          <Stack.Screen
-            name="TagEdit"
-            component={TagEdit}
-          />
-        </Stack.Group>
+                <Stack.Group
+                    screenOptions={{
+                        title: '',
+                        presentation: 'modal',
+                        headerShown: false,
+                    }}
+                >
+                    <Stack.Screen
+                        name="LogList"
+                        component={LogList}
+                    />
+                </Stack.Group>
 
-        <Stack.Group
-          screenOptions={{
-            ...defaultOptions,
-            headerBackTitle: '',
-          }}
-        >
-          <Stack.Screen
-            name="StatisticsHighlights"
-            component={StatisticsHighlights}
-            options={{
-              title: t('statistics_highlights'),
-              ...defaultPageOptions,
-            }}
-          />
-          <Stack.Screen
-            name="StatisticsYear"
-            component={StatisticsYearScreen}
-            options={{
-              title: dayjs().format('YYYY'),
-              headerShown: false,
-              ...defaultPageOptions,
-            }}
-          />
-        </Stack.Group>
-        <Stack.Group
-          screenOptions={{
-            ...defaultOptions,
-            headerBackTitle: '',
-          }}
-        >
-          <Stack.Screen
-            name="Settings"
-            component={SettingsScreen}
-            options={{
-              title: t('settings'),
-              ...defaultPageOptions,
-            }}
-          />
-          <Stack.Screen
-            name="StatisticsMonth"
-            component={StatisticsMonthScreen}
-            options={{
-              title: t('month_report'),
-              headerShown: false,
-              ...defaultPageOptions,
-            }}
-          />
-          <Stack.Screen
-            name="Reminder"
-            component={ReminderScreen}
-            options={{
-              title: t('reminder'),
-              ...defaultPageOptions,
-            }}
-          />
-          <Stack.Screen
-            name="Privacy"
-            component={PrivacyScreen}
-            options={{
-              title: t('privacy'),
-              ...defaultPageOptions,
-            }}
-          />
-          <Stack.Screen
-            name="Changelog"
-            component={ChangelogScreen}
-            options={{
-              title: t('changelog'),
-              ...defaultPageOptions,
-            }}
-          />
-          <Stack.Screen
-            name="Licenses"
-            component={LicensesScreen}
-            options={{
-              title: t('licenses'),
-              ...defaultPageOptions,
-            }}
-          />
-          <Stack.Screen
-            name="Colors"
-            component={ColorsScreen}
-            options={{
-              title: t('colors'),
-              ...defaultPageOptions,
-            }}
-          />
-          <Stack.Screen
-            name="SettingsTags"
-            component={SettingsTags}
-            options={{
-              title: t('tags'),
-              ...defaultPageOptions,
-            }}
-          />
-          <Stack.Screen
-            name="TagCategories"
-            component={TagCategories}
-            options={{
-              title: t('tag_categories_management'),
-              ...defaultPageOptions,
-            }}
-          />
-          <Stack.Screen
-            name="SettingsTagsArchive"
-            component={SettingsTagsArchive}
-            options={{
-              title: t('archive_tag'),
-              ...defaultPageOptions,
-            }}
-          />
-          <Stack.Screen
-            name="Steps"
-            component={StepsScreen}
-            options={{
-              title: t('steps'),
-              ...defaultPageOptions,
-            }}
-          />
-          <Stack.Screen
-            name="Data"
-            component={DataScreen}
-            options={{
-              title: t('data'),
-              ...defaultPageOptions,
-            }}
-          />
-          <Stack.Screen
-            name="DevelopmentTools"
-            component={DevelopmentTools}
-            options={{
-              title: t('settings_development_statistics'),
-              ...defaultPageOptions,
-            }}
-          />
-        </Stack.Group>
-      </Stack.Navigator>
-    </View>
-    // )
-  );
+                <Stack.Group
+                    screenOptions={{
+                        title: '',
+                        presentation: 'modal',
+                        gestureEnabled: false,
+                        headerShown: false,
+                    }}
+                >
+                    <Stack.Screen
+                        name="LogEdit"
+                        component={LogEdit}
+                    />
+                </Stack.Group>
+
+                <Stack.Group
+                    screenOptions={{
+                        title: '',
+                        presentation: 'modal',
+                        gestureEnabled: false,
+                        headerShown: false,
+                    }}
+                >
+                    <Stack.Screen
+                        name="Onboarding"
+                        component={Onboarding}
+                    />
+                </Stack.Group>
+
+                <Stack.Group
+                    screenOptions={{
+                        presentation: 'formSheet',
+                        headerShown: false,
+                    }}
+                >
+                    <Stack.Screen
+                        name="Tags"
+                        component={Tags}
+                    />
+                    <Stack.Screen
+                        name="TagCreate"
+                        component={TagCreate}
+                    />
+                    <Stack.Screen
+                        name="TagEdit"
+                        component={TagEdit}
+                    />
+                </Stack.Group>
+
+                <Stack.Group
+                    screenOptions={{
+                        ...defaultOptions,
+                        headerBackTitle: '',
+                    }}
+                >
+                    <Stack.Screen
+                        name="StatisticsHighlights"
+                        component={StatisticsHighlights}
+                        options={{
+                            title: t('statistics_highlights'),
+                            ...defaultPageOptions,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="StatisticsYear"
+                        component={StatisticsYearScreen}
+                        options={{
+                            title: dayjs().format('YYYY'),
+                            headerShown: false,
+                            ...defaultPageOptions,
+                        }}
+                    />
+                </Stack.Group>
+                <Stack.Group
+                    screenOptions={{
+                        ...defaultOptions,
+                        headerBackTitle: '',
+                    }}
+                >
+                    <Stack.Screen
+                        name="Settings"
+                        component={SettingsScreen}
+                        options={{
+                            title: t('settings'),
+                            ...defaultPageOptions,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="StatisticsMonth"
+                        component={StatisticsMonthScreen}
+                        options={{
+                            title: t('month_report'),
+                            headerShown: false,
+                            ...defaultPageOptions,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="Reminder"
+                        component={ReminderScreen}
+                        options={{
+                            title: t('reminder'),
+                            ...defaultPageOptions,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="Changelog"
+                        component={ChangelogScreen}
+                        options={{
+                            title: t('changelog'),
+                            ...defaultPageOptions,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="Colors"
+                        component={ColorsScreen}
+                        options={{
+                            title: t('colors'),
+                            ...defaultPageOptions,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="SettingsTags"
+                        component={SettingsTags}
+                        options={{
+                            title: t('tags'),
+                            ...defaultPageOptions,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="TagCategories"
+                        component={TagCategories}
+                        options={{
+                            title: t('tag_categories_management'),
+                            ...defaultPageOptions,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="SettingsTagsArchive"
+                        component={SettingsTagsArchive}
+                        options={{
+                            title: t('archive_tag'),
+                            ...defaultPageOptions,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="Steps"
+                        component={StepsScreen}
+                        options={{
+                            title: t('steps'),
+                            ...defaultPageOptions,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="Data"
+                        component={DataScreen}
+                        options={{
+                            title: t('data'),
+                            ...defaultPageOptions,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="DevelopmentTools"
+                        component={DevelopmentTools}
+                        options={{
+                            title: t('settings_development_statistics'),
+                            ...defaultPageOptions,
+                        }}
+                    />
+                </Stack.Group>
+            </Stack.Navigator>
+        </View>
+        // )
+    );
 }
