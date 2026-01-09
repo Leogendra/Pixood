@@ -1,49 +1,49 @@
 {
-  "expo": {
-    "name": "Pixood",
-    "slug": "pixood",
-    "version": "1.86.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "pixood",
-    "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff",
-      "dark": {
-        "image": "./assets/images/splash.png",
-        "backgroundColor": "#171717"
-      }
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "android": {
-      "package": "com.pixood.app",
-      "versionCode": 480018600,
-      "allowBackup": false,
-      "permissions": [],
-      "icon": "./assets/images/icon.png",
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "playStoreUrl": "",
-      "minSdkVersion": 16
-    },
-    "plugins": [
-      "expo-notifications",
-      "expo-localization",
-      [
-        "expo-document-picker",
-        {
-          "appleTeamId": "8VVNC4724B"
+    "expo": {
+        "name": "Pixood",
+        "slug": "pixood",
+        "version": "1.86.0",
+        "orientation": "portrait",
+        "icon": "./assets/images/icon.png",
+        "scheme": "pixood",
+        "userInterfaceStyle": "automatic",
+        "splash": {
+            "image": "./assets/images/splash.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#ffffff",
+            "dark": {
+                "image": "./assets/images/splash.png",
+                "backgroundColor": "#171717"
+            }
+        },
+        "assetBundlePatterns": [
+            "**/*"
+        ],
+        "android": {
+            "package": "com.pixood.app",
+            "versionCode": 480018600,
+            "allowBackup": false,
+            "permissions": [],
+            "icon": "./assets/images/icon.png",
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/images/adaptive-icon.png",
+                "backgroundColor": "#ffffff"
+            },
+            "playStoreUrl": "",
+            "minSdkVersion": 16
+        },
+        "plugins": [
+            "expo-notifications",
+            "expo-localization",
+            [
+                "expo-document-picker",
+                {
+                    "appleTeamId": "8VVNC4724B"
+                }
+            ]
+        ],
+        "runtimeVersion": {
+            "policy": "sdkVersion"
         }
-      ]
-    ],
-    "runtimeVersion": {
-      "policy": "sdkVersion"
-  }
-  }
+    }
 }

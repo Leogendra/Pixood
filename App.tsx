@@ -5,16 +5,16 @@ import Navigation from '@/navigation';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function App() {
-  const isLoadingComplete = useCachedResources();
+    const isLoadingComplete = useCachedResources();
 
-  if (!isLoadingComplete) {
-    return null;
-  } else {
-    return (
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <Navigation />
-        <StatusBar />
-      </GestureHandlerRootView>
-    );
-  }
+    if (!isLoadingComplete) {
+        return null;
+    } else {
+        return (
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <Navigation />
+                <StatusBar />
+            </GestureHandlerRootView>
+        );
+    }
 }
