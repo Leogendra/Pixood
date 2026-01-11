@@ -1,6 +1,7 @@
 {
     "name": "pixood",
     "version": "2.0.0",
+    "private": true,
     "scripts": {
         "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider expo start --dev-client",
         "android": "expo run:android",
@@ -105,5 +106,5 @@
         "sharp": "^0.31.2",
         "typescript": "^4.9.4"
     },
-    "private": true
+    "packageManager": "yarn@3.6.1+sha512.de524adec81a6c3d7a26d936d439d2832e351cdfc5728f9d91f3fc85dd20b04391c038e9b4ecab11cae2b0dd9f0d55fd355af766bc5c1a7f8d25d96bb2a0b2ca"
 }
