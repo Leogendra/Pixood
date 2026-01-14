@@ -1,54 +1,45 @@
 # Pixood - Minimalist Mood Tracker App
 
-This project is a **fork** of the original [Pixy Mood Tracker](https://github.com/mrzmyr/pixy-mood-tracker).  
-It aims to maintain and simplify the app while removing all cloud dependencies with a **fully local storage**, and preparing for future enhancements.
+Pixood is a minimalist mood tracking app to log your daily moods and visualize them over time.
+- The app uses Expo for cross-platform development
+- All data is stored locally on the device (no cloud sync)
+- Supports iOS, Android, and Web
 
-For the complete README and original documentation, please visit the original repository:  
-➡️ [Original Repository](https://github.com/mrzmyr/pixy-mood-tracker)
+This project is a **fork** of the original [Pixy Mood Tracker](https://github.com/mrzmyr/pixy-mood-tracker) app. It aims to maintain and simplify the app while removing all cloud dependencies with a **fully local storage**, and preparing for future enhancements. For more information, visit the original mrzmyr's repository.
 
----
-
-## 📋 Prerequisites
+## Prerequisites
 
 Before you start, make sure you have the following installed:
 
-- **Node.js** (v18 or higher) - [Download here](https://nodejs.org)
-- **Yarn** (v3.6+) - Install via `npm install -g yarn`
+- **Node.js** (v18+)
+- **Yarn** (v3.6+) - Managed via Corepack with `corepack enable`
 - **Expo CLI** - Install via `npm install -g expo-cli`
-- **Git** - [Download here](https://git-scm.com)
 
 ### For iOS Development
-- **Xcode** (macOS only) - Install from App Store or [developer.apple.com](https://developer.apple.com)
-- **CocoaPods** - Usually comes with Xcode, or install via `sudo gem install cocoapods`
+- **Xcode** (macOS only)
+- **CocoaPods**
 
 ### For Android Development
-- **Android Studio** - [Download here](https://developer.android.com/studio)
+- **Android Studio**
 - **Android SDK** (API 28+)
-- **JDK 17** (recommended) - [Download here](https://www.oracle.com/java/technologies/downloads/#java17)
+- **JDK 17** (recommended)
 
----
 
 ## Quick Start
 
-### 1. Clone the repository
-```bash
-git clone <repository-url>
-cd Pixood
-```
-
-### 2. Install dependencies
+1. Clone the repository
+2. Install dependencies
 ```bash
 yarn install
 ```
 
-### 3. Start the development server
+3. Start the development server
 ```bash
 yarn start
 ```
 
 This will launch the Expo CLI in your terminal with options to run on different platforms.
 
----
 
 ## Running on Different Platforms
 
@@ -122,9 +113,8 @@ If `yarn start` is already running, press `w` to open on Web
 
 The app will open at `http://localhost:19006`
 
----
 
-## 🔧 Common Commands
+## Common Commands
 
 Clear cache and reinstall
 ```bash
@@ -141,9 +131,8 @@ Run tests
 yarn test
 ```
 
----
 
-## 🛠 Troubleshooting
+## Troubleshooting
 
 ### Issue: "unable to get local issuer certificate"
 Set Yarn to ignore strict SSL (not recommended for production):
@@ -163,35 +152,11 @@ npm install -g expo-cli
 2. Go to `Device Manager` and launch the emulator from there
 3. Wait for it to fully boot before running `yarn android`
 
-### Issue: iOS build fails
-```bash
-cd ios
-pod install --repo-update
-cd ..
-yarn ios
-```
-
-### Issue: Port 8081 already in use
-Kill the process using the port
-```bash
-lsof -ti:8081 | xargs kill -9
-```
 
 ### Issue: Cache problems
-**Solution:**
+Clear all caches
 ```bash
-# Clear all caches
 yarn clean
 rm -rf node_modules
 yarn install
 ```
-
----
-
-## 📝 Notes
-
-- The app uses **Expo** for cross-platform development
-- All data is stored **locally** on the device (no cloud sync)
-- Supports **iOS**, **Android**, and **Web**
-
-For more information, visit the [original repository](https://github.com/mrzmyr/pixy-mood-tracker).
