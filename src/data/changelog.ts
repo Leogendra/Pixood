@@ -1,21 +1,15 @@
 export interface ChangelogEntry {
-  slug: string;
-  title: string;
-  summary: string;
-  published: string;
+    slug: string;
+    title: string;
+    summary: string;
+    published: string;
 }
 
 export const CHANGELOG_ENTRIES: ChangelogEntry[] = [
-  {
-    slug: 'offline-mode-initial-release',
-    title: 'Offline mode is here',
-    summary: 'Pixood no longer requires an internet connection. Feedback, surveys and statistics are stored securely on your device.',
-    published: '2024-05-01',
-  },
-  {
-    slug: 'offline-quality-of-life',
-    title: 'Quality of life improvements',
-    summary: 'Improved local backups, refined reminders and better performance when managing large journals.',
-    published: '2024-04-10',
-  },
+    {
+        slug: '2.0.0-initial-release',
+        title: 'Pixood 2.0.0 is here!',
+        summary: 'The app is now fully offline, allowing you to view and manage your photos without an internet connection.',
+        published: '2026',
+    },
 ];

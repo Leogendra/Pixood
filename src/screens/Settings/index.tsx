@@ -1,7 +1,6 @@
 import * as Linking from 'expo-linking';
-import * as StoreReview from 'expo-store-review';
 import { ScrollView, Text, View } from 'react-native';
-import { Bell, BookOpen, CheckCircle, Database, Droplet, Flag, PieChart, Smartphone, Star } from 'react-native-feather';
+import { Bell, BookOpen, CheckCircle, Database, Droplet, Github, PieChart, Smartphone } from 'react-native-feather';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import MenuList from '@/components/MenuList';
 import MenuListHeadline from '@/components/MenuListHeadline';
@@ -10,158 +9,134 @@ import TextInfo from '@/components/TextInfo';
 import { t } from '@/helpers/translation';
 import { useAnalytics } from '../../hooks/useAnalytics';
 import useColors from '../../hooks/useColors';
-import useFeedbackModal from '../../hooks/useFeedbackModal';
 import pkg from '../../../package.json';
 import { RootStackScreenProps } from '../../../types';
 import { UserDataImportList } from './UserData';
 import { Tag } from 'lucide-react-native';
 
 export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>) => {
-  const insets = useSafeAreaInsets();
-  const colors = useColors()
-  const analytics = useAnalytics()
+    const insets = useSafeAreaInsets();
+    const colors = useColors()
+    const analytics = useAnalytics()
 
-  const { show: showFeedbackModal, Modal: FeedbackModal } = useFeedbackModal();
+    const openGithubRepository = () => {
+        analytics.track('visit_github')
+        Linking.openURL('https://github.com/Leogendra/Pixood')
+    }
 
-  const askToRateApp = async () => {
-    analytics.track('rate_app')
-
-    const storeUrl = StoreReview.storeUrl();
-    if (storeUrl !== null) Linking.openURL(storeUrl)
-  }
-
-  return (
-    <View style={{
-      paddingTop: insets.top,
-      flex: 1,
-      backgroundColor: colors.background,
-    }}>
-      <ScrollView
-        style={{
-          padding: 20,
-        }}
-      >
-        <FeedbackModal />
-        <Text
-          style={{
-            fontSize: 32,
-            color: colors.text,
-            fontWeight: 'bold',
-            marginTop: 32,
-            marginBottom: 18,
-          }}
-        >{t('settings')}</Text>
-        <MenuList>
-          <MenuListItem
-            title={t('data')}
-            iconLeft={<Database width={18} color={colors.menuListItemIcon} />}
-            onPress={() => navigation.navigate('Data')}
-            testID='data'
-            isLink
-          />
-          <MenuListItem
-            title={t('reminder')}
-            iconLeft={<Bell width={18} color={colors.menuListItemIcon} />}
-            onPress={() => navigation.navigate('Reminder')}
-            testID='reminder'
-            isLink
-          />
-          <MenuListItem
-            title={t('colors')}
-            iconLeft={<Droplet width={18} color={colors.menuListItemIcon} />}
-            onPress={() => navigation.navigate('Colors')}
-            isLink
-          />
-          <MenuListItem
-            title={t('tags')}
-            iconLeft={<Tag width={18} color={colors.menuListItemIcon} />}
-            onPress={() => navigation.navigate('SettingsTags')}
-            isLink
-          />
-          <MenuListItem
-            title={t('tag_categories_management')}
-            iconLeft={<Tag width={18} color={colors.menuListItemIcon} />}
-            onPress={() => navigation.navigate('TagCategories')}
-            isLink
-          />
-          <MenuListItem
-            title={t('steps')}
-            iconLeft={<CheckCircle width={18} color={colors.menuListItemIcon} />}
-            onPress={() => navigation.navigate('Steps')}
-            isLink
-            isLast
-          />
-        </MenuList>
-
-        <MenuListHeadline>{t('settings_feedback')}</MenuListHeadline>
-        <MenuList
-          style={{
-          }}
-        >
-          <MenuListItem
-            title={t('send_feedback')}
-            onPress={() => showFeedbackModal({ type: 'issue' })}
-            iconLeft={<Flag width={18} color={colors.menuListItemIcon} />}
-            testID='send_feedback'
-            isLast
-          />
-        </MenuList>
-        <TextInfo>{t('feedback_help')}</TextInfo>
-
-        <MenuListHeadline>{t('settings_about')}</MenuListHeadline>
-        <MenuList
-          style={{
-          }}
-        >
-          <MenuListItem
-            title={t('changelog')}
-            onPress={() => {
-              analytics.track('settings_changelog')
-              navigation.navigate('Changelog')
-            }}
-            iconLeft={<BookOpen width={18} color={colors.menuListItemIcon} />}
-            testID='changelog'
-          />
-          <MenuListItem
-            title={t('rate_this_app')}
-            onPress={() => askToRateApp()}
-            iconLeft={<Star width={18} color={colors.menuListItemIcon} />}
-            isLast
-          />
-        </MenuList>
-
-        <MenuListHeadline>{t('settings_development')}</MenuListHeadline>
-        <MenuList
-          style={{
-          }}
-        >
-          <MenuListItem
-            title={`${t('onboarding')}`}
-            iconLeft={<Smartphone width={18} color={colors.menuListItemIcon} />}
-            onPress={() => navigation.navigate('Onboarding')}
-          />
-          <MenuListItem
-            title={`${t('settings_development_statistics')}`}
-            iconLeft={<PieChart width={18} color={colors.menuListItemIcon} />}
-            onPress={() => navigation.navigate('DevelopmentTools')}
-            isLink
-            isLast
-          />
-        </MenuList>
-        <View
-          style={{
-            marginTop: 20,
+    return (
+        <View style={{
+            paddingTop: insets.top,
             flex: 1,
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            marginBottom: 40,
-          }}
-        >
-          <Text style={{ fontSize: 14, marginTop: 5, color: colors.textSecondary }}>Pixood v{pkg.version}</Text>
-        </View>
+            backgroundColor: colors.background,
+        }}>
+            <ScrollView style={{ padding: 20 }} >
+                <Text
+                    style={{
+                        fontSize: 32,
+                        color: colors.text,
+                        fontWeight: 'bold',
+                        marginTop: 32,
+                        marginBottom: 18,
+                    }}
+                >{t('settings')}</Text>
+                <MenuList>
+                    <MenuListItem
+                        title={t('reminder')}
+                        iconLeft={<Bell width={18} color={colors.menuListItemIcon} />}
+                        onPress={() => navigation.navigate('Reminder')}
+                        testID='reminder'
+                        isLink
+                    />
+                    <MenuListItem
+                        title={t('colors')}
+                        iconLeft={<Droplet width={18} color={colors.menuListItemIcon} />}
+                        onPress={() => navigation.navigate('Colors')}
+                        isLink
+                    />
+                    {/* <MenuListItem
+                        title={t('tags')}
+                        iconLeft={<Tag width={18} color={colors.menuListItemIcon} />}
+                        onPress={() => navigation.navigate('SettingsTags')}
+                        isLink
+                    /> */}
+                    <MenuListItem
+                        title={t('tag_categories_management')}
+                        iconLeft={<Tag width={18} color={colors.menuListItemIcon} />}
+                        onPress={() => navigation.navigate('TagCategories')}
+                        isLink
+                    />
+                    <MenuListItem
+                        title={t('steps')}
+                        iconLeft={<CheckCircle width={18} color={colors.menuListItemIcon} />}
+                        onPress={() => navigation.navigate('Steps')}
+                        isLink
+                    />
+                    <MenuListItem
+                        title={t('data')}
+                        iconLeft={<Database width={18} color={colors.menuListItemIcon} />}
+                        onPress={() => navigation.navigate('Data')}
+                        testID='data'
+                        isLink
+                        isLast
+                    />
+                </MenuList>
 
-        {__DEV__ && <UserDataImportList />}
-      </ScrollView>
-    </View>
-  );
+                <MenuListHeadline>{t('settings_about')}</MenuListHeadline>
+                <MenuList>
+                    <MenuListItem
+                        title={t('changelog')}
+                        onPress={() => {
+                            analytics.track('settings_changelog')
+                            navigation.navigate('Changelog')
+                        }}
+                        iconLeft={<BookOpen width={18} color={colors.menuListItemIcon} />}
+                        testID='changelog'
+                        isLink
+                    />
+                    <MenuListItem
+                        title={t('visit_github_repository')}
+                        onPress={() => openGithubRepository()}
+                        iconLeft={<Github width={18} color={colors.menuListItemIcon} />}
+                        isLast
+                    />
+                    {/* <MenuListItem
+                        title={t('rate_this_app')}
+                        onPress={() => askToRateApp()}
+                        iconLeft={<Star width={18} color={colors.menuListItemIcon} />}
+                        isLast
+                    /> */}
+                </MenuList>
+
+                <MenuListHeadline>{t('settings_development')}</MenuListHeadline>
+                <MenuList>
+                    <MenuListItem
+                        title={`${t('onboarding')}`}
+                        iconLeft={<Smartphone width={18} color={colors.menuListItemIcon} />}
+                        onPress={() => navigation.navigate('Onboarding')}
+                    />
+                    <MenuListItem
+                        title={`${t('settings_development_statistics')}`}
+                        iconLeft={<PieChart width={18} color={colors.menuListItemIcon} />}
+                        onPress={() => navigation.navigate('DevelopmentTools')}
+                        isLink
+                        isLast
+                    />
+                </MenuList>
+                <View
+                    style={{
+                        marginTop: 20,
+                        flex: 1,
+                        justifyContent: 'flex-end',
+                        alignItems: 'center',
+                        marginBottom: 40,
+                    }}
+                >
+                    <Text style={{ fontSize: 14, marginTop: 5, color: colors.textSecondary }}>Pixood v{pkg.version}</Text>
+                </View>
+
+                {__DEV__ && <UserDataImportList />}
+            </ScrollView>
+        </View>
+    );
 }
