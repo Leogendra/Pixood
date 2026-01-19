@@ -6,7 +6,6 @@ import MenuList from '@/components/MenuList';
 import MenuListItem from '@/components/MenuListItem';
 import NotificationPreview from '@/components/NotificationPreview';
 import { t } from '@/helpers/translation';
-import { useAnalytics } from '@/hooks/useAnalytics';
 import useColors from '@/hooks/useColors';
 import useNotification from '@/hooks/useNotifications';
 import { SettingsState, useSettings } from '@/hooks/useSettings';
@@ -23,7 +22,6 @@ const Reminder = () => {
   const [reminderEnabled, setReminderEnabled] = useState(settings.reminderEnabled);
   const [reminderTime, setReminderTime] = useState(settings.reminderTime);
   const colors = useColors()
-  const analytics = useAnalytics()
 
   const hourAndMinute = reminderTime.split(':')
   const hour = parseInt(hourAndMinute[0])
@@ -38,7 +36,6 @@ const Reminder = () => {
     if (!value) {
       await cancelAll()
     }
-    analytics.track('reminder_enabled_change', { enabled: value })
 
     const enable = value && has
 
@@ -67,7 +64,6 @@ const Reminder = () => {
   }, [reminderEnabled, reminderTime])
 
   const onTimeChange = async (event: any, selectedDate: any) => {
-    analytics.track('reminder_time_change', { time: dayjs(selectedDate).format('HH:mm') })
     setReminderTime(dayjs(selectedDate).format('HH:mm'))
   }
 

@@ -5,7 +5,6 @@ import MenuListHeadline from '@/components/MenuListHeadline';
 import MenuListItem from '@/components/MenuListItem';
 import TextInfo from '@/components/TextInfo';
 import { t } from '@/helpers/translation';
-import { useAnalytics } from '../../hooks/useAnalytics';
 import useColors from '../../hooks/useColors';
 import { useSettings } from '../../hooks/useSettings';
 import { Radio } from './Radio';
@@ -15,7 +14,6 @@ import { PageWithHeaderLayout } from '@/components/PageWithHeaderLayout';
 export const ColorsScreen = ({ navigation }) => {
   const { setSettings, settings } = useSettings()
   const colors = useColors()
-  const analytics = useAnalytics()
 
   const [scaleType, setScaleType] = useState(settings.scaleType)
 
@@ -38,7 +36,6 @@ export const ColorsScreen = ({ navigation }) => {
 
   useEffect(() => {
     setSettings(settings => ({ ...settings, scaleType }))
-    analytics.track('colors_scale_changed', { scaleType })
   }, [scaleType])
 
   const onSelect = useCallback((id) => {

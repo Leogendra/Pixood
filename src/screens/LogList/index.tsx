@@ -2,7 +2,6 @@ import Button from "@/components/Button"
 import { PageModalLayout } from "@/components/PageModalLayout"
 import { askToRemove } from "@/helpers/prompts"
 import { t } from "@/helpers/translation"
-import { useAnalytics } from "@/hooks/useAnalytics"
 import useColors from "@/hooks/useColors"
 import { LogItem, useLogState, useLogUpdater } from "@/hooks/useLogs"
 import { getDayDateTitle } from "@/lib/utils"
@@ -21,7 +20,6 @@ export const LogList = ({ route, navigation }: RootStackScreenProps<'LogList'>) 
   const colors = useColors()
   const { date } = route.params
   const logState = useLogState()
-  const analytics = useAnalytics()
   const insets = useSafeAreaInsets()
   const logUpdater = useLogUpdater()
 
@@ -30,24 +28,20 @@ export const LogList = ({ route, navigation }: RootStackScreenProps<'LogList'>) 
     .sort((a, b) => dayjs(a.dateTime).isBefore(dayjs(b.dateTime)) ? -1 : 1)
 
   const close = () => {
-    analytics.track('log_list_close')
     navigation.goBack()
   }
 
   const add = () => {
-    analytics.track('log_list_add');
     navigation.navigate('LogCreate', {
       dateTime: dayjs(date).hour(dayjs().hour()).minute(dayjs().minute()).toISOString()
     })
   }
 
   const edit = (item: LogItem) => {
-    analytics.track('log_list_edit');
     navigation.navigate('LogEdit', { id: item.id });
   };
 
   const remove = (item: LogItem) => {
-    analytics.track('log_list_delete');
     logUpdater.deleteLog(item.id);
     // navigation.goBack();
   };

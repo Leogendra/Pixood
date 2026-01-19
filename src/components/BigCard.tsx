@@ -1,4 +1,3 @@
-import { useAnalytics } from '@/hooks/useAnalytics';
 import useColors from "@/hooks/useColors";
 import * as Sharing from 'expo-sharing';
 import { useRef, useState } from "react";
@@ -96,7 +95,6 @@ export const BigCard = ({
 }) => {
   const colors = useColors();
   const viewRef = useRef(null)
-  const analytics = useAnalytics();
   const [shareLoading, setShareLoading] = useState(false);
 
   const share = () => {
@@ -108,11 +106,6 @@ export const BigCard = ({
         Sharing.shareAsync("file://" + uri, {
           dialogTitle: 'Hey I use this app called "Pixood" and I wanted to share this with you!',
         })
-          .then(() => {
-            analytics.track('statstics_shared', {
-              type: analyticsId,
-            });
-          })
           .catch((error) => {
             console.log(error)
           })

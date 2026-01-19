@@ -1,6 +1,4 @@
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { TRACKING_ENABLED } from "@/constants/Config";
-import { AnalyticsProvider } from "@/hooks/useAnalytics";
 import { CalendarFiltersProvider } from "@/hooks/useCalendarFilters";
 import { LogsProvider } from "@/hooks/useLogs";
 import { SettingsProvider } from "@/hooks/useSettings";
@@ -14,8 +12,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
     <SafeAreaProvider>
       <SettingsProvider>
         {/* <PasscodeProvider> */}
-        <AnalyticsProvider options={{ enabled: TRACKING_ENABLED }}>
-          <LogsProvider>
+        <LogsProvider>
             <TagsProvider>
               <TagCategoriesProvider>
                 <TemporaryLogProvider>
@@ -26,7 +23,6 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
               </TagCategoriesProvider>
             </TagsProvider>
           </LogsProvider>
-        </AnalyticsProvider>
         {/* </PasscodeProvider> */}
       </SettingsProvider>
     </SafeAreaProvider>

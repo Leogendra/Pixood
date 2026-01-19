@@ -1,7 +1,6 @@
 // Removed AsyncStorage import
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { act, renderHook } from '@testing-library/react-hooks'
-import { AnalyticsProvider } from '../hooks/useAnalytics'
 import { CalendarFiltersProvider, useCalendarFilters } from '../hooks/useCalendarFilters'
 import { LogsProvider, LogsState, STORAGE_KEY } from '../hooks/useLogs'
 import { SettingsProvider } from '../hooks/useSettings'
@@ -9,13 +8,11 @@ import { _generateItem } from './utils'
 
 const wrapper = ({ children }) => (
   <SettingsProvider>
-    <AnalyticsProvider>
       <LogsProvider>
         <CalendarFiltersProvider>
           {children}
         </CalendarFiltersProvider>
       </LogsProvider>
-    </AnalyticsProvider>
   </SettingsProvider>
 )
 

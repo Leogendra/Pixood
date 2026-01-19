@@ -5,9 +5,9 @@ import { t } from "@/helpers/translation";
 import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
 import { useEffect } from "react";
+import { useState } from "react";
 import { Text, View } from "react-native";
 import { Activity } from "react-native-feather";
-import { useAnalytics } from "../../hooks/useAnalytics";
 import useColors from "../../hooks/useColors";
 import { LogItem, useLogState } from "../../hooks/useLogs";
 import { useStatistics } from "../../hooks/useStatistics";
@@ -55,9 +55,9 @@ const EmptryState = () => {
 export const HighlightsSection = ({ items }: { items: LogItem[] }) => {
   const colors = useColors();
   const navigation = useNavigation();
-  const analytics = useAnalytics();
   const statistics = useStatistics();
   const logState = useLogState();
+  const [highlights, setHighlights] = useState<Record<string, any>>({});
 
   const showMoodAvg = statistics.isHighlighted("mood_avg");
   const showMoodPeaksPositve = statistics.isHighlighted("mood_peaks_positive");
@@ -123,10 +123,7 @@ export const HighlightsSection = ({ items }: { items: LogItem[] }) => {
       cards.emotions_distribution_item_count = statistics.state.emotionsDistributionData.emotions.length
     }
 
-    analytics.track('statistics_relevant_highlights', {
-      itemsCount: statistics.state.itemsCount,
-      ...cards
-    })
+    setHighlights(cards)
   }, [JSON.stringify(statistics.state)])
 
   return (

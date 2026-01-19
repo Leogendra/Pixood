@@ -58,8 +58,7 @@ export const INITIAL_STATE: SettingsState = {
     "sleep",
     "emotions",
     "tags",
-    "message",
-    "feedback"
+    "message"
   ],
 };
 

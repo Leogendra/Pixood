@@ -3,7 +3,6 @@ import { load, store } from '@/helpers/storage';
 import { t } from '@/helpers/translation';
 import _ from 'lodash';
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from "react";
-import { useAnalytics } from './useAnalytics';
 import { useLogState, useLogUpdater } from './useLogs';
 import { useSettings } from './useSettings';
 

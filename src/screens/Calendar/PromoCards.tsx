@@ -3,7 +3,6 @@ import { MONTH_REPORT_SLUG, PromoCardMonth } from "@/components/PromoCardMonth";
 import { PromoCardYear, YEAR_REPORT_SLUG } from "@/components/PromoCardYear";
 import { DATE_FORMAT, STATISTIC_MIN_LOGS } from "@/constants/Config";
 import { t } from "@/helpers/translation";
-import { useAnalytics } from "@/hooks/useAnalytics";
 import { useSettings } from "@/hooks/useSettings";
 import { CHANGELOG_ENTRIES } from "@/data/changelog";
 import { useNavigation } from "@react-navigation/native";
@@ -16,7 +15,6 @@ import { useLogState } from "../../hooks/useLogs";
 export const PromoCards = () => {
   const navigation = useNavigation();
   const logState = useLogState();
-  const analytics = useAnalytics();
   const colors = useColors();
   const { hasActionDone } = useSettings()
 
@@ -63,7 +61,6 @@ export const PromoCards = () => {
         subtitle={t('new_feature')}
         title={t('promo_sleep_tracking_title')}
         onPress={() => {
-          analytics.track('promo_sleep_tracking_clicked')
           navigation.navigate("Steps");
         }}
       />
@@ -78,7 +75,6 @@ export const PromoCards = () => {
         subtitle={t('new_release')}
         title={mostRecentChangelog.title}
         onPress={() => {
-          analytics.track('promo_changelog_clicked')
           Alert.alert(mostRecentChangelog.title, mostRecentChangelog.summary)
         }}
       />

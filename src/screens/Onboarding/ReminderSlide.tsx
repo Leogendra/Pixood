@@ -9,7 +9,6 @@ import useNotification from '../../hooks/useNotifications';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import { SettingsState, useSettings } from '../../hooks/useSettings';
-import { useAnalytics } from '../../hooks/useAnalytics';
 import LinkButton from '@/components/LinkButton';
 import { t } from '@/helpers/translation';
 
@@ -57,7 +56,6 @@ export const ReminderSlide = ({
 }) => {
   const colors = useColors()
   const { setSettings } = useSettings()
-  const analytics = useAnalytics()
 
   const {
     askForPermission,
@@ -93,12 +91,10 @@ export const ReminderSlide = ({
   }
 
   const onLater = () => {
-    analytics.track('onboarding_reminder_later')
     setIndex(index + 1)
   }
 
   const onEnable = async () => {
-    analytics.track('onboarding_reminder_enable')
     await enable()
     setIndex(index + 1)
   }

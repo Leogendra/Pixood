@@ -8,7 +8,6 @@ import Clock from '@/components/Clock';
 import LinkButton from '@/components/LinkButton';
 import useColors from '@/hooks/useColors';
 import useNotification from '@/hooks/useNotifications';
-import { useAnalytics } from '@/hooks/useAnalytics';
 import { SettingsState, useSettings } from '@/hooks/useSettings';
 import { SlideHeadline } from "../components/SlideHeadline";
 import { getLogEditMarginTop } from '@/helpers/responsive';
@@ -21,7 +20,6 @@ export const SlideReminder = ({
 }) => {
   const { setSettings } = useSettings()
   const insets = useSafeAreaInsets();
-  const analytics = useAnalytics()
   const colors = useColors()
   const marginTop = getLogEditMarginTop()
 
@@ -59,12 +57,10 @@ export const SlideReminder = ({
   }
 
   const onLater = () => {
-    analytics.track('log_reminder_later')
     onPress?.()
   }
 
   const onEnable = async () => {
-    analytics.track('log_reminder_enable')
     await enable()
     onPress?.()
   }

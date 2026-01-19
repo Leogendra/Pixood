@@ -14,18 +14,21 @@ import {
     LogEdit,
     NotFoundScreen,
     ChangelogScreen,
-    ReminderScreen, SettingsScreen, StatisticsHighlights, TagCreate, TagEdit, TagCategories, SettingsTags, SettingsTagsArchive
+    ReminderScreen,
+    SettingsScreen,
+    StatisticsHighlights,
+    TagCreate,
+    TagEdit,
+    TagCategories,
+    SettingsTags,
+    SettingsTagsArchive
 } from '../screens';
-
 import Providers from '@/components/Providers';
 import Colors from '@/constants/Colors';
 import { initializeDayjs, t } from '@/helpers/translation';
-import { useAnalytics } from '@/hooks/useAnalytics';
-import { useAnonymizer } from '@/hooks/useAnonymizer';
 import { useLogState } from '@/hooks/useLogs';
 import { useSettings } from '@/hooks/useSettings';
 import { useTagsState } from '@/hooks/useTags';
-import { getItemsCountPerDayAverage, getItemsCoverage } from '@/lib/utils';
 import dayjs from 'dayjs';
 import { enableScreens } from 'react-native-screens';
 import { DevelopmentTools } from '../screens/DevelopmentTools';
@@ -50,7 +53,6 @@ const NAVIGATION_LINKING = {
         screens: {
             Calendar: 'calendar',
             Onboarding: 'onboarding',
-
             Settings: 'settings',
             Colors: 'settings/colors',
             Steps: 'settings/steps',
@@ -65,13 +67,14 @@ const NAVIGATION_LINKING = {
             LogList: 'days/:date',
             LogCreate: 'logs/create/:dateTime',
             LogEdit: 'logs/:id/edit',
-
             Tags: 'tags',
             TagEdit: 'tags/:id',
             TagCreate: 'tags/create',
         },
     },
 };
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function Navigation() {
     const scheme = useColorScheme();
@@ -81,13 +84,9 @@ export default function Navigation() {
             linking={NAVIGATION_LINKING}
             // @ts-ignore
             theme={
-                scheme === 'dark' ? {
-                    dark: true,
-                    colors: Colors.dark,
-                } : {
-                    dark: false,
-                    colors: Colors.light,
-                }
+                scheme === 'dark'
+                    ? { dark: true, colors: Colors.dark }
+                    : { dark: false, colors: Colors.light }
             }
         >
             <Providers>
@@ -97,16 +96,12 @@ export default function Navigation() {
     );
 }
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
-
 function RootNavigator() {
     const colors = useColors();
-    const { settings, hasActionDone } = useSettings()
-    const navigation = useNavigation()
-    const analytics = useAnalytics()
+    const { settings, hasActionDone } = useSettings();
+    const navigation = useNavigation();
     const logState = useLogState();
     const { tags } = useTagsState();
-    const { anonymizeTag } = useAnonymizer();
 
     const defaultOptions = {
         headerTintColor: colors.text,
@@ -114,21 +109,11 @@ function RootNavigator() {
             backgroundColor: colors.background,
         },
         headerShadowVisible: Platform.OS !== 'web',
-    }
+    };
 
     useEffect(() => {
         if (settings.loaded && !hasActionDone('onboarding')) {
-            navigation.navigate('Onboarding')
-        }
-        if (settings.loaded && !analytics.isIdentified) {
-            analytics.identify({
-                tags: tags.map(tag => anonymizeTag(tag)),
-                tagsCount: tags.length,
-
-                itemsCount: logState.items.length,
-                itemsCoverage: getItemsCoverage(logState.items),
-                itemsCountPerDayAverage: getItemsCountPerDayAverage(logState.items),
-            })
+            navigation.navigate('Onboarding');
         }
 
         initializeDayjs();
@@ -139,12 +124,11 @@ function RootNavigator() {
             //   enableInExpoDevelopment: false,
             // });
         }
-    }, [settings.loaded])
-
+    }, [settings.loaded]);
 
     const defaultPageOptions = {
-        headerLeft: () => Platform.OS === 'ios' ? null : <BackButton testID={'settings-back-button'} />
-    }
+        headerLeft: () => (Platform.OS === 'ios' ? null : <BackButton testID={'settings-back-button'} />),
+    };
 
     return (
         <View
@@ -178,10 +162,7 @@ function RootNavigator() {
                             gestureEnabled: false,
                         }}
                     >
-                        <Stack.Screen
-                            name="BotLogger"
-                            component={BotLogger}
-                        />
+                        <Stack.Screen name="BotLogger" component={BotLogger} />
                     </Stack.Group>
                     <Stack.Group
                         screenOptions={{
@@ -191,10 +172,7 @@ function RootNavigator() {
                             gestureEnabled: false,
                         }}
                     >
-                        <Stack.Screen
-                            name="BotLoggerEmotions"
-                            component={BotLoggerEmotions}
-                        />
+                        <Stack.Screen name="BotLoggerEmotions" component={BotLoggerEmotions} />
                     </Stack.Group>
                     <Stack.Group
                         screenOptions={{
@@ -204,10 +182,7 @@ function RootNavigator() {
                             gestureEnabled: false,
                         }}
                     >
-                        <Stack.Screen
-                            name="BotLoggerTags"
-                            component={BotLoggerTags}
-                        />
+                        <Stack.Screen name="BotLoggerTags" component={BotLoggerTags} />
                     </Stack.Group>
                 </>
 
@@ -219,10 +194,7 @@ function RootNavigator() {
                         headerShown: false,
                     }}
                 >
-                    <Stack.Screen
-                        name="LogCreate"
-                        component={LogCreate}
-                    />
+                    <Stack.Screen name="LogCreate" component={LogCreate} />
                 </Stack.Group>
 
                 <Stack.Group
@@ -232,24 +204,7 @@ function RootNavigator() {
                         headerShown: false,
                     }}
                 >
-                    <Stack.Screen
-                        name="LogList"
-                        component={LogList}
-                    />
-                </Stack.Group>
-
-                <Stack.Group
-                    screenOptions={{
-                        title: '',
-                        presentation: 'modal',
-                        gestureEnabled: false,
-                        headerShown: false,
-                    }}
-                >
-                    <Stack.Screen
-                        name="LogEdit"
-                        component={LogEdit}
-                    />
+                    <Stack.Screen name="LogList" component={LogList} />
                 </Stack.Group>
 
                 <Stack.Group
@@ -260,10 +215,18 @@ function RootNavigator() {
                         headerShown: false,
                     }}
                 >
-                    <Stack.Screen
-                        name="Onboarding"
-                        component={Onboarding}
-                    />
+                    <Stack.Screen name="LogEdit" component={LogEdit} />
+                </Stack.Group>
+
+                <Stack.Group
+                    screenOptions={{
+                        title: '',
+                        presentation: 'modal',
+                        gestureEnabled: false,
+                        headerShown: false,
+                    }}
+                >
+                    <Stack.Screen name="Onboarding" component={Onboarding} />
                 </Stack.Group>
 
                 <Stack.Group
@@ -272,18 +235,9 @@ function RootNavigator() {
                         headerShown: false,
                     }}
                 >
-                    <Stack.Screen
-                        name="Tags"
-                        component={Tags}
-                    />
-                    <Stack.Screen
-                        name="TagCreate"
-                        component={TagCreate}
-                    />
-                    <Stack.Screen
-                        name="TagEdit"
-                        component={TagEdit}
-                    />
+                    <Stack.Screen name="Tags" component={Tags} />
+                    <Stack.Screen name="TagCreate" component={TagCreate} />
+                    <Stack.Screen name="TagEdit" component={TagEdit} />
                 </Stack.Group>
 
                 <Stack.Group
@@ -408,6 +362,5 @@ function RootNavigator() {
                 </Stack.Group>
             </Stack.Navigator>
         </View>
-        // )
     );
 }

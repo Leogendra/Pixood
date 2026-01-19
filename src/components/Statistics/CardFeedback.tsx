@@ -1,6 +1,5 @@
 import { OFFLINE_STATISTICS_FEEDBACK_STORAGE_KEY } from '@/constants/API';
 import { locale, t } from '@/helpers/translation';
-import { useAnalytics } from '@/hooks/useAnalytics';
 import useColors from '@/hooks/useColors';
 import useHaptics from '@/hooks/useHaptics';
 import { useSettings } from '@/hooks/useSettings';
@@ -80,7 +79,6 @@ export const CardFeedback = ({
   variant?: 'default' | 'minimal',
   style?: ViewStyle,
 }) => {
-  const analytics = useAnalytics();
   const colors = useColors();
   const { settings } = useSettings()
 
@@ -123,7 +121,6 @@ export const CardFeedback = ({
 
     console.log('Sending statistics feedback', body);
 
-    analytics.track('statistics_feedback', body);
 
     return appendOfflineEntry(OFFLINE_STATISTICS_FEEDBACK_STORAGE_KEY, body)
       .finally(() => onSendDone())
@@ -145,11 +142,8 @@ export const CardFeedback = ({
     } else {
       send(emoji);
       if (await StoreReview.hasAction() && variant === 'default') {
-        analytics.track('statistics_feedback_store_review_request');
         StoreReview.requestReview().then(() => {
-          analytics.track('statistics_feedback_store_review_done');
         }).catch(() => {
-          analytics.track('statistics_feedback_store_review_error');
         })
       }
     }

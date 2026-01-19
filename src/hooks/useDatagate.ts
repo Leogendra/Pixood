@@ -9,7 +9,6 @@ import { migrateImportData } from "@/helpers/migration";
 import { askToImport, askToReset, showImportError, showImportSuccess, showResetSuccess } from "@/helpers/prompts";
 import { t } from "@/helpers/translation";
 import pkg from '../../package.json';
-import { useAnalytics } from "./useAnalytics";
 import { LogsState, STORAGE_KEY as STORAGE_KEY_LOGS, useLogState, useLogUpdater } from "./useLogs";
 import { ExportSettings, STORAGE_KEY as STORAGE_KEY_SETTINGS, useSettings } from "./useSettings";
 import { transformToExportFormat } from "@/types/logFormat";
@@ -38,7 +37,6 @@ export const useDatagate = (): {
   const tagsUpdater = useTagsUpdater();
   const { resetSettings, importSettings, settings } = useSettings();
 
-  const analytics = useAnalytics();
 
   const dangerouslyImportDirectlyToAsyncStorage = async (data: ImportData) => {
     await AsyncStorage.multiRemove([
@@ -80,13 +78,9 @@ export const useDatagate = (): {
       });
       importSettings(migratedData.settings);
       if (!options.muted) showImportSuccess()
-      analytics.track("data_import_success");
     } else {
       console.log('import failed, json schema:', jsonSchemaType);
       if (!options.muted) showImportError()
-      analytics.track("data_import_error", {
-        reason: "invalid_json_schema"
-      });
     }
   };
 
@@ -98,22 +92,18 @@ export const useDatagate = (): {
   const factoryReset = () => {
     reset()
     resetSettings();
-    analytics.reset()
   };
 
   const openImportDialog = async (): Promise<void> => {
     return askToImport()
       .then(async () => {
         try {
-          analytics.track("data_import_start");
-
           const doc = await DocumentPicker.getDocumentAsync({
             type: "application/json",
             copyToCacheDirectory: true,
           });
 
           if (doc.type === "success") {
-            analytics.track("data_import_success");
             const contents = await FileSystem.readAsStringAsync(doc.uri);
             const data = JSON.parse(contents);
 
@@ -121,15 +111,11 @@ export const useDatagate = (): {
           }
         } catch (error) {
           showImportError()
-          analytics.track("data_import_error", {
-            reason: "document_picker_error"
-          });
         }
       })
   };
 
   const openResetDialog = async (type: ResetType) => {
-    analytics.track("data_reset_asked");
     const resetFn = type === "factory" ? factoryReset : reset;
 
     if (Platform.OS === "web") {
@@ -141,13 +127,9 @@ export const useDatagate = (): {
     return askToReset<ResetType>(type)
       .then(() => {
         resetFn()
-        analytics.track("data_reset_success", {
-          type
-        });
         showResetSuccess<ResetType>(type)
       })
       .catch(() => {
-        analytics.track("data_reset_cancel");
       })
   };
 
@@ -155,7 +137,6 @@ export const useDatagate = (): {
     // Utiliser le nouveau format d'export simplifié
     const data = transformToExportFormat(logState.items, tags);
 
-    analytics.track("data_export_started");
 
     if (Platform.OS === "web") {
       return Alert.alert("Not supported on web");

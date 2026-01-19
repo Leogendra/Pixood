@@ -2,7 +2,6 @@ import { load, store } from '@/helpers/storage';
 import { t } from '@/helpers/translation';
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { useAnalytics } from './useAnalytics';
 import { useLogState, useLogUpdater } from './useLogs';
 import { useSettings } from './useSettings';
 import { 
@@ -185,7 +184,6 @@ const getInitialState = (): TagCategoriesState => {
 // Provider Component
 export function TagCategoriesProvider({ children }: { children: React.ReactNode }) {
   const { settings } = useSettings();
-  const analytics = useAnalytics();
   const logsUpdater = useLogUpdater();
   const logsState = useLogState();
 
@@ -205,10 +203,9 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
     };
 
     dispatch({ type: 'CREATE_CATEGORY', payload: newCategory });
-    analytics.track('tag_category_created', { name, color, icon });
     
     return newCategory;
-  }, [analytics]);
+  }, []);
 
   const updateCategory = useCallback(async (id: string, updates: Partial<Omit<TagCategory, 'id' | 'createdAt' | 'updatedAt'>>) => {
     const category = state.categories.find(c => c.id === id);
@@ -221,16 +218,14 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
     };
 
     dispatch({ type: 'UPDATE_CATEGORY', payload: updatedCategory });
-    analytics.track('tag_category_updated', { id, updates });
-  }, [state.categories, analytics]);
+  }, [state.categories]);
 
   const deleteCategory = useCallback(async (id: string) => {
     const category = state.categories.find(c => c.id === id);
     if (!category || category.isDefault) return; // Ne pas supprimer les catégories par défaut
 
     dispatch({ type: 'DELETE_CATEGORY', payload: id });
-    analytics.track('tag_category_deleted', { id });
-  }, [state.categories, analytics]);
+  }, [state.categories]);
 
   const createTag = useCallback(async (categoryId: string, title: string, color?: string): Promise<CategorizedTag> => {
     const category = state.categories.find(c => c.id === categoryId);
@@ -248,10 +243,9 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
     };
 
     dispatch({ type: 'CREATE_TAG', payload: newTag });
-    analytics.track('categorized_tag_created', { categoryId, title, color });
     
     return newTag;
-  }, [state.categories, analytics]);
+  }, [state.categories]);
 
   const updateTag = useCallback(async (id: string, updates: Partial<Omit<CategorizedTag, 'id' | 'createdAt' | 'updatedAt'>>) => {
     const tag = state.tags.find(t => t.id === id);
@@ -264,8 +258,7 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
     };
 
     dispatch({ type: 'UPDATE_TAG', payload: updatedTag });
-    analytics.track('categorized_tag_updated', { id, updates });
-  }, [state.tags, analytics]);
+  }, [state.tags]);
 
   const deleteTag = useCallback(async (id: string) => {
     dispatch({ type: 'DELETE_TAG', payload: id });
@@ -280,8 +273,7 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
     });
 
     logsUpdater.updateLogs(newItems);
-    analytics.track('categorized_tag_deleted', { id });
-  }, [logsState.items, logsUpdater, analytics]);
+  }, [logsState.items, logsUpdater]);
 
   const archiveTag = useCallback(async (id: string) => {
     await updateTag(id, { isArchived: true });
@@ -289,18 +281,15 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
 
   const migrateFromOldSystem = useCallback(async () => {
     // Cette fonction sera implémentée pour migrer depuis l'ancien système useTags
-    analytics.track('tag_categories_migration_started');
-  }, [analytics]);
+  }, []);
 
   const importData = useCallback(async (data: TagCategoriesState) => {
     dispatch({ type: 'LOAD_DATA', payload: data });
-    analytics.track('tag_categories_imported');
-  }, [analytics]);
+  }, []);
 
   const reset = useCallback(async () => {
     dispatch({ type: 'RESET' });
-    analytics.track('tag_categories_reset');
-  }, [analytics]);
+  }, []);
 
   const updaterValue: TagCategoriesUpdater = useMemo(() => ({
     createCategory,

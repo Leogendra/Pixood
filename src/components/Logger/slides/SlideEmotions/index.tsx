@@ -20,7 +20,6 @@ import { EmotionBasicGradients } from "./EmotionBasicGradients";
 import { EmotionBasicSelection } from "./EmotionBasicSelection";
 import { ExpandButton } from "./ExpandButton";
 import { Tooltip } from "./Tooltip";
-import { useAnalytics } from "@/hooks/useAnalytics";
 
 type Mode = 'basic' | 'advanced'
 
@@ -43,7 +42,6 @@ export const SlideEmotions = ({
   const marginTop = getLogEditMarginTop()
   const tempLog = useTemporaryLog()
   const logState = useLogState()
-  const analytics = useAnalytics()
 
   const EMOTIONS_BY_KEY = _.keyBy(EMOTIONS, 'key')
 
@@ -198,7 +196,6 @@ export const SlideEmotions = ({
             <Tooltip
               emotion={selectedEmotions[selectedEmotions.length - 1]}
               onClose={() => {
-                analytics.track('log_emotions_tooltip_close')
                 setShowTooltip(false)
               }}
             />

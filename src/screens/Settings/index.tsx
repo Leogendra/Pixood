@@ -7,7 +7,6 @@ import MenuListHeadline from '@/components/MenuListHeadline';
 import MenuListItem from '@/components/MenuListItem';
 import TextInfo from '@/components/TextInfo';
 import { t } from '@/helpers/translation';
-import { useAnalytics } from '../../hooks/useAnalytics';
 import useColors from '../../hooks/useColors';
 import pkg from '../../../package.json';
 import { RootStackScreenProps } from '../../../types';
@@ -17,10 +16,8 @@ import { Tag } from 'lucide-react-native';
 export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>) => {
     const insets = useSafeAreaInsets();
     const colors = useColors()
-    const analytics = useAnalytics()
 
     const openGithubRepository = () => {
-        analytics.track('visit_github')
         Linking.openURL('https://github.com/Leogendra/Pixood')
     }
 
@@ -87,7 +84,6 @@ export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>)
                     <MenuListItem
                         title={t('changelog')}
                         onPress={() => {
-                            analytics.track('settings_changelog')
                             navigation.navigate('Changelog')
                         }}
                         iconLeft={<BookOpen width={18} color={colors.menuListItemIcon} />}
