@@ -30,17 +30,6 @@ export type RootStackParamList = {
     TagCategories: undefined;
     DevelopmentTools: undefined;
 
-    BotLogger: {
-        dateTime: string;
-        emotions?: Emotion[];
-        tags?: TagReference[];
-    };
-    BotLoggerEmotions: {
-        onDone: (emotions: Emotion[]) => void;
-    };
-    BotLoggerTags: {
-        onDone: (tags: TagReference[]) => void;
-    };
     SettingsTags: undefined;
     SettingsTagsArchive: undefined;
 
