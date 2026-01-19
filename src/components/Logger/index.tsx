@@ -2,49 +2,26 @@ import { DATE_FORMAT } from '@/constants/Config';
 import { askToCancel, askToDisableStep, askToRemove } from '@/helpers/prompts';
 import useColors from '@/hooks/useColors';
 import { LogItem, useLogState, useLogUpdater } from '@/hooks/useLogs';
-import { IQuestion, useQuestioner } from '@/hooks/useQuestioner';
 import { useSettings } from '@/hooks/useSettings';
 import { TemporaryLogState, useTemporaryLog } from '@/hooks/useTemporaryLog';
-import { Emotion, TagReference } from '@/types';
 import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
-import { ReactElement, useEffect, useRef, useState } from 'react';
-import { Dimensions, Keyboard, Platform, Text, TextInput, View } from 'react-native';
-import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel';
+import { useRef } from 'react';
+import { Keyboard, Platform, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { v4 as uuidv4 } from "uuid";
 import { SlideAction } from './components/SlideAction';
 import { SlideHeader } from './components/SlideHeader';
-import { Stepper } from './components/Stepper';
 import { LoggerStep } from './config';
-import { SlideEmotions } from './slides/SlideEmotions';
-import { SlideMessage } from './slides/SlideMessage';
-import { SlideMood } from './slides/SlideMood';
-import { SlideReminder } from './slides/SlideReminder';
-import { SlideTags } from './slides/SlideTags';
-import { SlideSleep } from './slides/SlideSleep';
 import { UnifiedLoggerSlide } from './slides/UnifiedLoggerSlide';
-import { StackActions } from '@react-navigation/native';
 
 export type LoggerMode = 'create' | 'edit'
-export type LoggerInterface = 'carousel' | 'unified'
-
-const EMOTIONS_INDEX_MAPPING = {
-    extremely_bad: 0,
-    very_bad: 1,
-    bad: 1,
-    neutral: 2,
-    good: 3,
-    very_good: 3,
-    extremely_good: 4,
-}
+export type LoggerInterface = 'unified'
 
 const getAvailableStepsForCreate = ({
     date,
-    question,
 }: {
     date: string;
-    question: IQuestion | null;
 }) => {
     const { hasStep, settings } = useSettings();
     const logState = useLogState();
@@ -60,13 +37,6 @@ const getAvailableStepsForCreate = ({
     if (hasStep('emotions')) slides.push('emotions')
     if (hasStep('tags')) slides.push('tags')
     if (hasStep('message')) slides.push('message')
-
-    if (
-        logState.items.length === 1 &&
-        !settings.reminderEnabled
-    ) {
-        slides.push('reminder')
-    }
 
     return slides;
 }
@@ -106,9 +76,9 @@ export const LoggerEdit = ({
     interfaceType?: LoggerInterface
 }) => {
     const logState = useLogState()
-    const initialItem = logState?.items.find(item => item.id === id)
+    const logItem = logState?.items.find(item => item.id === id)
 
-    if (initialItem === undefined) {
+    if (logItem === undefined) {
         return (
             <View>
                 <Text>Log not found</Text>
@@ -116,9 +86,16 @@ export const LoggerEdit = ({
         )
     }
 
+    const initialItem: TemporaryLogState = {
+        ...logItem,
+        sleep: {
+            quality: logItem.sleep?.quality || null,
+        },
+    }
+
     const avaliableSteps = getAvailableStepsForEdit({
         date: dayjs(initialItem.dateTime).format(DATE_FORMAT),
-        item: initialItem,
+        item: logItem,
     })
 
     return (
@@ -145,9 +122,8 @@ export const LoggerCreate = ({
 }) => {
     const _id = useRef(uuidv4())
     const createdAt = useRef(dayjs().toISOString())
-    const questioner = useQuestioner()
 
-    const initialItem = {
+    const initialItem: TemporaryLogState = {
         id: _id.current,
         date: dateTime ? dayjs(dateTime).format(DATE_FORMAT) : dayjs().format(DATE_FORMAT),
         dateTime: dateTime,
@@ -163,7 +139,6 @@ export const LoggerCreate = ({
 
     avaliableSteps = avaliableSteps || getAvailableStepsForCreate({
         date: initialItem.date,
-        question: questioner.question,
     })
 
     return (
@@ -172,7 +147,6 @@ export const LoggerCreate = ({
             initialItem={initialItem}
             initialStep={initialStep}
             avaliableSteps={avaliableSteps}
-            question={questioner.question}
             interfaceType={interfaceType}
         />
     )
@@ -183,14 +157,12 @@ export const Logger = ({
     initialStep,
     avaliableSteps,
     mode,
-    question,
-    interfaceType = 'carousel',
+    interfaceType = 'unified',
 }: {
     initialItem: TemporaryLogState,
     initialStep?: LoggerStep;
     avaliableSteps: LoggerStep[];
     mode: LoggerMode
-    question?: IQuestion | null
     interfaceType?: LoggerInterface
 }) => {
     const navigation = useNavigation();
@@ -208,45 +180,20 @@ export const Logger = ({
     const isEditing = mode === 'edit'
     const showDisable = logState.items.length <= 3 && !isEditing;
 
-    const [touched, setTouched] = useState(false)
-
-    const indexFound = avaliableSteps.findIndex(slide => slide === initialStep)
-    const initialIndex = indexFound !== -1 ? indexFound : 0
-    const [slideIndex, setSlideIndex] = useState(initialIndex)
-
     const close = async () => {
         tempLog.reset()
         navigation.goBack();
     }
 
     const save = (data: TemporaryLogState) => {
-        const eventData = {
-            date: data?.date,
-            dateTime: data?.dateTime,
-            messageLength: data?.message.length,
-            rating: data?.rating,
-            tagsCount: data?.tags.length,
-            emotions: data?.emotions,
-            emotionsCount: data?.emotions.length,
-        }
-
         if (data.rating === null) {
             data.rating = 'neutral'
         }
-
 
         if (mode === 'edit') {
             logUpdater.editLog(data as LogItem)
         } else {
             logUpdater.addLog(data as LogItem)
-
-            const itemsOnDate = logState.items.filter(item => dayjs(item.dateTime).isSame(dayjs(data.dateTime), 'day'))
-
-            if (itemsOnDate.length === 1) {
-                navigation.dispatch(StackActions.popToTop());
-                tempLog.reset()
-                return;
-            }
         }
 
         close()
@@ -260,257 +207,6 @@ export const Logger = ({
     const cancel = () => {
         close()
     }
-
-    // Interface unifiée - tout sur une seule page scrollable
-    if (interfaceType === 'unified') {
-        return (
-            <View style={{
-                flex: 1,
-                backgroundColor: colors.logBackground,
-                position: 'relative',
-            }}>
-                <View
-                    style={{
-                        flex: 1,
-                        paddingTop: Platform.OS === 'android' ? insets.top : 0,
-                    }}
-                >
-                    <View
-                        style={{
-                            paddingHorizontal: 20,
-                            paddingTop: 12,
-                        }}
-                    >
-                        <SlideHeader
-                            backVisible={false}
-                            isDeleteable={isEditing}
-                            onClose={() => {
-                                if (tempLog.isDirty) {
-                                    askToCancel().then(() => cancel()).catch(() => { })
-                                } else {
-                                    cancel()
-                                }
-                            }}
-                            onDelete={() => {
-                                if (
-                                    tempLog.data.message.length > 0 ||
-                                    tempLog.data.tags.length > 0
-                                ) {
-                                    askToRemove().then(() => remove())
-                                } else {
-                                    remove()
-                                }
-                            }}
-                        />
-                    </View>
-                    <UnifiedLoggerSlide
-                        onRatingChange={(rating) => tempLog.update({ rating })}
-                        onTagsChange={(tagIds) => tempLog.update({ selectedCategorizedTagIds: tagIds })}
-                        onMessageChange={(message) => tempLog.update({ message })}
-                        showDisable={showDisable}
-                        onDisableStep={() => {
-                            askToDisableStep().then(() => {
-                                // Logique pour désactiver une étape
-                            })
-                        }}
-                    />
-                </View>
-                <SlideAction
-                    type="save"
-                    onPress={() => save(tempLog.data)}
-                />
-            </View>
-        )
-    }
-
-    // Interface originale avec carousel
-
-    const next = () => {
-        if (slideIndex + 1 === content.length - 1) {
-            Keyboard.dismiss()
-        }
-
-        if (slideIndex + 1 === content.length) {
-            save(tempLog.data)
-        } else {
-            if (_carousel.current) _carousel.current.next()
-        }
-    }
-
-    const content: {
-        key: string;
-        slide: ReactElement,
-        action?: ReactElement,
-    }[] = []
-
-    content.push({
-        key: 'rating',
-        slide: (
-            <SlideMood
-                onChange={(rating) => {
-                    if (tempLog.data.rating !== rating) {
-                        if (content.length === 1) {
-                            save({
-                                ...tempLog.data,
-                                rating,
-                            })
-                        } else {
-                            next()
-                        }
-                    }
-                    tempLog.update({ rating })
-                }}
-            />
-        ),
-        action: (
-            <SlideAction
-                type={slideIndex !== 0 || touched || mode === 'edit' ? (content.length === 1 ? 'save' : 'next') : 'hidden'}
-                onPress={next}
-            />
-        )
-    })
-
-    if (avaliableSteps.includes('sleep')) {
-        content.push({
-            key: 'sleep',
-            slide: (
-                <SlideSleep
-                    onChange={(value: LogItem['sleep']['quality']) => {
-                        if (tempLog.data.sleep.quality === value) {
-                            tempLog.update({
-                                sleep: {
-                                    ...tempLog.data.sleep,
-                                    quality: null
-                                }
-                            })
-                        } else {
-
-                            tempLog.update({
-                                sleep: {
-                                    ...tempLog.data.sleep,
-                                    quality: value
-                                }
-                            })
-                            next()
-                        }
-                    }}
-                    showDisable={showDisable}
-                    onDisableStep={() => {
-                        askToDisableStep().then(() => {
-                            toggleStep('sleep')
-                            next()
-                        })
-                    }}
-                />
-            ),
-        })
-    }
-
-    if (avaliableSteps.includes('emotions')) {
-        content.push({
-            key: 'emotions',
-            slide: (
-                <View
-                    style={{
-                        paddingBottom: insets.bottom + 20,
-                        flex: 1,
-                    }}
-                >
-                    <SlideEmotions
-                        defaultIndex={EMOTIONS_INDEX_MAPPING[tempLog.data.rating || 'neutral']}
-                        onChange={(emotions: Emotion[]) => {
-                            tempLog.update({ emotions: emotions.map(emotion => emotion.key) })
-                        }}
-                        showDisable={showDisable}
-                    />
-                </View>
-            ),
-        })
-    }
-
-    if (avaliableSteps.includes('tags')) {
-        content.push({
-            key: 'tags',
-            slide: (
-                <SlideTags
-                    onChange={(tags: TagReference[]) => {
-                        tempLog.update({ tags })
-                    }}
-                    onDisableStep={() => {
-                        askToDisableStep().then(() => {
-                            toggleStep('tags')
-                            next()
-                        })
-                    }}
-                    showDisable={showDisable}
-                />
-            ),
-        })
-    }
-
-    if (avaliableSteps.includes('message')) {
-        content.push({
-            key: 'message',
-            slide: (
-                <SlideMessage
-                    onChange={(message) => {
-                        tempLog.update({ message })
-                    }}
-                    onDisableStep={() => {
-                        askToDisableStep().then(() => {
-                            toggleStep('message')
-                            next()
-                        })
-                    }}
-                    ref={texAreaRef}
-                    showDisable={showDisable}
-                />
-            )
-        })
-    }
-
-    if (avaliableSteps.includes('reminder')) {
-        content.push({
-            key: 'reminder',
-            slide: (
-                <SlideReminder
-                    onPress={next}
-                />
-            ),
-            action: <SlideAction type="hidden" />
-        })
-    }
-
-    const _carousel = useRef<ICarouselInstance>(null);
-
-    const messageSlideIndex = content.findIndex(item => item.key === 'message')
-    const hasMessageSlide = messageSlideIndex !== -1
-
-    const isMounted = useRef(true)
-
-    useEffect(() => {
-        return () => {
-            isMounted.current = false
-        }
-    }, [])
-
-    const onScrollEnd = (index: number) => {
-        Keyboard.dismiss()
-
-        if (
-            index === messageSlideIndex &&
-            hasMessageSlide &&
-            mode === 'create'
-        ) {
-            texAreaRef.current?.focus()
-        }
-    }
-
-    useEffect(() => {
-        if (isMounted.current) {
-            onScrollEnd(slideIndex)
-        }
-    }, [slideIndex])
 
     return (
         <View style={{
@@ -527,27 +223,11 @@ export const Logger = ({
                 <View
                     style={{
                         paddingHorizontal: 20,
+                        paddingTop: 12,
                     }}
                 >
-                    {content.length > 1 ? (
-                        <Stepper
-                            count={content.length}
-                            index={slideIndex}
-                            scrollTo={({ index }) => {
-                                if (_carousel.current) {
-                                    _carousel.current.scrollTo({ index, animated: false })
-                                }
-                                setSlideIndex(index)
-                            }}
-                        />
-                    ) : (
-                        <View style={{ height: 24 }} />
-                    )}
                     <SlideHeader
-                        onBack={() => {
-                            _carousel.current?.prev()
-                        }}
-                        backVisible={slideIndex > 0}
+                        backVisible={false}
                         isDeleteable={isEditing}
                         onClose={() => {
                             if (tempLog.isDirty) {
@@ -568,45 +248,22 @@ export const Logger = ({
                         }}
                     />
                 </View>
-                <View
-                    style={{
-                        flex: 1,
-                        flexDirection: 'column',
+                <UnifiedLoggerSlide
+                    onRatingChange={(rating) => tempLog.update({ rating })}
+                    onTagsChange={(tagIds) => tempLog.update({ selectedCategorizedTagIds: tagIds })}
+                    onMessageChange={(message) => tempLog.update({ message })}
+                    showDisable={showDisable}
+                    onDisableStep={() => {
+                        askToDisableStep().then(() => {
+                            // TODO: Logic 
+                        })
                     }}
-                >
-                    <Carousel
-                        loop={false}
-                        width={Dimensions.get('window').width}
-                        ref={_carousel}
-                        data={content}
-                        defaultIndex={Math.min(initialIndex, content.length - 1)}
-                        onProgressChange={(relativeProgress, absoluteProgress) => {
-                            if (isMounted.current) {
-                                setSlideIndex(Math.round(absoluteProgress))
-                            }
-                        }}
-                        onScrollBegin={() => {
-                            setTouched(true)
-                        }}
-                        enabled={false}
-                        renderItem={({ index }) => content[index].slide}
-                        panGestureHandlerProps={{
-                            activeOffsetX: [-10, 10],
-                        }}
-                    />
-                </View>
+                />
             </View>
-            {
-                content[slideIndex] &&
-                (
-                    content[slideIndex].action || (
-                        slideIndex === content.length - 1 ? (
-                            <SlideAction type="save" onPress={next} />
-                        ) : (
-                            <SlideAction type="next" onPress={next} />
-                        )
-                    )
-                )}
+            <SlideAction
+                type="save"
+                onPress={() => save(tempLog.data)}
+            />
         </View>
     )
 }

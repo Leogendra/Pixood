@@ -115,11 +115,6 @@ const Tips = ({
           marginTop: 16,
         }}
         onClose={onClose}
-        hasFeedback
-        analyticsId="log_message_hint"
-        analyticsData={{
-          questions: questions,
-        }}
       >
         {questions.map((q, index) => (
           <Text

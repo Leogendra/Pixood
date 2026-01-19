@@ -4,7 +4,7 @@ import { LogItem } from "./useLogs";
 export type TemporaryLogState = Omit<LogItem, 'rating' | 'sleep'> & {
     rating: LogItem['rating'] | null,
     sleep: {
-        quality: LogItem['sleep']['quality'] | null,
+        quality: 'very_good' | 'good' | 'neutral' | 'bad' | 'very_bad' | null,
     },
     selectedCategorizedTagIds?: string[];
 }

@@ -11,81 +11,81 @@ import { OFFLINE_IMPORT_USERS, OfflineImportUser } from "@/data/offlineImports";
 type User = OfflineImportUser;
 
 export const UserDataImportList = () => {
-  const [users, setUsers] = useState<User[]>([]);
-  const colors = useColors();
-  const datagate = useDatagate();
+    const [users, setUsers] = useState<User[]>([]);
+    const colors = useColors();
+    const datagate = useDatagate();
 
-  const [loadedUserIds, setLoadedUserIds] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
+    const [loadedUserIds, setLoadedUserIds] = useState<string[]>([]);
+    const [loading, setLoading] = useState(false);
 
-  const loadUsers = () => {
-    setLoading(true);
+    const loadUsers = () => {
+        setLoading(true);
 
-    setTimeout(() => {
-      setUsers(OFFLINE_IMPORT_USERS);
-      setLoadedUserIds([]);
-      setLoading(false);
-    }, 250);
-  };
+        setTimeout(() => {
+            setUsers(OFFLINE_IMPORT_USERS);
+            setLoadedUserIds([]);
+            setLoading(false);
+        }, 250);
+    };
 
-  useEffect(() => {
-    loadUsers();
-  }, []);
+    useEffect(() => {
+        loadUsers();
+    }, []);
 
-  const onPress = (user: User) => {
-    datagate.import(user.importData, {
-      muted: true
-    });
-    setLoadedUserIds((loadedUserIds) => [...loadedUserIds, user.id]);
-  };
+    const onPress = (user: User) => {
+        datagate.import(user.importData, {
+            muted: true
+        });
+        setLoadedUserIds((loadedUserIds) => [...loadedUserIds, user.id]);
+    };
 
-  return (
-    <>
-      <MenuListHeadline>Load User Data</MenuListHeadline>
-      <MenuList style={{}}>
-        <MenuListItem
-          title={"Reload"}
-          iconLeft={<Repeat width={18} color={colors.menuListItemIcon} />}
-          onPress={() => loadUsers()}
-          isLast
-        />
-      </MenuList>
-      <MenuList
-        style={{
-          marginTop: 16,
-          marginBottom: 40,
-        }}
-      >
-        {loading && (
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "center",
-              marginBottom: 8,
-              padding: 16,
-            }}
-          >
-            <ActivityIndicator size={"small"} color={colors.loadingIndicator} />
-          </View>
-        )}
-        {!loading &&
-          users.map((user, index) => (
-            <MenuListItem
-              key={user.id}
-              title={user.id}
-              iconLeft={
-                loadedUserIds.includes(user.id) ? (
-                  <CheckCircle width={18} color={colors.palette.green[500]} />
-                ) : (
-                  <UploadCloud width={18} color={colors.menuListItemIcon} />
-                )
-              }
-              onPress={() => onPress(user)}
-              isLast={index === users.length - 1}
-            />
-          ))}
-      </MenuList>
-    </>
-  );
+    return (
+        <>
+            <MenuListHeadline>Load User Data</MenuListHeadline>
+            <MenuList style={{}}>
+                <MenuListItem
+                    title={"Reload"}
+                    iconLeft={<Repeat width={18} color={colors.menuListItemIcon} />}
+                    onPress={() => loadUsers()}
+                    isLast
+                />
+            </MenuList>
+            <MenuList
+                style={{
+                    marginTop: 16,
+                    marginBottom: 40,
+                }}
+            >
+                {loading && (
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            marginBottom: 8,
+                            padding: 16,
+                        }}
+                    >
+                        <ActivityIndicator size={"small"} color={colors.loadingIndicator} />
+                    </View>
+                )}
+                {!loading &&
+                    users.map((user, index) => (
+                        <MenuListItem
+                            key={user.id}
+                            title={user.id}
+                            iconLeft={
+                                loadedUserIds.includes(user.id) ? (
+                                    <CheckCircle width={18} color={colors.palette.green[500]} />
+                                ) : (
+                                    <UploadCloud width={18} color={colors.menuListItemIcon} />
+                                )
+                            }
+                            onPress={() => onPress(user)}
+                            isLast={index === users.length - 1}
+                        />
+                    ))}
+            </MenuList>
+        </>
+    );
 };

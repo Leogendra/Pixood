@@ -27,14 +27,6 @@ export const TagDistribution = ({
       title={title}
       subtitle={subtitle}
       isShareable
-      hasFeedback
-      analyticsId="tag-distribution"
-      analyticsData={
-        data.tags.map(tag => ({
-          ...tag,
-          details: anonymizeTag(tag.details),
-        }))
-      }
     >
       {data.tags.length < MIN_TAGS && (
         <NotEnoughDataOverlay />

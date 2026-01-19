@@ -58,11 +58,6 @@ export const MoodPeaks = ({
         title={t('statistics_mood_peaks_positive')}
         subtitle={t('statistics_mood_peaks_positive_description', { date: date.format('MMMM, YYYY') })}
         isShareable
-        hasFeedback
-        analyticsId="mood-peaks-positive"
-        analyticsData={
-          dataNegative.days.map(day => anonymizeDay(day))
-        }
       >
         {dataPositive.days.length < MIN_ITEMS && (
           <NotEnoughDataOverlay />
@@ -83,11 +78,6 @@ export const MoodPeaks = ({
         title={t('statistics_mood_peaks_negative')}
         subtitle={t('statistics_mood_peaks_negative_description', { date: date.format('MMMM, YYYY') })}
         isShareable
-        hasFeedback
-        analyticsId="mood-peaks-negative"
-        analyticsData={
-          dataNegative.days.map(day => anonymizeDay(day))
-        }
       >
         {dataNegative.days.length < MIN_ITEMS && (
           <NotEnoughDataOverlay />

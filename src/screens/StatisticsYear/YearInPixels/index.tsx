@@ -6,7 +6,6 @@ import { BigCard } from "@/components/BigCard";
 import { DATE_FORMAT } from "@/constants/Config";
 import { t } from "@/helpers/translation";
 import { LogItem, RATING_KEYS, useLogState } from "../../../hooks/useLogs";
-import { CardFeedback } from "@/components/Statistics/CardFeedback";
 import { NotEnoughDataOverlay } from "@/components/Statistics/NotEnoughDataOverlay";
 
 import { Row } from "./Row";
@@ -63,9 +62,6 @@ const YearInPixels = ({
       title={t('year_in_pixels')}
       subtitle={t('year_in_pixels_description', { date: date.format('YYYY') })}
       isShareable
-      hasFeedback
-      analyticsId="year-in-pixels"
-      analyticsData={items.map(item => anonymizeItem(item))}
     >
       <>
         <View

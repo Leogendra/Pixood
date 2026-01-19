@@ -9,7 +9,7 @@ export const SlideSleepButton = ({
   onPress,
   style = {},
 }: {
-  value: LogItem['sleep']['quality'];
+  value: 'very_good' | 'good' | 'neutral' | 'bad' | 'very_bad';
   selected?: boolean;
   onPress?: () => void;
   style?: ViewStyle;

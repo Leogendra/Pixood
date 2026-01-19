@@ -37,7 +37,7 @@ export const getAverageSleepQuality = (items: LogItem[]): number | null => {
   let averageSleepQuality = 0;
 
   if (items.length > 0) {
-    const sum = items.reduce((acc, item) => acc + SLEEP_QUALITY_MAPPING[item.sleep?.quality], 0);
+    const sum = items.reduce((acc, item) => acc + (item.sleep?.quality ? SLEEP_QUALITY_MAPPING[item.sleep.quality] : 0), 0);
     averageSleepQuality = Math.round(sum / items.length);
   } else {
     return null;

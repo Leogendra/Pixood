@@ -22,11 +22,6 @@ export const EmotionsDistribution = ({
       title={title}
       subtitle={subtitle}
       isShareable
-      hasFeedback
-      analyticsId="emotions-distribution"
-      analyticsData={{
-        emotions: data.emotions
-      }}
     >
       {data.emotions.length < MIN_TAGS && (
         <NotEnoughDataOverlay />
