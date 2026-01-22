@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { LogItem, RATING_MAPPING } from "../useLogs";
+import { LogEntry, RATING_MAPPING } from "../useLogs";
 
 type PeriodDataPoint = {
   date: Date;
@@ -13,7 +13,7 @@ export interface MoodTrendData {
   ratingsPeriode2: PeriodDataPoint[];
   diff: number;
   status: 'improved' | 'declined';
-  items: (LogItem & { value: number })[]
+  items: (LogEntry & { value: number })[]
 }
 
 export const defaultMoodTrendData: MoodTrendData = {
@@ -30,7 +30,7 @@ export const SCALE_TYPE = 'week';
 export const SCALE_RANGE = 24;
 const DEFAULT_WEEK_AVG = 3;
 
-export const getMoodTrendData = (items: LogItem[]): MoodTrendData => {
+export const getMoodTrendData = (items: LogEntry[]): MoodTrendData => {
   const ratingsPeriode1: PeriodDataPoint[] = []
   const ratingsPeriode2: PeriodDataPoint[] = []
 

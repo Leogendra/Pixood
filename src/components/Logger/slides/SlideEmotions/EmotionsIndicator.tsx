@@ -1,5 +1,5 @@
 import useScale from "@/hooks/useScale";
-import { Emotion } from "@/types";
+import { Emotion } from "@/types/logFormat";
 import { View } from "react-native";
 
 export const EmotionIndicator = ({

@@ -1,5 +1,5 @@
 import { Dayjs } from "dayjs"
-import { LogItem, RATING_KEYS } from "@/hooks/useLogs"
+import { LogEntry, RATING_KEYS } from "@/hooks/useLogs"
 import { NotEnoughDataOverlay } from "../NotEnoughDataOverlay"
 import { BigCard } from "../../BigCard"
 import { Content } from "./Content"
@@ -15,7 +15,7 @@ export const MoodCounts = ({
     title: string,
     subtitle: string,
     date: Dayjs
-    items: LogItem[]
+    items: LogEntry[]
 }) => {
     const ratingCounts: {
         [key: string]: number

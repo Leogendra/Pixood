@@ -49,7 +49,7 @@ export const store = async <State>(key: string, state: State) => {
 };
 
 
-export const load = async <ReturnValue>(key: string, feedback?: any): Promise<ReturnValue | null> => {
+export const load = async <ReturnValue>(key: string): Promise<ReturnValue | null> => {
     try {
         const fromLocalStorage = readFromLocalStorage(key);
         const data = fromLocalStorage !== null ? fromLocalStorage : await AsyncStorage.getItem(key);
@@ -62,20 +62,6 @@ export const load = async <ReturnValue>(key: string, feedback?: any): Promise<Re
     } 
     catch (error: any) {
         console.error(error);
-        if (feedback && typeof feedback.send === 'function') {
-            feedback.send({
-                type: 'issue',
-                message: JSON.stringify({
-                    title: 'Error loading logs',
-                    description: error?.message,
-                    trace: error?.stack,
-                }),
-                email: '',
-                source: 'error',
-                onCancel: () => { },
-                onOk: () => { },
-            });
-        }
         return null;
     }
 };

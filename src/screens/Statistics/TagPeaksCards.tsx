@@ -5,7 +5,7 @@ import { DATE_FORMAT } from '@/constants/Config';
 import { t } from '@/helpers/translation';
 import useColors from '../../hooks/useColors';
 import useHaptics from '../../hooks/useHaptics';
-import { LogItem } from '../../hooks/useLogs';
+import { LogEntry } from '../../hooks/useLogs';
 import { TagsPeakData } from '../../hooks/useStatistics/TagsPeaks';
 import { Tag as ITag } from '../../hooks/useTags';
 import { HeaderWeek } from './HeaderWeek';
@@ -21,7 +21,7 @@ const DayDot = ({
     date: Dayjs,
     isHighlighted: boolean,
     colorName: string,
-    item: LogItem | undefined,
+    item: LogEntry | undefined,
 }) => {
     const colors = useColors()
     const haptics = useHaptics()
@@ -70,7 +70,7 @@ const BodyWeek = ({
     tag,
     start,
 }: {
-    items: LogItem[],
+    items: LogEntry[],
     tag: ITag,
     start: Dayjs,
 }) => {

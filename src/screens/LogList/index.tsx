@@ -3,7 +3,7 @@ import { PageModalLayout } from "@/components/PageModalLayout"
 import { askToRemove } from "@/helpers/prompts"
 import { t } from "@/helpers/translation"
 import useColors from "@/hooks/useColors"
-import { LogItem, useLogState, useLogUpdater } from "@/hooks/useLogs"
+import { LogEntry, useLogState, useLogUpdater } from "@/hooks/useLogs"
 import { getDayDateTitle } from "@/lib/utils"
 import dayjs from "dayjs"
 import { useRef } from "react"
@@ -37,16 +37,16 @@ export const LogList = ({ route, navigation }: RootStackScreenProps<'LogList'>) 
     })
   }
 
-  const edit = (item: LogItem) => {
+  const edit = (item: LogEntry) => {
     navigation.navigate('LogEdit', { id: item.id });
   };
 
-  const remove = (item: LogItem) => {
+  const remove = (item: LogEntry) => {
     logUpdater.deleteLog(item.id);
     // navigation.goBack();
   };
 
-  const _delete = (item: LogItem) => {
+  const _delete = (item: LogEntry) => {
     askToRemove().then(() => remove(item));
   };
 

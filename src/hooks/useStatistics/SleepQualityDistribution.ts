@@ -1,6 +1,6 @@
 import { getLogDays } from '@/lib/utils';
 import dayjs from 'dayjs';
-import { LogItem } from '../useLogs';
+import { LogEntry } from '../useLogs';
 import _ from 'lodash';
 
 const MONTH_MAPPING = {
@@ -39,7 +39,7 @@ export const defaultSleepQualityDistributionDataForXDays = (): SleepQualityDistr
 }
 
 
-export const getSleepQualityDistributionForYear = (items: LogItem[]): SleepQualityDistributionData => {
+export const getSleepQualityDistributionForYear = (items: LogEntry[]): SleepQualityDistributionData => {
   const result: SleepQualityDistributionData = []
 
   for (const month in Object.keys(MONTH_MAPPING)) {
@@ -69,7 +69,7 @@ export const getSleepQualityDistributionForYear = (items: LogItem[]): SleepQuali
   return result;
 }
 
-export const getSleepQualityDistributionForXDays = (items: LogItem[], startDate: string, dayCount): SleepQualityDistributionData => {
+export const getSleepQualityDistributionForXDays = (items: LogEntry[], startDate: string, dayCount): SleepQualityDistributionData => {
   const result: SleepQualityDistributionData = []
 
   const logDays = getLogDays(items)

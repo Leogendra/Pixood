@@ -1,4 +1,4 @@
-import { LogItem } from '@/hooks/useLogs';
+import { LogEntry } from '@/hooks/useLogs';
 import { dummyEmotionsDistributionData, getEmotionsDistributionData } from '@/hooks/useStatistics/EmotionsDistributuon';
 import { EmotionsDistributionContent } from '@/screens/Statistics/EmotionsDistributionCard';
 import { BigCard } from '../BigCard';
@@ -13,7 +13,7 @@ export const EmotionsDistribution = ({
 }: {
   title: string
   subtitle: string
-  items: LogItem[],
+  items: LogEntry[],
 }) => {
   const data = getEmotionsDistributionData(items);
 

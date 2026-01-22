@@ -1,9 +1,9 @@
 import _ from "lodash";
-import { LogItem } from "@/hooks/useLogs";
+import { LogEntry } from "@/hooks/useLogs";
 import { ImportData } from "./Import";
 
 interface MigratedData extends ImportData {
-  items: LogItem[];
+  items: LogEntry[];
 }
 
 export const migrateImportData = (data: ImportData): MigratedData => {

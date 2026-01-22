@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import Scale from '@/components/Scale';
 import TextHeadline from '@/components/TextHeadline';
 import { t } from '@/helpers/translation';
-import { LogItem } from '../../../hooks/useLogs';
+import { LogEntry } from '../../../hooks/useLogs';
 import { useSettings } from '../../../hooks/useSettings';
 
 export const RatingSection = ({
@@ -10,8 +10,8 @@ export const RatingSection = ({
   onChange,
   allowMultiple = false,
 }: {
-  value: LogItem['rating'][];
-  onChange: (value: LogItem['rating']) => void;
+  value: LogEntry['rating'][];
+  onChange: (value: LogEntry['rating']) => void;
   allowMultiple?: boolean;
 }) => {
   const { settings } = useSettings();

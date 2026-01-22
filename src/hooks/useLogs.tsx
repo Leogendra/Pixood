@@ -1,6 +1,6 @@
 import { DATE_FORMAT } from "@/constants/Config";
 import { load, store } from "@/helpers/storage";
-import { LogItemSchema } from "@/types";
+import { LogEntry } from "@/types/logFormat";
 import { AtLeast } from "../../types";
 import { Buffer } from "buffer";
 import dayjs from "dayjs";
@@ -14,7 +14,6 @@ import {
     useReducer,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
-import z from "zod";
 
 
 export const STORAGE_KEY = "PIXEL_TRACKER_LOGS";
@@ -44,33 +43,32 @@ export const SLEEP_QUALITY_KEYS = Object.keys(
     SLEEP_QUALITY_MAPPING
 ) as (keyof typeof SLEEP_QUALITY_MAPPING)[];
 
-export type LogItem = z.infer<typeof LogItemSchema>;
 
 export interface LogDay {
     date: string;
-    items: LogItem[];
+    items: LogEntry[];
     ratingAvg: (typeof RATING_KEYS)[number];
     sleepQualityAvg: number;
 }
 
 export interface LogsState {
     loaded?: boolean;
-    items: LogItem[];
+    items: LogEntry[];
 }
 
 type LogAction =
     | { type: "import"; payload: LogsState }
-    | { type: "add"; payload: LogItem }
-    | { type: "edit"; payload: AtLeast<LogItem, "id"> }
-    | { type: "batchEdit"; payload: LogItem[] }
-    | { type: "delete"; payload: LogItem["id"] }
+    | { type: "add"; payload: LogEntry }
+    | { type: "edit"; payload: AtLeast<LogEntry, "id"> }
+    | { type: "batchEdit"; payload: LogEntry[] }
+    | { type: "delete"; payload: LogEntry["id"] }
     | { type: "reset"; payload: LogsState };
 
 export interface UpdaterValue {
-    addLog: (item: LogItem) => void;
-    editLog: (item: Partial<LogItem>) => void;
+    addLog: (item: LogEntry) => void;
+    editLog: (item: Partial<LogEntry>) => void;
     updateLogs: (items: LogsState["items"]) => void;
-    deleteLog: (id: LogItem["id"]) => void;
+    deleteLog: (id: LogEntry["id"]) => void;
     reset: () => void;
     import: (data: LogsState) => void;
 }
@@ -198,11 +196,11 @@ function LogsProvider({ children }: { children: React.ReactNode }) {
     }, []);
 
     const addLog = useCallback(
-        (payload: LogItem) => dispatch({ type: "add", payload }),
+        (payload: LogEntry) => dispatch({ type: "add", payload }),
         []
     );
     const editLog = useCallback(
-        (payload: AtLeast<LogItem, "id">) => dispatch({ type: "edit", payload }),
+        (payload: AtLeast<LogEntry, "id">) => dispatch({ type: "edit", payload }),
         []
     );
     const updateLogs = useCallback(
@@ -211,7 +209,7 @@ function LogsProvider({ children }: { children: React.ReactNode }) {
         []
     );
     const deleteLog = useCallback(
-        (payload: LogItem["id"]) => dispatch({ type: "delete", payload }),
+        (payload: LogEntry["id"]) => dispatch({ type: "delete", payload }),
         []
     );
     const reset = useCallback(

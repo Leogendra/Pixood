@@ -1,7 +1,7 @@
 import { EMOTIONS } from "@/components/Logger/config";
-import { Emotion } from "@/types";
+import { Emotion } from "@/types/logFormat";
 import _ from "lodash";
-import { LogItem } from "../useLogs";
+import { LogEntry } from "../useLogs";
 
 export interface EmotionsDistributionData {
   emotions: {
@@ -23,7 +23,7 @@ export const dummyEmotionsDistributionData: EmotionsDistributionData = {
   })),
 }
 
-export const getEmotionsDistributionData = (items: LogItem[]): EmotionsDistributionData => {
+export const getEmotionsDistributionData = (items: LogEntry[]): EmotionsDistributionData => {
   const distribution = _.countBy(
     items.flatMap((item) => item?.emotions)
   );

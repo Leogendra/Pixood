@@ -1,7 +1,7 @@
 import { Dimensions, Platform, Pressable, useColorScheme, View } from 'react-native';
 import { Check } from 'react-native-feather';
 import useHaptics from '@/hooks/useHaptics';
-import { LogItem } from '@/hooks/useLogs';
+import { LogEntry } from '@/hooks/useLogs';
 import useScale from '@/hooks/useScale';
 
 const SCREEN_HEIGHT = Dimensions.get('screen').height;
@@ -9,7 +9,7 @@ const SCREEN_HEIGHT = Dimensions.get('screen').height;
 export const SlideMoodButton = ({
   rating, selected, onPress
 }: {
-  rating: LogItem['rating'];
+  rating: LogEntry['rating'];
   selected: boolean;
   onPress: () => void;
 }) => {

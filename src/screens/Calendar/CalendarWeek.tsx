@@ -6,7 +6,7 @@ import { DATE_FORMAT } from "@/constants/Config";
 import { useNavigation } from "@react-navigation/native";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import { useCalendarFilters } from "../../hooks/useCalendarFilters";
-import { LogItem, useLogState } from "../../hooks/useLogs";
+import { LogEntry, useLogState } from "../../hooks/useLogs";
 import { getAverageMood } from "@/lib/utils";
 import CalendarDay from "./CalendarDay";
 import { useCalendarNavigation } from "@/hooks/useCalendarNavigation";
@@ -39,7 +39,7 @@ const CalendarWeek = memo(function CalendarWeek({
   isFirst?: boolean;
   isLast?: boolean;
   itemMap: {
-    [key: string]: LogItem[];
+    [key: string]: LogEntry[];
   }
 }) {
   const calendarNavigation = useCalendarNavigation()

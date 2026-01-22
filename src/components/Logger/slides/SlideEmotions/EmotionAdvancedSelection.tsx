@@ -1,4 +1,4 @@
-import { Emotion, EMOTION_CATEGORIES } from "@/types";
+import { Emotion, EMOTION_CATEGORIES } from "@/types/logFormat";
 import { useRef } from "react";
 import { Dimensions, ViewStyle } from "react-native";
 import Carousel, { ICarouselInstance } from "react-native-reanimated-carousel";

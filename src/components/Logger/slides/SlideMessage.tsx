@@ -2,7 +2,7 @@ import { Card } from '@/components/Card';
 import { getLogEditMarginTop } from "@/helpers/responsive";
 import { language, t } from "@/helpers/translation";
 import useColors from "@/hooks/useColors";
-import { LogItem, RATING_MAPPING, useLogState } from "@/hooks/useLogs";
+import { LogEntry, RATING_MAPPING, useLogState } from "@/hooks/useLogs";
 import { useTemporaryLog } from "@/hooks/useTemporaryLog";
 import { getAverageMood } from "@/lib/utils";
 import dayjs, { Dayjs } from "dayjs";
@@ -136,7 +136,7 @@ export const SlideMessage = forwardRef(({
   onDisableStep,
   showDisable,
 }: {
-  onChange: (text: LogItem['message']) => void
+  onChange: (text: LogEntry['message']) => void
   onDisableStep: () => void
   showDisable: boolean
 }, ref: any) => {

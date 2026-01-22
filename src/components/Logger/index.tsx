@@ -1,7 +1,7 @@
 import { DATE_FORMAT } from '@/constants/Config';
 import { askToCancel, askToDisableStep, askToRemove } from '@/helpers/prompts';
 import useColors from '@/hooks/useColors';
-import { LogItem, useLogState, useLogUpdater } from '@/hooks/useLogs';
+import { LogEntry, useLogState, useLogUpdater } from '@/hooks/useLogs';
 import { useSettings } from '@/hooks/useSettings';
 import { TemporaryLogState, useTemporaryLog } from '@/hooks/useTemporaryLog';
 import { useNavigation } from '@react-navigation/native';
@@ -46,7 +46,7 @@ const getAvailableStepsForEdit = ({
     item,
 }: {
     date: string;
-    item: LogItem;
+    item: LogEntry;
 }) => {
     const { hasStep } = useSettings();
     const logState = useLogState();
@@ -76,9 +76,9 @@ export const LoggerEdit = ({
     interfaceType?: LoggerInterface
 }) => {
     const logState = useLogState()
-    const logItem = logState?.items.find(item => item.id === id)
+    const LogEntry = logState?.items.find(item => item.id === id)
 
-    if (logItem === undefined) {
+    if (LogEntry === undefined) {
         return (
             <View>
                 <Text>Log not found</Text>
@@ -87,15 +87,15 @@ export const LoggerEdit = ({
     }
 
     const initialItem: TemporaryLogState = {
-        ...logItem,
+        ...LogEntry,
         sleep: {
-            quality: logItem.sleep?.quality || null,
+            quality: LogEntry.sleep?.quality || null,
         },
     }
 
     const avaliableSteps = getAvailableStepsForEdit({
         date: dayjs(initialItem.dateTime).format(DATE_FORMAT),
-        item: logItem,
+        item: LogEntry,
     })
 
     return (
@@ -191,9 +191,9 @@ export const Logger = ({
         }
 
         if (mode === 'edit') {
-            logUpdater.editLog(data as LogItem)
+            logUpdater.editLog(data as LogEntry)
         } else {
-            logUpdater.addLog(data as LogItem)
+            logUpdater.addLog(data as LogEntry)
         }
 
         close()

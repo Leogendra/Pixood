@@ -15,13 +15,6 @@ import { STORAGE_KEY as STORAGE_KEY_TAGS, Tag, useTagsState, useTagsUpdater } fr
 
 type ResetType = "factory" | "data"
 
-// Old export format - now replaced by simplified format in logFormat.ts
-// type ExportData = {
-//   version: string;
-//   tags: Tag[];
-//   items: LogsState['items'];
-//   settings: ExportSettings;
-// }
 
 export const useDatagate = (): {
     openExportDialog: () => Promise<void>;
@@ -73,11 +66,12 @@ export const useDatagate = (): {
                 items: migratedData.items,
             });
             tagsUpdater.import({
-                tags: migratedData.settings.tags || migratedData.tags || []
+                tags: migratedData.tags || []
             });
             importSettings(migratedData.settings);
             if (!options.muted) showImportSuccess()
-        } else {
+        } 
+    else {
             console.log('import failed, json schema:', jsonSchemaType);
             if (!options.muted) showImportError()
         }
@@ -141,11 +135,11 @@ export const useDatagate = (): {
             return Alert.alert("Not supported on web");
         }
 
-        const filename = `pixood-export-${dayjs().format("YYYY-MM-DD")}${__DEV__ ? '-DEV' : ''}.json`;
+        const filename = `Pixood${__DEV__ ? '-DEV' : ''}-export-${dayjs().format("YY-MM-DD_HH-mm")}.json`;
 
         await FileSystem.writeAsStringAsync(
             FileSystem.documentDirectory + filename,
-            JSON.stringify(data, null, 2) // Pretty print for readability
+            JSON.stringify(data, null, 2)
         );
 
         if (!(await Sharing.isAvailableAsync())) {

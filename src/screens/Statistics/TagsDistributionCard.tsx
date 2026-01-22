@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { Pressable, Text, View } from 'react-native';
 import { Card } from '@/components/Statistics/Card';
 import { t } from '@/helpers/translation';
-import { useAnonymizer } from '../../hooks/useAnonymizer';
 import { useCalendarFilters } from '../../hooks/useCalendarFilters';
 import useColors from '../../hooks/useColors';
 import useHaptics from '../../hooks/useHaptics';
@@ -95,8 +94,6 @@ export const TagsDistributionCard = ({
 }: {
     data: TagsDistributionData
 }) => {
-    const { anonymizeTag } = useAnonymizer()
-
     return (
         <Card
             subtitle={t('tags')}

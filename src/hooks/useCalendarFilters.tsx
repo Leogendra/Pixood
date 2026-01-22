@@ -1,17 +1,17 @@
 import _ from "lodash";
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
-import { LogItem, useLogState } from './useLogs';
+import { LogEntry, useLogState } from './useLogs';
 import { Tag } from "./useTags";
 
 
 interface FiltersData {
   text: string,
-  ratings: LogItem['rating'][],
+  ratings: LogEntry['rating'][],
   tagIds: Tag['id'][],
 }
 
 export interface CalendarFiltersData extends FiltersData {
-  filteredItems: LogItem[];
+  filteredItems: LogEntry[];
   filterCount: number;
   isFiltering: boolean;
 }
@@ -45,7 +45,7 @@ function CalendarFiltersProvider({
   const [data, setData] = useState<CalendarFiltersData>(initialState)
   const [isOpen, setIsOpen] = useState(false)
 
-  const _isMatching = (item: LogItem, data: CalendarFiltersData) => {
+  const _isMatching = (item: LogEntry, data: CalendarFiltersData) => {
     const matchesText = item.message.toLowerCase().includes(data.text.toLowerCase())
     const matchesRatings = data.ratings.includes(item.rating)
     const tagIds = item?.tags?.map(tag => tag.id)
@@ -60,7 +60,7 @@ function CalendarFiltersProvider({
     return conditions.every(condition => condition)
   }
 
-  const _getFilteredItems = (data): LogItem[] => {
+  const _getFilteredItems = (data): LogEntry[] => {
     return logState.items.filter((item) => _isMatching(item, data))
   }
 

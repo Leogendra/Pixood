@@ -1,4 +1,4 @@
-import { LogItem, LogsState, RATING_KEYS } from '@/hooks/useLogs';
+import { LogEntry, LogsState, RATING_KEYS } from '@/hooks/useLogs';
 import { TAG_COLOR_NAMES } from '@/constants/Config';
 import { ExportSettings } from '@/hooks/useSettings';
 import { Tag } from "@/hooks/useTags";
@@ -19,10 +19,10 @@ export const pixySchema = z.object({
 
     items: z.array(z.object({
         id: z.string().optional(),
-        date: z.string().refine((date: LogItem['date']) => {
+        date: z.string().refine((date: LogEntry['date']) => {
             return /^\d{4}-\d{2}-\d{2}$/.test(date);
         }),
-        rating: z.string().refine((rating: LogItem['rating']) => {
+        rating: z.string().refine((rating: LogEntry['rating']) => {
             return RATING_KEYS.includes(rating);
         }),
         tags: z.array(z.object({

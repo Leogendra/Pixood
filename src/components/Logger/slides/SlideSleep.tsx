@@ -2,7 +2,7 @@ import LinkButton from "@/components/LinkButton";
 import { getLogEditMarginTop } from "@/helpers/responsive";
 import { t } from "@/helpers/translation";
 import useColors from "@/hooks/useColors";
-import { LogItem, SLEEP_QUALITY_KEYS } from "@/hooks/useLogs";
+import { LogEntry, SLEEP_QUALITY_KEYS } from "@/hooks/useLogs";
 import { useTemporaryLog } from "@/hooks/useTemporaryLog";
 import { Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -15,7 +15,7 @@ export const SlideSleep = ({
   showDisable,
   onDisableStep,
 }: {
-  onChange: (rating: LogItem['rating']) => void;
+  onChange: (rating: LogEntry['rating']) => void;
   showDisable: boolean;
   onDisableStep: () => void;
 }) => {

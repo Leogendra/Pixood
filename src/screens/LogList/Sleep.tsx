@@ -1,6 +1,6 @@
 import { t } from '../../helpers/translation';
 import { SlideSleepButton } from '@/components/Logger/slides/SlideSleepButton';
-import { LogItem } from '@/hooks/useLogs';
+import { LogEntry } from '@/hooks/useLogs';
 import { useNavigation } from '@react-navigation/native';
 // Removed t from i18n-js import
 import { View } from 'react-native';
@@ -9,7 +9,7 @@ import { SectionHeader } from './SectionHeader';
 export const Sleep = ({
   item,
 }: {
-  item: LogItem;
+  item: LogEntry;
 }) => {
   const navigation = useNavigation();
 

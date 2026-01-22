@@ -1,6 +1,6 @@
 import { t } from '../../helpers/translation';
 import useColors from '@/hooks/useColors';
-import { LogItem } from '@/hooks/useLogs';
+import { LogEntry } from '@/hooks/useLogs';
 import { useTagsState } from '@/hooks/useTags';
 import { useNavigation } from '@react-navigation/native';
 // Removed t from i18n-js import
@@ -56,7 +56,7 @@ const Tag = ({
 export const Tags = ({
   item,
 }: {
-  item: LogItem;
+  item: LogEntry;
 }) => {
   const colors = useColors();
   const { tags } = useTagsState();

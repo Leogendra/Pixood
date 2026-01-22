@@ -1,6 +1,6 @@
 import useColors from "@/hooks/useColors";
 import useHaptics from "@/hooks/useHaptics";
-import { Emotion } from "@/types";
+import { Emotion } from "@/types/logFormat";
 import { Text, View, ViewStyle, useColorScheme } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
 import { EmotionIndicator } from "./EmotionsIndicator";

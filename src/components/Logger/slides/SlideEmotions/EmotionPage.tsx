@@ -1,4 +1,4 @@
-import { Emotion } from "@/types";
+import { Emotion } from "@/types/logFormat";
 import _ from "lodash";
 import { View } from "react-native";
 import { EmotionButtonAdvanced, EmotionButtonEmpty } from "./EmotionButtonAdvanced";

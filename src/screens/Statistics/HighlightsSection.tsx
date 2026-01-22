@@ -9,7 +9,7 @@ import { useState } from "react";
 import { Text, View } from "react-native";
 import { Activity } from "react-native-feather";
 import useColors from "../../hooks/useColors";
-import { LogItem, useLogState } from "../../hooks/useLogs";
+import { LogEntry, useLogState } from "../../hooks/useLogs";
 import { useStatistics } from "../../hooks/useStatistics";
 import { MoodAvgData } from "../../hooks/useStatistics/MoodAvg";
 import { EmotionsDistributionCard } from "./EmotionsDistributionCard";
@@ -52,7 +52,7 @@ const EmptryState = () => {
   )
 }
 
-export const HighlightsSection = ({ items }: { items: LogItem[] }) => {
+export const HighlightsSection = ({ items }: { items: LogEntry[] }) => {
   const colors = useColors();
   const navigation = useNavigation();
   const statistics = useStatistics();

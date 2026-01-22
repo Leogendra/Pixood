@@ -11,7 +11,6 @@ const baseSettings = {
     scaleType: INITIAL_STATE.scaleType,
     reminderEnabled: INITIAL_STATE.reminderEnabled,
     reminderTime: INITIAL_STATE.reminderTime,
-    analyticsEnabled: false,
     actionsDone: [],
     steps: INITIAL_STATE.steps,
 };
@@ -20,11 +19,8 @@ const baseSettings = {
 export function generateOfflineUser(nbDays: number, userId = 'demo-user'): OfflineImportUser {
     const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
     const days = Math.floor(nbDays);
-    const count = clamp(days, 0, 3650); // safety cap ~10 years
 
     const WORDS = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.".split(' ');
-
-
     const TAGS = [
         { id: 't-01', title: 'Work', color: 'blue' },
         { id: 't-02', title: 'Sport', color: 'green' },
@@ -73,7 +69,7 @@ export function generateOfflineUser(nbDays: number, userId = 'demo-user'): Offli
     };
 
     const items: ImportData['items'] = [];
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < days; i++) {
         const d = dayjs().subtract(i, 'day');
         const hour = randInt(7, 22);
         const minute = randInt(0, 59);

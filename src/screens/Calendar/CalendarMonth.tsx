@@ -4,7 +4,7 @@ import React, { memo } from "react";
 import { Platform, StyleSheet, Text, View } from "react-native";
 import { useStyle } from "react-native-style-utilities";
 import useColors from "../../hooks/useColors";
-import { LogItem } from "../../hooks/useLogs";
+import { LogEntry } from "../../hooks/useLogs";
 import CalendarWeek from "./CalendarWeek";
 
 const CalendarMonth = memo(function CalendarMonth({
@@ -13,7 +13,7 @@ const CalendarMonth = memo(function CalendarMonth({
 }: {
   dateString: string;
   itemMap: {
-    [key: string]: LogItem[];
+    [key: string]: LogEntry[];
   }
 }) {
   const colors = useColors();

@@ -1,5 +1,5 @@
 import { getLogDays } from "@/lib/utils";
-import { LogDay, LogItem } from "../useLogs";
+import { LogDay, LogEntry } from "../useLogs";
 
 export interface MoodPeaksPositiveData {
   days: LogDay[];
@@ -17,7 +17,7 @@ export const defaultMoodPeaksNegativeData = {
   days: [],
 };
 
-export const getMoodPeaksPositiveData = (items: LogItem[]): MoodPeaksPositiveData => {
+export const getMoodPeaksPositiveData = (items: LogEntry[]): MoodPeaksPositiveData => {
   const positiveKeys = ["extremely_good", "very_good", "good"];
 
   const logDays = getLogDays(items);
@@ -28,7 +28,7 @@ export const getMoodPeaksPositiveData = (items: LogItem[]): MoodPeaksPositiveDat
   };
 };
 
-export const getMoodPeaksNegativeData = (items: LogItem[]): MoodPeaksNegativeData => {
+export const getMoodPeaksNegativeData = (items: LogEntry[]): MoodPeaksNegativeData => {
   const negativeKeys = ["extremely_bad", "very_bad", "bad"];
 
   const logDays = getLogDays(items);

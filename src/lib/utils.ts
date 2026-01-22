@@ -3,11 +3,11 @@ import dayjs from 'dayjs';
 import _ from 'lodash';
 import { t } from '@/helpers/translation';
 import { DATE_FORMAT } from '@/constants/Config';
-import { LogDay, LogItem, RATING_MAPPING, SLEEP_QUALITY_MAPPING } from '@/hooks/useLogs';
+import { LogDay, LogEntry, RATING_MAPPING, SLEEP_QUALITY_MAPPING } from '@/hooks/useLogs';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-export const getItemsCoverage = (items: LogItem[]) => {
+export const getItemsCoverage = (items: LogEntry[]) => {
   let itemsCoverage = 0;
 
   const itemsSorted = _.sortBy(items, (item) => item.dateTime);
@@ -20,7 +20,7 @@ export const getItemsCoverage = (items: LogItem[]) => {
   return itemsCoverage;
 };
 
-export const getAverageMood = (items: LogItem[]): LogItem['rating'] | null => {
+export const getAverageMood = (items: LogEntry[]): LogEntry['rating'] | null => {
   let averageRating = 0;
 
   if (items.length > 0) {
@@ -30,10 +30,10 @@ export const getAverageMood = (items: LogItem[]): LogItem['rating'] | null => {
     return null;
   }
 
-  return _.invert(RATING_MAPPING)[averageRating] as LogItem['rating'];
+  return _.invert(RATING_MAPPING)[averageRating] as LogEntry['rating'];
 }
 
-export const getAverageSleepQuality = (items: LogItem[]): number | null => {
+export const getAverageSleepQuality = (items: LogEntry[]): number | null => {
   let averageSleepQuality = 0;
 
   if (items.length > 0) {
@@ -46,7 +46,7 @@ export const getAverageSleepQuality = (items: LogItem[]): number | null => {
   return averageSleepQuality;
 }
 
-export const getLogDays = (items: LogItem[]): LogDay[] => {
+export const getLogDays = (items: LogEntry[]): LogDay[] => {
   const moodsPerDay = _.groupBy(items, (item) => dayjs(item.dateTime).format(DATE_FORMAT))
 
   return Object.keys(moodsPerDay).map((date) => {
@@ -65,7 +65,7 @@ export const getLogDays = (items: LogItem[]): LogDay[] => {
   }).filter((item) => item !== null) as LogDay[]
 }
 
-export const getItemDateTitle = (dateTime: LogItem['dateTime']) => {
+export const getItemDateTitle = (dateTime: LogEntry['dateTime']) => {
   const isSmallScreen = SCREEN_WIDTH < 350;
 
   if (dayjs(dateTime).isSame(dayjs(), 'day')) {
@@ -102,7 +102,7 @@ export const isISODate = (date: string) => {
   return isoDateRegExp.test(date);
 };
 
-export const getMostUsedEmotions = (items: LogItem[]) => {
+export const getMostUsedEmotions = (items: LogEntry[]) => {
   const emotions = items.reduce((acc, item) => {
     if (item.emotions) {
       item.emotions.forEach((emotion) => {
@@ -131,7 +131,7 @@ export const wait = async (timeout: number) => {
   });
 };
 
-export const getItemsCountPerDayAverage = (items: LogItem[]) => {
+export const getItemsCountPerDayAverage = (items: LogEntry[]) => {
   if (items.length === 0) return 0;
 
   const itemsSorted = _.sortBy(items, (item) => item.dateTime);

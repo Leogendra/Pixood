@@ -1,7 +1,7 @@
 import { View, Text, Pressable } from "react-native";
 import { Plus } from "react-native-feather";
 import useHaptics from "@/hooks/useHaptics";
-import { LogItem } from "@/hooks/useLogs";
+import { LogEntry } from "@/hooks/useLogs";
 import useScale from "@/hooks/useScale";
 import useColors from "@/hooks/useColors";
 import { SettingsState } from "@/hooks/useSettings";
@@ -16,7 +16,7 @@ export default function Scale({
     allowMultiple = false,
 }: {
     type: SettingsState['scaleType'];
-    value?: LogItem['rating'] | LogItem['rating'][];
+    value?: LogEntry['rating'] | LogEntry['rating'][];
     onPress?: any,
     allowMultiple?: boolean;
 }) {
@@ -33,14 +33,14 @@ export default function Scale({
                 // For multiple selection
                 const currentValue = Array.isArray(value) ? value : (value ? [value] : [])
 
-                if (currentValue.includes(key as LogItem['rating'])) {
+                if (currentValue.includes(key as LogEntry['rating'])) {
                     // Deselect if already selected
                     const newValue = currentValue.filter(v => v !== key)
                     onPress(newValue.length > 0 ? newValue : null)
                 } 
                 else {
                     // Add to selection
-                    const newValue = [...currentValue, key as LogItem['rating']]
+                    const newValue = [...currentValue, key as LogEntry['rating']]
                     onPress(newValue)
                 }
             } 
@@ -65,7 +65,7 @@ export default function Scale({
             >
                 {Object.keys(colors).reverse().map((key, index) => {
                     const isSelected = Array.isArray(value) ?
-                        value.includes(key as LogItem['rating']) :
+                        value.includes(key as LogEntry['rating']) :
                         value === key
 
                     return (

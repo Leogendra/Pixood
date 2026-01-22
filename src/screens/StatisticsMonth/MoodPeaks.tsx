@@ -3,7 +3,6 @@ import { NotEnoughDataOverlay } from '@/components/Statistics/NotEnoughDataOverl
 import { DATE_FORMAT } from '@/constants/Config';
 import { t } from '@/helpers/translation';
 import dayjs from 'dayjs';
-import { useAnonymizer } from '../../hooks/useAnonymizer';
 import { LogDay } from '../../hooks/useLogs';
 import { getMoodPeaksNegativeData, getMoodPeaksPositiveData } from '../../hooks/useStatistics/MoodPeaks';
 import { MoodPeaksContent } from '../Statistics/MoodPeaksCards';
@@ -13,8 +12,6 @@ const MIN_ITEMS = 1;
 export const MoodPeaks = ({
   date, items,
 }) => {
-  const { anonymizeDay } = useAnonymizer()
-
   const dataNegative = getMoodPeaksNegativeData(items);
   const dataPositive = getMoodPeaksPositiveData(items);
 

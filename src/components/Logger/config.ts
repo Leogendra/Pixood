@@ -1,5 +1,5 @@
 import { t } from "@/helpers/translation";
-import { Emotion } from "@/types";
+import { Emotion } from "@/types/logFormat";
 
 export type LoggerStep = "rating" | "tags" | "message" | "reminder" | "emotions" | "sleep";
 

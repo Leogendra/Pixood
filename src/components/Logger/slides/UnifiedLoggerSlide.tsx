@@ -1,7 +1,7 @@
 import { getLogEditMarginTop } from "@/helpers/responsive";
 import { t } from "@/helpers/translation";
 import useColors from "@/hooks/useColors";
-import { LogItem, RATING_KEYS } from "@/hooks/useLogs";
+import { LogEntry, RATING_KEYS } from "@/hooks/useLogs";
 import { useTemporaryLog } from "@/hooks/useTemporaryLog";
 import { ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -18,7 +18,7 @@ export const UnifiedLoggerSlide = ({
     showDisable,
     onDisableStep = () => { },
 }: {
-    onRatingChange: (rating: LogItem['rating']) => void;
+    onRatingChange: (rating: LogEntry['rating']) => void;
     onTagsChange: (tagIds: string[]) => void;
     onMessageChange: (message: string) => void;
     showDisable: boolean;

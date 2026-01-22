@@ -3,7 +3,7 @@ import React from "react";
 import { View } from "react-native";
 import { DATE_FORMAT } from "@/constants/Config";
 import useColors from "../../../hooks/useColors";
-import { LogItem } from "../../../hooks/useLogs";
+import { LogEntry } from "../../../hooks/useLogs";
 import useScale from "../../../hooks/useScale";
 
 export const Day = ({
@@ -11,7 +11,7 @@ export const Day = ({
   rating,
 }: {
   date: string;
-  rating: LogItem['rating'] | null;
+  rating: LogEntry['rating'] | null;
 }) => {
   const colors = useColors();
   const scale = useScale();

@@ -8,7 +8,7 @@ import { DATE_FORMAT } from "@/constants/Config";
 import { getLogEditMarginTop } from "@/helpers/responsive";
 import { t } from "@/helpers/translation";
 import useColors from "@/hooks/useColors";
-import { LogItem, RATING_KEYS } from "@/hooks/useLogs";
+import { LogEntry, RATING_KEYS } from "@/hooks/useLogs";
 import { useTemporaryLog } from "@/hooks/useTemporaryLog";
 import { SlideHeadline } from "../components/SlideHeadline";
 import { SlideMoodButton } from "../components/SlideMoodButton";
@@ -16,7 +16,7 @@ import { SlideMoodButton } from "../components/SlideMoodButton";
 export const SlideMood = ({
   onChange,
 }: {
-  onChange: (rating: LogItem['rating']) => void;
+  onChange: (rating: LogEntry['rating']) => void;
 }) => {
   const colors = useColors();
   const tempLog = useTemporaryLog();
@@ -77,9 +77,9 @@ export const SlideMood = ({
           {RATING_KEYS.map((key, index) => (
             <SlideMoodButton
               key={key}
-              rating={key as LogItem['rating']}
+              rating={key as LogEntry['rating']}
               selected={tempLog?.data?.rating === key}
-              onPress={() => onChange(key as LogItem['rating'])}
+              onPress={() => onChange(key as LogEntry['rating'])}
             />
           ))}
         </View>

@@ -1,6 +1,6 @@
 import LinkButton from "@/components/LinkButton";
 import useColors from "@/hooks/useColors";
-import { LogItem } from "@/hooks/useLogs";
+import { LogEntry } from "@/hooks/useLogs";
 import dayjs from "dayjs";
 import { LinearGradient } from "expo-linear-gradient";
 import { Edit, Trash } from "lucide-react-native";
@@ -16,9 +16,9 @@ const EntryHeader = ({
   onEdit,
   onDelete,
 }: {
-  item: LogItem;
-  onEdit: (item: LogItem) => void;
-  onDelete: (item: LogItem) => void;
+  item: LogEntry;
+  onEdit: (item: LogEntry) => void;
+  onDelete: (item: LogEntry) => void;
 }) => {
   const colors = useColors();
 
@@ -100,9 +100,9 @@ export const Entry = ({
   onEdit,
   onDelete,
 }: {
-  item: LogItem;
-  onEdit: (item: LogItem) => void;
-  onDelete: (item: LogItem) => void;
+  item: LogEntry;
+  onEdit: (item: LogEntry) => void;
+  onDelete: (item: LogEntry) => void;
 }) => {
   const colors = useColors();
 

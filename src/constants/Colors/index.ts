@@ -87,10 +87,6 @@ const light = {
   bottomSheetHeaderBorder: colors.neutral[200],
   bottomSheetHandle: 'rgba(255, 255, 255, 0.5)',
 
-  feedbackSelectionBackground: colors.neutral[200],
-  feedbackSelectionText: colors.neutral[900],
-  feedbackBackground: colors.neutral[100],
-
   cardBackground: '#fff',
   cardBorder: colors.neutral[200],
 
@@ -103,10 +99,6 @@ const light = {
   tabsIconInactive: colors.neutral[400],
   tabsTextActive: tintColorLight,
   tabsTextInactive: colors.neutral[400],
-
-  passcodeDotBackground: colors.neutral[300],
-  passcodePadBackground: colors.neutral[200],
-  passcodePadBackgroundActive: colors.neutral[400],
 
   menuListItemBackground: '#FFF',
   menuListItemText: '#000',
@@ -176,10 +168,6 @@ const light = {
   statisticsDescription: colors.neutral[500],
   statisticsCardBackground: '#FFF',
   statisticsCardSubtitle: colors.neutral[500],
-  statisticsFeedbackEmojiOpacity: 1,
-  statisticsFeedbackEmojiBackground: colors.neutral[100],
-  statisticsFeedbackBorder: colors.neutral[200],
-  statisticsFeedbackText: colors.neutral[500],
   statisticsWeekdayText: colors.neutral[400],
   statisticsWeekdayBorder: colors.neutral[200],
   statisticsCalendarDotBackground: colors.neutral[200],
@@ -242,8 +230,6 @@ const light = {
   tooltipBackground: 'rgba(0, 0, 0, 0.8)',
   tooltipText: colors.white,
   tooltipTextSecondary: colors.neutral[400],
-
-  feedbackBoxBackground: colors.amber[50],
 
   LogListAddButtonBorder: colors.neutral[300],
   LogListAddButtonText: colors.neutral[400],
@@ -322,10 +308,6 @@ const dark: IColors & {
   bottomSheetHeaderBorder: colors.neutral[800],
   bottomSheetHandle: 'rgba(255, 255, 255, 0.5)',
 
-  feedbackSelectionBackground: colors.neutral[800],
-  feedbackSelectionText: colors.white,
-  feedbackBackground: colors.neutral[900],
-
   cardBackground: colors.neutral[900],
   cardBorder: colors.neutral[800],
 
@@ -338,10 +320,6 @@ const dark: IColors & {
   tabsIconInactive: colors.neutral[600],
   tabsTextActive: tintColorDark,
   tabsTextInactive: colors.neutral[600],
-
-  passcodeDotBackground: colors.neutral[600],
-  passcodePadBackground: colors.neutral[800],
-  passcodePadBackgroundActive: colors.neutral[700],
 
   menuListItemBackground: colors.neutral[900],
   menuListItemText: colors.neutral[50],
@@ -411,10 +389,6 @@ const dark: IColors & {
   statisticsDescription: colors.neutral[500],
   statisticsCardBackground: colors.neutral[900],
   statisticsCardSubtitle: colors.neutral[400],
-  statisticsFeedbackEmojiOpacity: 0.6,
-  statisticsFeedbackEmojiBackground: colors.neutral[800],
-  statisticsFeedbackBorder: colors.neutral[800],
-  statisticsFeedbackText: colors.neutral[500],
   statisticsWeekdayText: colors.neutral[400],
   statisticsWeekdayBorder: colors.neutral[800],
   statisticsCalendarDotBackground: colors.neutral[800],
@@ -472,8 +446,6 @@ const dark: IColors & {
   emotionButtonBorderActive: colors.white,
   emotionButtonText: colors.white,
   emotionButtonTextActive: colors.neutral[900],
-
-  feedbackBoxBackground: colors.neutral[900],
 
   tooltipBackground: 'rgba(0, 0, 0, 0.8)',
   tooltipText: colors.white,

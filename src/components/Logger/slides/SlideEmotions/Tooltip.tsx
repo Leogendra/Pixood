@@ -1,6 +1,6 @@
 import useColors from "@/hooks/useColors";
 import useHaptics from "@/hooks/useHaptics";
-import { Emotion } from "@/types";
+import { Emotion } from "@/types/logFormat";
 import { Motion } from "@legendapp/motion";
 import { Pressable, Text, View } from "react-native";
 import { X } from "react-native-feather";

@@ -1,11 +1,10 @@
-import { uniqueId } from "lodash";
-import { LogItem } from "../hooks/useLogs";
+import { LogEntry } from "@/types/logFormat";
 
-export const _generateItem = (item: Partial<LogItem>): LogItem => {
-  const newItem: LogItem = {
-    id: uniqueId(),
-    rating: ('neutral' as LogItem['rating']),
-    message: '🥹',
+
+export const _generateItem = (item: Partial<LogEntry>): LogEntry => {
+  const newItem: LogEntry = {
+    rating: ('neutral' as LogEntry['rating']),
+    notes: '🥹',
     date: '2020-01-01',
     sleep: {
       quality: 'neutral',

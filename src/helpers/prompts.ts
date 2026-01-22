@@ -146,25 +146,3 @@ export const askToDisableStep = () => {
     );
   });
 }
-
-export const askToDisableFeedbackStep = () => {
-  return new Promise((resolve, reject) => {
-    Alert.alert(
-      t("disable_feedback_step_confirm_title"),
-      t("disable_feedback_step_confirm_message"),
-      [
-        {
-          text: t("disable"),
-          onPress: () => resolve({}),
-          style: "destructive",
-        },
-        {
-          text: t("cancel"),
-          onPress: () => reject(),
-          style: "cancel",
-        },
-      ],
-      { cancelable: true }
-    );
-  });
-}

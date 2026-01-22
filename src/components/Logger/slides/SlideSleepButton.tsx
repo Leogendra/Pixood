@@ -1,5 +1,5 @@
 import useColors from "@/hooks/useColors";
-import { LogItem, SLEEP_QUALITY_MAPPING } from "@/hooks/useLogs";
+import { LogEntry, SLEEP_QUALITY_MAPPING } from "@/hooks/useLogs";
 import { Pressable, View, ViewStyle, useColorScheme } from "react-native";
 import useHaptics from "@/hooks/useHaptics";
 

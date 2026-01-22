@@ -2,7 +2,7 @@ import dayjs, { Dayjs } from "dayjs";
 import _ from "lodash";
 import React, { ReactNode } from "react";
 import { View } from "react-native";
-import { LogItem } from "../../../hooks/useLogs";
+import { LogEntry } from "../../../hooks/useLogs";
 import { getAverageMood } from "@/lib/utils";
 import { Day } from "./Day";
 import { YAxis } from "./YAxis";
@@ -10,7 +10,7 @@ import { YAxis } from "./YAxis";
 export const Row = ({ date, dayCount, items }: {
   date: Dayjs;
   dayCount: number;
-  items: LogItem[];
+  items: LogEntry[];
 }) => {
 
   const months: ReactNode[] = [];

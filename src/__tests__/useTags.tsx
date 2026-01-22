@@ -1,4 +1,3 @@
-// Removed AsyncStorage import
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { renderHook, act } from "@testing-library/react-hooks";
 import {

@@ -1,8 +1,8 @@
 import { t } from '../../helpers/translation';
 import { EMOTIONS } from '@/components/Logger/config';
 import useColors from '@/hooks/useColors';
-import { LogItem } from '@/hooks/useLogs';
-import { Emotion } from '@/types';
+import { LogEntry } from '@/hooks/useLogs';
+import { Emotion } from '@/types/logFormat';
 import { useNavigation } from '@react-navigation/native';
 // Removed t from i18n-js import
 import _ from 'lodash';
@@ -21,7 +21,7 @@ const EMOTIONS_CATEGORY_ORDER = {
 export const Emotions = ({
   item,
 }: {
-  item: LogItem;
+  item: LogEntry;
 }) => {
   const colors = useColors();
   const navigation = useNavigation();

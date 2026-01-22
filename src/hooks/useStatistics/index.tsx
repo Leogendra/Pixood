@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import _ from "lodash";
 import { createContext, useContext, useState } from "react";
-import { LogItem, useLogState } from "../useLogs";
+import { LogEntry, useLogState } from "../useLogs";
 import { useTagsState } from "../useTags";
 import { defaultMoodAvgData, getMoodAvgData, MoodAvgData } from "./MoodAvg";
 import {
@@ -66,8 +66,8 @@ export function StatisticsProvider({
   const logState = useLogState()
   const { tags } = useTagsState()
   const [isLoading, setIsLoading] = useState(false);
-  const [prevHighlightItems, setPrevHighlightItems] = useState<LogItem[]>([]);
-  const [prevTrendsItems, setPrevTrendsItems] = useState<LogItem[]>([]);
+  const [prevHighlightItems, setPrevHighlightItems] = useState<LogEntry[]>([]);
+  const [prevTrendsItems, setPrevTrendsItems] = useState<LogEntry[]>([]);
 
   const [state, setState] = useState<StatisticsState>({
     loaded: false,

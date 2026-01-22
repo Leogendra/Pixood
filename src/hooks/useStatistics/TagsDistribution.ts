@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { LogItem } from "../useLogs";
+import { LogEntry } from "../useLogs";
 import { Tag } from "../useTags";
 
 export interface TagsDistributionData {
@@ -55,7 +55,7 @@ export const dummyTagsDistributionData: TagsDistributionData = {
   ],
 }
 
-export const getTagsDistributionData = (items: LogItem[], tags: Tag[]): TagsDistributionData => {
+export const getTagsDistributionData = (items: LogEntry[], tags: Tag[]): TagsDistributionData => {
   const distribution = _.countBy(
     items.flatMap((item) => item?.tags?.map((tag) => tag?.id))
   );

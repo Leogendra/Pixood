@@ -11,7 +11,6 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <SafeAreaProvider>
       <SettingsProvider>
-        {/* <PasscodeProvider> */}
         <LogsProvider>
             <TagsProvider>
               <TagCategoriesProvider>
@@ -23,7 +22,6 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
               </TagCategoriesProvider>
             </TagsProvider>
           </LogsProvider>
-        {/* </PasscodeProvider> */}
       </SettingsProvider>
     </SafeAreaProvider>
   );

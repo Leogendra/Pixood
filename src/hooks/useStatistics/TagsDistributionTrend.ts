@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import _ from "lodash";
-import { LogItem } from "../useLogs";
+import { LogEntry } from "../useLogs";
 import { Tag } from "../useTags";
 
 interface DistributionTag extends Tag {
@@ -29,7 +29,7 @@ const SCALE_TYPE = "week";
 const SCALE_RANGE = 8;
 
 export const getTagsDistributionTrendData = (
-  items: LogItem[],
+  items: LogEntry[],
   tags: Tag[]
 ): TagsDistributionTrendData => {
   const distributionPeriode1: TagCounter = _.zipObject(

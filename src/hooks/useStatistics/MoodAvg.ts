@@ -1,11 +1,11 @@
-import { LogItem, RATING_KEYS } from "../useLogs";
+import { LogEntry, RATING_KEYS } from "../useLogs";
 import { getLogDays } from '@/lib/utils';
 
 export interface MoodAvgData {
-  ratingHighestKey: LogItem["rating"];
+  ratingHighestKey: LogEntry["rating"];
   ratingHighestPercentage: number;
   distribution: {
-    key: LogItem["rating"];
+    key: LogEntry["rating"];
     count: number;
   }[];
   itemsCount: number;
@@ -18,8 +18,8 @@ export const defaultMoodAvgData: MoodAvgData = {
   distribution: [],
 }
 
-export const getMoodAvgData = (items: LogItem[]): MoodAvgData => {
-  const keys: LogItem["rating"][] = [...RATING_KEYS].reverse()
+export const getMoodAvgData = (items: LogEntry[]): MoodAvgData => {
+  const keys: LogEntry["rating"][] = [...RATING_KEYS].reverse()
 
   const moods = {
     negative: 0,
@@ -48,7 +48,7 @@ export const getMoodAvgData = (items: LogItem[]): MoodAvgData => {
   const rating_distribution = keys.map((key) => {
     const count = items.filter((item) => item.rating === key).length;
     return {
-      key: key as LogItem["rating"],
+      key: key as LogEntry["rating"],
       count,
     };
   });
@@ -60,7 +60,7 @@ export const getMoodAvgData = (items: LogItem[]): MoodAvgData => {
 
   const ratingHighestKey = Object.keys(moods).reduce((a, b) =>
     moods[a] > moods[b] ? a : b
-  ) as LogItem["rating"];
+  ) as LogEntry["rating"];
 
   const percentage = Math.round(
     (moods[ratingHighestKey] / rating_total) * 100

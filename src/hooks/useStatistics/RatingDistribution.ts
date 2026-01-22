@@ -1,6 +1,6 @@
 import { getLogDays } from '@/lib/utils';
 import dayjs from 'dayjs';
-import { LogItem, RATING_MAPPING } from '../useLogs';
+import { LogEntry, RATING_MAPPING } from '../useLogs';
 
 const MONTH_MAPPING = {
   0: 'Jan',
@@ -23,7 +23,7 @@ export type RatingDistributionData = {
   value: number | null;
 }[]
 
-export const getRatingDistributionForYear = (items: LogItem[]): RatingDistributionData => {
+export const getRatingDistributionForYear = (items: LogEntry[]): RatingDistributionData => {
   const result: RatingDistributionData = []
 
   for (const month in Object.keys(MONTH_MAPPING)) {
@@ -53,7 +53,7 @@ export const getRatingDistributionForYear = (items: LogItem[]): RatingDistributi
   return result;
 }
 
-export const getRatingDistributionForXDays = (items: LogItem[], startDate, dayCount): RatingDistributionData => {
+export const getRatingDistributionForXDays = (items: LogEntry[], startDate, dayCount): RatingDistributionData => {
   const result: RatingDistributionData = []
 
   const logDays = getLogDays(items)
