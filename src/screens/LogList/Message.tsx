@@ -33,7 +33,7 @@ export const Message = ({
           flexDirection: 'row',
         }}
       >
-        {item?.message?.length > 0 ? (
+        {item?.notes?.length > 0 ? (
           <View
             style={{
               width: '100%',
@@ -53,7 +53,7 @@ export const Message = ({
                   lineHeight: 23,
                   width: '100%',
                 }}
-              >{item.message}</Text>
+              >{item.notes}</Text>
             </View>
           </View>
         ) : (

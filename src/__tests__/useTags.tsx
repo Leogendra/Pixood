@@ -57,16 +57,16 @@ const testTags: Tag[] = [
 
 const testItems: LogsState['items'] = [
   _generateItem({
-    date: '2022-01-01',
-    rating: 'neutral',
-    message: 'test message',
-    tags: [...testTags],
+    dateTime: '2022-01-01T12:00:00Z',
+    rating: [3],
+    notes: 'test message',
+    tags: testTags.map(t => ({ tagId: t.id })),
   }),
   _generateItem({
-    date: '2022-01-02',
-    rating: 'neutral',
-    message: '🦄',
-    tags: [...testTags],
+    dateTime: '2022-01-02T12:00:00Z',
+    rating: [3],
+    notes: '🦄',
+    tags: testTags.map(t => ({ tagId: t.id })),
   })
 ]
 

@@ -14,7 +14,6 @@ import { MoodChart } from './MoodChart';
 import { MoodPeaks } from './MoodPeaks';
 import { Navigation } from './Navigation';
 import { Stats } from './Stats';
-import { EmotionsDistribution } from '@/components/Statistics/EmotionsDistribution';
 
 export const StatisticsMonthScreen = ({ navigation, route }: RootStackScreenProps<'StatisticsMonth'>) => {
   const colors = useColors()
@@ -81,11 +80,6 @@ export const StatisticsMonthScreen = ({ navigation, route }: RootStackScreenProp
           <TagDistribution
             title={t('statistics_most_used_tags')}
             subtitle={t('statistics_most_used_tags_description', { date: date.format('MMMM, YYYY') })}
-            items={items}
-          />
-          <EmotionsDistribution
-            title={t('statistics_most_used_emotions')}
-            subtitle={t('statistics_most_used_emotions_description', { date: date.format('MMMM, YYYY') })}
             items={items}
           />
           <MoodPeaks items={items} date={date} />

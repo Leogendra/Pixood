@@ -44,7 +44,7 @@ export const getTagsDistributionTrendData = (
 
   // if tags exist inside the settings tags
   const filteredItems = items.filter((item) =>
-    item?.tags?.some((tag) => tags.some((d) => d.id === tag.id))
+    item?.tags?.some((tag) => tags.some((d) => d.id === tag.tagId))
   );
 
   if (filteredItems.length === 0) {
@@ -60,7 +60,7 @@ export const getTagsDistributionTrendData = (
 
     _items.forEach((item) => {
       item.tags.forEach((tag) => {
-        distributionPeriode1[tag.id].count++;
+        distributionPeriode1[tag.tagId].count++;
       });
     });
   }
@@ -74,7 +74,7 @@ export const getTagsDistributionTrendData = (
 
     _items.forEach((item) => {
       item.tags.forEach((tag) => {
-        distributionPeriode2[tag.id].count++;
+        distributionPeriode2[tag.tagId].count++;
       });
     });
   }

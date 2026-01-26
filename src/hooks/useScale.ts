@@ -1,23 +1,19 @@
 import { IScale } from '@/constants/Colors/Scales';
+import { NUMBER_OF_RATINGS } from '@/constants/Config';
 import useColors from "./useColors";
-import { RATING_KEYS } from "./useLogs";
 import { SettingsState, useSettings } from "./useSettings";
 
 export default function useScale(
-  type?: SettingsState['scaleType']
+    type?: SettingsState['scaleType']
 ) {
-  const colors = useColors()
-  const { settings } = useSettings()
+    const colors = useColors()
+    const { settings } = useSettings()
 
-  const _type = type || settings.scaleType
+    const _type = type || settings.scaleType
 
-  const scaleColors = {} as IScale
-  RATING_KEYS.forEach((label, index) => {
-    scaleColors[label] = colors.scales[_type][label]
-  })
-
-  return {
-    colors: scaleColors,
-    labels: RATING_KEYS
-  }
+    // Simply return the scale from colors which already has numeric indices
+    return {
+        colors: colors.scales[_type],
+        labels: Array.from({ length: NUMBER_OF_RATINGS }, (_, i) => NUMBER_OF_RATINGS - i)
+    }
 }

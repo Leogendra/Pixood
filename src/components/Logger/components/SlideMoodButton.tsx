@@ -1,7 +1,6 @@
 import { Dimensions, Platform, Pressable, useColorScheme, View } from 'react-native';
 import { Check } from 'react-native-feather';
 import useHaptics from '@/hooks/useHaptics';
-import { LogEntry } from '@/hooks/useLogs';
 import useScale from '@/hooks/useScale';
 
 const SCREEN_HEIGHT = Dimensions.get('screen').height;
@@ -9,7 +8,7 @@ const SCREEN_HEIGHT = Dimensions.get('screen').height;
 export const SlideMoodButton = ({
   rating, selected, onPress
 }: {
-  rating: LogEntry['rating'];
+  rating: number;
   selected: boolean;
   onPress: () => void;
 }) => {
@@ -27,7 +26,7 @@ export const SlideMoodButton = ({
         onPress();
       }}
       style={({ pressed }) => ({
-        backgroundColor: scale.colors[rating].background,
+        backgroundColor: scale.colors[rating]?.background || '#ccc',
         borderWidth: Platform.OS === 'android' && colorScheme === 'dark' ? 0 : 1,
         borderColor: colorScheme === 'light' ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.2)',
         borderRadius: 12,
@@ -45,7 +44,7 @@ export const SlideMoodButton = ({
         justifyContent: 'center',
       }}>
         <Check
-          color={selected ? scale.colors[rating].text : 'transparent'}
+          color={selected ? (scale.colors[rating]?.text || '#000') : 'transparent'}
           width={24}
           height={24} />
       </View>

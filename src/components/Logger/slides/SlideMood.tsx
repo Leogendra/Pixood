@@ -4,11 +4,11 @@ import { useState } from "react";
 import { Platform, View } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { DATE_FORMAT } from "@/constants/Config";
+import { DATE_FORMAT, NUMBER_OF_RATINGS } from "@/constants/Config";
 import { getLogEditMarginTop } from "@/helpers/responsive";
 import { t } from "@/helpers/translation";
 import useColors from "@/hooks/useColors";
-import { LogEntry, RATING_KEYS } from "@/hooks/useLogs";
+import { LogEntry } from "@/hooks/useLogs";
 import { useTemporaryLog } from "@/hooks/useTemporaryLog";
 import { SlideHeadline } from "../components/SlideHeadline";
 import { SlideMoodButton } from "../components/SlideMoodButton";
@@ -74,12 +74,20 @@ export const SlideMood = ({
             width: '100%',
           }}
         >
-          {RATING_KEYS.map((key, index) => (
+          {Array.from({ length: NUMBER_OF_RATINGS }, (_, i) => NUMBER_OF_RATINGS - i).map((rating) => (
             <SlideMoodButton
-              key={key}
-              rating={key as LogEntry['rating']}
-              selected={tempLog?.data?.rating === key}
-              onPress={() => onChange(key as LogEntry['rating'])}
+              key={rating}
+              rating={rating}
+              selected={tempLog?.data?.rating?.includes(rating) || false}
+              onPress={() => {
+                // Toggle rating in/out of array
+                const currentRatings = tempLog.data.rating || [];
+                if (currentRatings.includes(rating)) {
+                  onChange(currentRatings.filter(r => r !== rating));
+                } else {
+                  onChange([...currentRatings, rating]);
+                }
+              }}
             />
           ))}
         </View>

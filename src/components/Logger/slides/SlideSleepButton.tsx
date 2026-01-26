@@ -9,7 +9,7 @@ export const SlideSleepButton = ({
   onPress,
   style = {},
 }: {
-  value: 'very_good' | 'good' | 'neutral' | 'bad' | 'very_bad';
+  value: number | 'very_good' | 'good' | 'neutral' | 'bad' | 'very_bad';
   selected?: boolean;
   onPress?: () => void;
   style?: ViewStyle;
@@ -18,7 +18,7 @@ export const SlideSleepButton = ({
   const colorScheme = useColorScheme();
   const haptics = useHaptics();
 
-  const _value = SLEEP_QUALITY_MAPPING[value];
+  const _value = typeof value === 'number' ? value : SLEEP_QUALITY_MAPPING[value];
 
   const HEIGHT = 32;
 

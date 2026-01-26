@@ -20,30 +20,23 @@ export const getItemsCoverage = (items: LogEntry[]) => {
   return itemsCoverage;
 };
 
-export const getAverageMood = (items: LogEntry[]): LogEntry['rating'] | null => {
-  let averageRating = 0;
-
-  if (items.length > 0) {
-    const sum = items.reduce((acc, item) => acc + RATING_MAPPING[item.rating], 0);
-    averageRating = Math.round(sum / items.length);
-  } else {
-    return null;
-  }
-
-  return _.invert(RATING_MAPPING)[averageRating] as LogEntry['rating'];
+export const getAverageMood = (items: LogEntry[]): number | null => {
+  if (items.length === 0) return null;
+  
+  // Flatten all ratings from all items into a single array
+  const allRatings = items.flatMap(item => item.rating || []);
+  
+  if (allRatings.length === 0) return null;
+  
+  const sum = allRatings.reduce((acc, rating) => acc + rating, 0);
+  return Math.round(sum / allRatings.length);
 }
 
 export const getAverageSleepQuality = (items: LogEntry[]): number | null => {
-  let averageSleepQuality = 0;
-
-  if (items.length > 0) {
-    const sum = items.reduce((acc, item) => acc + (item.sleep?.quality ? SLEEP_QUALITY_MAPPING[item.sleep.quality] : 0), 0);
-    averageSleepQuality = Math.round(sum / items.length);
-  } else {
-    return null;
-  }
-
-  return averageSleepQuality;
+  // Sleep is now stored in metrics, not as a separate field
+  // This function is kept for backward compatibility but returns null
+  // TODO: Implement sleep quality extraction from metrics
+  return null;
 }
 
 export const getLogDays = (items: LogEntry[]): LogDay[] => {
@@ -102,28 +95,7 @@ export const isISODate = (date: string) => {
   return isoDateRegExp.test(date);
 };
 
-export const getMostUsedEmotions = (items: LogEntry[]) => {
-  const emotions = items.reduce((acc, item) => {
-    if (item.emotions) {
-      item.emotions.forEach((emotion) => {
-        if (acc[emotion]) {
-          acc[emotion] += 1;
-        } else {
-          acc[emotion] = 1;
-        }
-      });
-    }
-
-    return acc;
-  }, {} as Record<string, number>);
-
-  return Object.keys(emotions)
-    .map((emotion) => ({
-      key: emotion,
-      count: emotions[emotion],
-    }))
-    .sort((a, b) => b.count - a.count);
-}
+// Removed getMostUsedEmotions - emotions feature has been deprecated
 
 export const wait = async (timeout: number) => {
   return new Promise(resolve => {

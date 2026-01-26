@@ -1,7 +1,8 @@
 import { DATE_FORMAT } from '@/constants/Config';
 import { askToCancel, askToDisableStep, askToRemove } from '@/helpers/prompts';
 import useColors from '@/hooks/useColors';
-import { LogEntry, useLogState, useLogUpdater } from '@/hooks/useLogs';
+import { useLogState, useLogUpdater } from '@/hooks/useLogs';
+import { LogEntry } from '@/types/logFormat';
 import { useSettings } from '@/hooks/useSettings';
 import { TemporaryLogState, useTemporaryLog } from '@/hooks/useTemporaryLog';
 import { useNavigation } from '@react-navigation/native';
@@ -30,11 +31,6 @@ const getAvailableStepsForCreate = ({
         'rating'
     ]
 
-    const itemsOnDate = logState.items.filter(item => dayjs(item.dateTime).isSame(dayjs(date), 'day'))
-    const hasSleep = itemsOnDate.some(item => item.sleep?.quality !== null)
-
-    if (hasStep('sleep') && !hasSleep) slides.push('sleep')
-    if (hasStep('emotions')) slides.push('emotions')
     if (hasStep('tags')) slides.push('tags')
     if (hasStep('message')) slides.push('message')
 
@@ -55,13 +51,8 @@ const getAvailableStepsForEdit = ({
         'rating'
     ]
 
-    const itemsOnDate = logState.items.filter(item => dayjs(item.dateTime).isSame(dayjs(date), 'day'))
-    const hasSleep = itemsOnDate.some(item => item.sleep?.quality !== null)
-
-    if (item.sleep?.quality || (!hasSleep && hasStep('sleep'))) slides.push('sleep')
-    if (hasStep('emotions') || item.emotions.length > 0) slides.push('emotions')
     if (hasStep('tags') || item.tags.length > 0) slides.push('tags')
-    if (hasStep('message') || item.message.length > 0) slides.push('message')
+    if (hasStep('message') || item.notes.length > 0) slides.push('message')
 
     return slides;
 }
@@ -88,9 +79,6 @@ export const LoggerEdit = ({
 
     const initialItem: TemporaryLogState = {
         ...LogEntry,
-        sleep: {
-            quality: LogEntry.sleep?.quality || null,
-        },
     }
 
     const avaliableSteps = getAvailableStepsForEdit({
@@ -128,13 +116,9 @@ export const LoggerCreate = ({
         date: dateTime ? dayjs(dateTime).format(DATE_FORMAT) : dayjs().format(DATE_FORMAT),
         dateTime: dateTime,
         rating: null,
-        message: '',
-        emotions: [],
+        notes: '',
+        metrics: {},
         tags: [],
-        sleep: {
-            quality: null,
-        },
-        createdAt: createdAt.current,
     }
 
     avaliableSteps = avaliableSteps || getAvailableStepsForCreate({
@@ -186,13 +170,14 @@ export const Logger = ({
     }
 
     const save = (data: TemporaryLogState) => {
-        if (data.rating === null) {
-            data.rating = 'neutral'
+        if (data.rating === null || data.rating.length === 0) {
+            data.rating = [3] // neutral par défaut
         }
 
         if (mode === 'edit') {
-            logUpdater.editLog(data as LogEntry)
-        } else {
+            logUpdater.editLog(data.id, data as LogEntry)
+        }
+        else {
             logUpdater.addLog(data as LogEntry)
         }
 
@@ -238,7 +223,7 @@ export const Logger = ({
                         }}
                         onDelete={() => {
                             if (
-                                tempLog.data.message.length > 0 ||
+                                tempLog.data.notes.length > 0 ||
                                 tempLog.data.tags.length > 0
                             ) {
                                 askToRemove().then(() => remove())
@@ -251,7 +236,7 @@ export const Logger = ({
                 <UnifiedLoggerSlide
                     onRatingChange={(rating) => tempLog.update({ rating })}
                     onTagsChange={(tagIds) => tempLog.update({ selectedCategorizedTagIds: tagIds })}
-                    onMessageChange={(message) => tempLog.update({ message })}
+                    onMessageChange={(notes) => tempLog.update({ notes })}
                     showDisable={showDisable}
                     onDisableStep={() => {
                         askToDisableStep().then(() => {

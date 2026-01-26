@@ -12,7 +12,7 @@ const MIN_PEAKS = 3;
 
 export const getTagsPeaksData = (items: LogEntry[], settingsTags: Tag[]): TagsPeakData => {
   const distribution = _.countBy(
-    items.flatMap((item) => item.tags.map((tag) => tag.id))
+    items.flatMap((item) => item.tags.map((tag) => tag.tagId))
   );
 
   const tags = Object.keys(distribution)
@@ -27,7 +27,7 @@ export const getTagsPeaksData = (items: LogEntry[], settingsTags: Tag[]): TagsPe
     })
     .map((key) => ({
       ...settingsTags.find((tag) => tag.id === key)!,
-      items: items.filter((item) => item.tags.find((tag) => tag.id === key)),
+      items: items.filter((item) => item.tags.find((tag) => tag.tagId === key)),
     }))
     .filter((tag) => tag && tag.items.length > 0)
 

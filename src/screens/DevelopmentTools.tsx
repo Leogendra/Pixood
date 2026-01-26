@@ -66,7 +66,7 @@ export const DevelopmentTools = () => {
   const { settings, setSettings, removeActionDone } = useSettings();
 
   const words_total = logState.items
-    .map((d) => d.message.split(" ").length)
+    .map((d) => (d.notes || '').split(" ").length)
     .reduce((a, b) => a + b, 0);
 
   return (

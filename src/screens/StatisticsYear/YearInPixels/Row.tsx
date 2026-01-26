@@ -2,7 +2,7 @@ import dayjs, { Dayjs } from "dayjs";
 import _ from "lodash";
 import React, { ReactNode } from "react";
 import { View } from "react-native";
-import { LogEntry } from "../../../hooks/useLogs";
+import { LogEntry } from "@/types/logFormat";
 import { getAverageMood } from "@/lib/utils";
 import { Day } from "./Day";
 import { YAxis } from "./YAxis";

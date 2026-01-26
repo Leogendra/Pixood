@@ -13,8 +13,8 @@ export const Stats = ({
   items: LogEntry[];
   prevItems: LogEntry[];
 }) => {
-  const words = items.reduce((acc, item) => acc + item.message.split(' ').length, 0);
-  const wordsPrev = prevItems.reduce((acc, item) => acc + item.message.split(' ').length, 0);
+  const words = items.reduce((acc, item) => acc + item.notes.split(' ').length, 0);
+  const wordsPrev = prevItems.reduce((acc, item) => acc + item.notes.split(' ').length, 0);
   const wordsDiff = _.round(Math.abs(words - wordsPrev));
 
   const wordsPerDay = _.round(words / date.daysInMonth(), 2);

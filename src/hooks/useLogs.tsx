@@ -15,9 +15,12 @@ import {
 } from "react";
 import { v4 as uuidv4 } from "uuid";
 
+export { LogEntry };
+
 
 export const STORAGE_KEY = "PIXEL_TRACKER_LOGS";
 
+// Deprecated - kept for migration compatibility
 export const RATING_MAPPING = {
     extremely_good: 6,
     very_good: 5,
@@ -36,6 +39,7 @@ export const SLEEP_QUALITY_MAPPING = {
     very_bad: 0,
 };
 
+// Deprecated - Use NUMBER_OF_RATINGS from Config instead
 export const RATING_KEYS = Object.keys(
     RATING_MAPPING
 ) as (keyof typeof RATING_MAPPING)[];
@@ -43,11 +47,15 @@ export const SLEEP_QUALITY_KEYS = Object.keys(
     SLEEP_QUALITY_MAPPING
 ) as (keyof typeof SLEEP_QUALITY_MAPPING)[];
 
+// New: Generate array of rating values dynamically
+import { NUMBER_OF_RATINGS } from "@/constants/Config";
+export const RATING_VALUES = Array.from({ length: NUMBER_OF_RATINGS }, (_, i) => i + 1);
+
 
 export interface LogDay {
     date: string;
     items: LogEntry[];
-    ratingAvg: (typeof RATING_KEYS)[number];
+    ratingAvg: number;
     sleepQualityAvg: number;
 }
 
@@ -59,16 +67,16 @@ export interface LogsState {
 type LogAction =
     | { type: "import"; payload: LogsState }
     | { type: "add"; payload: LogEntry }
-    | { type: "edit"; payload: AtLeast<LogEntry, "id"> }
+    | { type: "edit"; payload: { id: string; data: Partial<LogEntry> } }
     | { type: "batchEdit"; payload: LogEntry[] }
-    | { type: "delete"; payload: LogEntry["id"] }
+    | { type: "delete"; payload: string }
     | { type: "reset"; payload: LogsState };
 
 export interface UpdaterValue {
     addLog: (item: LogEntry) => void;
-    editLog: (item: Partial<LogEntry>) => void;
+    editLog: (id: string, item: Partial<LogEntry>) => void;
     updateLogs: (items: LogsState["items"]) => void;
-    deleteLog: (id: LogEntry["id"]) => void;
+    deleteLog: (id: string) => void;
     reset: () => void;
     import: (data: LogsState) => void;
 }
@@ -97,7 +105,7 @@ function reducer(state: LogsState, action: LogAction): LogsState {
                     if (item.id === action.payload.id) {
                         return {
                             ...item,
-                            ...action.payload,
+                            ...action.payload.data,
                         };
                     }
                     return item;
@@ -131,19 +139,30 @@ const migrate = (data: LogsState): LogsState => {
     }
 
     result.items = result.items.map((item) => {
-        const date = dayjs(item.date).format(DATE_FORMAT);
-
         const newItem = { ...item };
 
-        if (!newItem.createdAt) newItem.createdAt = dayjs(date).toISOString();
-        if (!newItem.dateTime) newItem.dateTime = dayjs(date).toISOString();
-        if (!newItem.id) newItem.id = uuidv4();
+        // Migrate old dateTime fields
+        if (!newItem.dateTime && (item as any).date) {
+            newItem.dateTime = dayjs((item as any).date).toISOString();
+        }
+        if (!newItem.dateTime && (item as any).createdAt) {
+            newItem.dateTime = dayjs((item as any).createdAt).toISOString();
+        }
+        
+        // Ensure defaults
+        if (!newItem.dateTime) newItem.dateTime = dayjs().toISOString();
+        if (!newItem.notes) newItem.notes = "";
+        if (!newItem.rating || !Array.isArray(newItem.rating)) newItem.rating = [3]; // neutral
         if (!newItem.tags) newItem.tags = [];
-        if (!newItem.emotions) newItem.emotions = [];
+        
+        // Migrate old tag structure (id -> tagId)
+        if (newItem.tags && Array.isArray(newItem.tags)) {
+            newItem.tags = newItem.tags.map((tag: any) => ({
+                tagId: tag.tagId || tag.id
+            }));
+        }
 
-        newItem.tags = newItem.tags.map((tag) => _.pick(tag, ["id"]));
-
-        return newItem;
+        return newItem as LogEntry;
     });
 
     return result;
@@ -200,7 +219,7 @@ function LogsProvider({ children }: { children: React.ReactNode }) {
         []
     );
     const editLog = useCallback(
-        (payload: AtLeast<LogEntry, "id">) => dispatch({ type: "edit", payload }),
+        (id: string, data: Partial<LogEntry>) => dispatch({ type: "edit", payload: { id, data } }),
         []
     );
     const updateLogs = useCallback(
@@ -209,7 +228,7 @@ function LogsProvider({ children }: { children: React.ReactNode }) {
         []
     );
     const deleteLog = useCallback(
-        (payload: LogEntry["id"]) => dispatch({ type: "delete", payload }),
+        (id: string) => dispatch({ type: "delete", payload: id }),
         []
     );
     const reset = useCallback(

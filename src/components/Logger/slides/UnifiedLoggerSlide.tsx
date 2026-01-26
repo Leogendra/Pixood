@@ -1,7 +1,7 @@
 import { getLogEditMarginTop } from "@/helpers/responsive";
 import { t } from "@/helpers/translation";
 import useColors from "@/hooks/useColors";
-import { LogEntry, RATING_KEYS } from "@/hooks/useLogs";
+import { LogEntry } from "@/hooks/useLogs";
 import { useTemporaryLog } from "@/hooks/useTemporaryLog";
 import { ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -9,6 +9,9 @@ import { SlideHeadline } from "../components/SlideHeadline";
 import { SlideMoodButton } from "../components/SlideMoodButton";
 import { CategoryTagSelector } from "./CategoryTagSelector";
 import TextArea from "../../TextArea";
+import { NUMBER_OF_RATINGS } from "@/constants/Config";
+
+const RATING_VALUES = Array.from({ length: NUMBER_OF_RATINGS }, (_, i) => i + 1);
 
 
 export const UnifiedLoggerSlide = ({
@@ -20,7 +23,7 @@ export const UnifiedLoggerSlide = ({
 }: {
     onRatingChange: (rating: LogEntry['rating']) => void;
     onTagsChange: (tagIds: string[]) => void;
-    onMessageChange: (message: string) => void;
+    onMessageChange: (notes: string) => void;
     showDisable: boolean;
     onDisableStep?: () => void;
 }) => {
@@ -64,12 +67,20 @@ export const UnifiedLoggerSlide = ({
                         gap: 8,
                         justifyContent: 'center',
                     }}>
-                        {RATING_KEYS.map((rating) => (
+                        {RATING_VALUES.map((rating) => (
                             <SlideMoodButton
                                 key={rating}
                                 rating={rating}
-                                selected={tempLog.data.rating === rating}
-                                onPress={() => onRatingChange(rating)}
+                                selected={tempLog.data.rating?.includes(rating) || false}
+                                onPress={() => {
+                                    // Toggle rating in array
+                                    const currentRatings = tempLog.data.rating || [];
+                                    if (currentRatings.includes(rating)) {
+                                        onRatingChange(currentRatings.filter(r => r !== rating));
+                                    } else {
+                                        onRatingChange([...currentRatings, rating]);
+                                    }
+                                }}
                             />
                         ))}
                     </View>
@@ -108,7 +119,7 @@ export const UnifiedLoggerSlide = ({
                         {t('log_modal_message_description')}
                     </Text>
                     <TextArea
-                        value={tempLog.data.message}
+                        value={tempLog.data.notes}
                         onChange={onMessageChange}
                         maxLength={10000}
                         style={{

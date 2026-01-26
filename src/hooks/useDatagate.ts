@@ -10,10 +10,16 @@ import { askToImport, askToReset, showImportError, showImportSuccess, showResetS
 import { t } from "@/helpers/translation";
 import { LogsState, STORAGE_KEY as STORAGE_KEY_LOGS, useLogState, useLogUpdater } from "./useLogs";
 import { ExportSettings, STORAGE_KEY as STORAGE_KEY_SETTINGS, useSettings } from "./useSettings";
-import { transformToExportFormat } from "@/types/logFormat";
 import { STORAGE_KEY as STORAGE_KEY_TAGS, Tag, useTagsState, useTagsUpdater } from "./useTags";
 
 type ResetType = "factory" | "data"
+
+// Simplified export format builder using current in-memory state
+const transformToExportFormat = (items: LogsState["items"], tags: Tag[], settings: ExportSettings) => ({
+    items,
+    tags,
+    settings,
+});
 
 
 export const useDatagate = (): {
@@ -128,7 +134,7 @@ export const useDatagate = (): {
 
     const openExportDialog = async () => {
         // Use the new simplified export format
-        const data = transformToExportFormat(logState.items, tags);
+        const data = transformToExportFormat(logState.items, tags, settings);
 
 
         if (Platform.OS === "web") {

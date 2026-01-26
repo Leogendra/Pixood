@@ -14,7 +14,6 @@ import {
     DEFAULT_ACTIVITY_CATEGORY,
     TagSelection
 } from '@/types/tagCategories';
-import { EMOTIONS } from '@/components/Logger/config';
 
 export const STORAGE_KEY = 'PIXEL_TRACKER_TAG_CATEGORIES';
 
@@ -111,40 +110,10 @@ const generateDefaultActivityCategory = (): TagCategory => {
     };
 };
 
-// Convert emotions to categorized tags - Simplified version with 10 main emotions
+// Convert emotions to categorized tags - Deprecated since emotions were removed
+// Returns empty array as emotions are no longer supported
 const convertEmotionsToTags = (emotionsCategory: TagCategory): CategorizedTag[] => {
-    const now = new Date().toISOString();
-
-    // Selection of 10 representative main emotions
-    const mainEmotions = [
-        'happy',      // Happy
-        'excited',    // Excited  
-        'energized',  // Énergique
-        'proud',      // Proud
-        'hopeful',    // Hopeful
-        'surprised',  // Surprised
-        'angry',      // Angry
-        'annoyed',    // Annoyed
-        'sad',        // Sad
-        'tired'       // Tired
-    ];
-
-    return EMOTIONS
-        .filter(emotion => mainEmotions.includes(emotion.key))
-        .map(emotion => ({
-            id: uuidv4(),
-            categoryId: emotionsCategory.id,
-            title: emotion.label,
-            color: emotionsCategory.color,
-            isArchived: false,
-            createdAt: now,
-            updatedAt: now,
-            emotionData: {
-                key: emotion.key,
-                category: emotion.category,
-                description: emotion.description,
-            },
-        }));
+    return [];
 };
 
 // Initial state

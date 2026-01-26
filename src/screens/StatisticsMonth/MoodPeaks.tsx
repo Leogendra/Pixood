@@ -18,22 +18,22 @@ export const MoodPeaks = ({
   const dataNegativeDummy: { days: LogDay[] } = {
     days: [{
       date: dayjs().format(DATE_FORMAT),
-      ratingAvg: 'bad',
+      ratingAvg: 2,
       sleepQualityAvg: 1,
       items: [],
     }, {
       date: dayjs(date).add(4, 'day').format(DATE_FORMAT),
-      ratingAvg: 'extremely_bad',
+      ratingAvg: 1,
       sleepQualityAvg: 1,
       items: [],
     }, {
       date: dayjs(date).add(8, 'day').format(DATE_FORMAT),
-      ratingAvg: 'bad',
+      ratingAvg: 2,
       sleepQualityAvg: 1,
       items: [],
     }, {
       date: dayjs(date).add(12, 'day').format(DATE_FORMAT),
-      ratingAvg: 'extremely_bad',
+      ratingAvg: 1,
       sleepQualityAvg: 1,
       items: [],
     }]
@@ -42,7 +42,7 @@ export const MoodPeaks = ({
   const dataPositiveDummy = {
     days: dataNegativeDummy.days.map((item) => ({
       ...item,
-      ratingAvg: 'extremely_good' as LogDay['ratingAvg'],
+      ratingAvg: 7 as LogDay['ratingAvg'],
     }))
   }
 

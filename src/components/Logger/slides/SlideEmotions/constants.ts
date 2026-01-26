@@ -1,1 +1,0 @@
-export const EMOTION_BUTTON_HEIGHT = 60

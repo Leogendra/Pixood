@@ -83,14 +83,14 @@ export const Tags = ({
         }}
       >
         {item && item.tags.length > 0 ? item.tags.map(tag => {
-          const _tag = tags.find(t => t.id === tag.id);
+          const _tag = tags.find(t => t.id === tag.tagId);
 
           if (!_tag)
             return null;
 
           return (
             <Tag
-              key={tag.id}
+              key={tag.tagId}
               title={_tag.title}
               colorName={_tag.color}
               style={{

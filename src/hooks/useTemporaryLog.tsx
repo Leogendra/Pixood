@@ -1,11 +1,8 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { LogEntry } from "./useLogs";
 
-export type TemporaryLogState = Omit<LogEntry, 'rating' | 'sleep'> & {
+export type TemporaryLogState = Omit<LogEntry, 'rating'> & {
     rating: LogEntry['rating'] | null,
-    sleep: {
-        quality: 'very_good' | 'good' | 'neutral' | 'bad' | 'very_bad' | null,
-    },
     selectedCategorizedTagIds?: string[];
 }
 

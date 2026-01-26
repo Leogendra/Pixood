@@ -6,7 +6,7 @@ import { Tag } from "./useTags";
 
 interface FiltersData {
   text: string,
-  ratings: LogEntry['rating'][],
+  ratings: number[],
   tagIds: Tag['id'][],
 }
 
@@ -46,9 +46,9 @@ function CalendarFiltersProvider({
   const [isOpen, setIsOpen] = useState(false)
 
   const _isMatching = (item: LogEntry, data: CalendarFiltersData) => {
-    const matchesText = item.message.toLowerCase().includes(data.text.toLowerCase())
-    const matchesRatings = data.ratings.includes(item.rating)
-    const tagIds = item?.tags?.map(tag => tag.id)
+    const matchesText = item.notes.toLowerCase().includes(data.text.toLowerCase())
+    const matchesRatings = data.ratings.length === 0 || data.ratings.some((rating) => item.rating?.includes(rating))
+    const tagIds = item?.tags?.map(tag => tag.tagId)
     const matchesTags = _.difference(data.tagIds, tagIds).length === 0;
 
     const conditions: boolean[] = []

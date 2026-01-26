@@ -6,7 +6,6 @@ import { useStyle } from "react-native-style-utilities";
 import { DATE_FORMAT } from "@/constants/Config";
 import useColors from "../../../hooks/useColors";
 import useHaptics from "../../../hooks/useHaptics";
-import { LogEntry } from "../../../hooks/useLogs";
 import { useSettings } from "../../../hooks/useSettings";
 
 const CalendarDay = memo(function CalendarDay({
@@ -17,7 +16,7 @@ const CalendarDay = memo(function CalendarDay({
   onPress,
 }: {
   dateString: string,
-  rating?: LogEntry["rating"] | null,
+  rating?: number | null,
   isFiltering: boolean,
   isFiltered: boolean,
   onPress: () => void,

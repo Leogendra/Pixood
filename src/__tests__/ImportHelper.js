@@ -9,7 +9,7 @@ describe("getJSONSchemaType", () => {
                 "2022-01-23": {
                     date: "2022-01-23",
                     rating: "extremely_good",
-                    message: "test message",
+                    notes: "test message",
                     tags: [
                         { id: "bb65f208-4e4c-11ed-bdc3-0242ac120002" },
                         { id: "a8e3f89d-4dd3-43f9-8275-2c291f080392" },
@@ -32,7 +32,7 @@ describe("getJSONSchemaType", () => {
                 "2020-23": {
                     date: "2022-01",
                     rating: "extremely_good",
-                    message: "test message",
+                    notes: "test message",
                 },
             },
         };
@@ -47,7 +47,7 @@ describe("getJSONSchemaType", () => {
                 "2022-01-03": {
                     date: "2022-01-03",
                     rating: "really_good", // wrong rating
-                    message: "test message 2",
+                    notes: "test message 2",
                 },
             },
         };

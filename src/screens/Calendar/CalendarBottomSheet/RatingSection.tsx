@@ -10,8 +10,8 @@ export const RatingSection = ({
   onChange,
   allowMultiple = false,
 }: {
-  value: LogEntry['rating'][];
-  onChange: (value: LogEntry['rating']) => void;
+  value: number[];
+  onChange: (value: number) => void;
   allowMultiple?: boolean;
 }) => {
   const { settings } = useSettings();

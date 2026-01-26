@@ -7,6 +7,7 @@ import useColors from "@/hooks/useColors";
 import { SettingsState } from "@/hooks/useSettings";
 import { t } from "@/helpers/translation";
 import ScaleButton from "./ScaleButton";
+import { NUMBER_OF_RATINGS } from "@/constants/Config";
 
 
 export default function Scale({
@@ -16,16 +17,15 @@ export default function Scale({
     allowMultiple = false,
 }: {
     type: SettingsState['scaleType'];
-    value?: LogEntry['rating'] | LogEntry['rating'][];
+    value?: number | number[];
     onPress?: any,
     allowMultiple?: boolean;
 }) {
     let { colors, labels } = useScale(type)
-    const _labels = labels.slice().reverse()
     const haptics = useHaptics()
     const themeColors = useColors()
 
-    const handleMoodPress = async (key: string) => {
+    const handleMoodPress = async (rating: number) => {
         if (onPress) {
             await haptics.selection()
 
@@ -33,20 +33,20 @@ export default function Scale({
                 // For multiple selection
                 const currentValue = Array.isArray(value) ? value : (value ? [value] : [])
 
-                if (currentValue.includes(key as LogEntry['rating'])) {
+                if (currentValue.includes(rating)) {
                     // Deselect if already selected
-                    const newValue = currentValue.filter(v => v !== key)
+                    const newValue = currentValue.filter(v => v !== rating)
                     onPress(newValue.length > 0 ? newValue : null)
                 } 
                 else {
                     // Add to selection
-                    const newValue = [...currentValue, key as LogEntry['rating']]
+                    const newValue = [...currentValue, rating]
                     onPress(newValue)
                 }
             } 
             else {
                 // Classic simple selection
-                onPress(key)
+                onPress(rating)
             }
         }
     }
@@ -63,21 +63,21 @@ export default function Scale({
                     marginBottom: allowMultiple ? 16 : 0,
                 }}
             >
-                {Object.keys(colors).reverse().map((key, index) => {
+                {labels.map((rating, index) => {
                     const isSelected = Array.isArray(value) ?
-                        value.includes(key as LogEntry['rating']) :
-                        value === key
+                        value.includes(rating) :
+                        value === rating
 
                     return (
                         <ScaleButton
-                            accessibilityLabel={_labels[index]}
-                            key={key}
+                            accessibilityLabel={`Rating ${rating}`}
+                            key={rating}
                             isFirst={index === 0}
-                            isLast={index === _labels.length - 1}
+                            isLast={index === labels.length - 1}
                             isSelected={isSelected}
-                            onPress={() => handleMoodPress(key)}
-                            backgroundColor={colors[key].background}
-                            textColor={colors[key].text}
+                            onPress={() => handleMoodPress(rating)}
+                            backgroundColor={colors[rating].background}
+                            textColor={colors[rating].text}
                         />
                     );
                 })}

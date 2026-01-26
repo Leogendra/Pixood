@@ -88,7 +88,7 @@ const BodyWeek = ({
             {days.map((day, index) => {
                 const date = dayjs(start).add(day, 'day')
                 const item = items.find(item => dayjs(item.dateTime).isSame(date, 'day'))
-                const isHighlighted = item?.tags?.map(d => d.id).includes(tag?.id) ?? false
+                const isHighlighted = item?.tags?.map(d => d.tagId).includes(tag?.id) ?? false
 
                 return (
                     <View

@@ -8,6 +8,7 @@ interface IScaleMood {
 }
 
 export interface IScale {
+  [key: number]: IScaleMood;
   extremely_good: IScaleMood;
   very_good: IScaleMood;
   good: IScaleMood;
@@ -32,8 +33,27 @@ const getScaleMood = (color: string): IScaleMood => {
 
 const getScale = (scale: string[]): IScale => {
   const [extremely_good, very_good, good, neutral, bad, very_bad, extremely_bad, empty] = scale;
+  
+  const moodValues = [
+    getScaleMood(extremely_bad),
+    getScaleMood(very_bad),
+    getScaleMood(bad),
+    getScaleMood(neutral),
+    getScaleMood(good),
+    getScaleMood(very_good),
+    getScaleMood(extremely_good),
+  ];
 
   return {
+    // Numeric indices (1-7)
+    1: moodValues[0],
+    2: moodValues[1],
+    3: moodValues[2],
+    4: moodValues[3],
+    5: moodValues[4],
+    6: moodValues[5],
+    7: moodValues[6],
+    // Legacy string keys (deprecated)
     extremely_good: getScaleMood(extremely_good),
     very_good: getScaleMood(very_good),
     good: getScaleMood(good),
@@ -46,7 +66,7 @@ const getScale = (scale: string[]): IScale => {
       border: chroma(empty).luminance() > 0.5 ? chroma(empty).darken(0.5).hex() : chroma(empty).brighten(1.5).hex(),
       text: chroma(empty).luminance() > 0.5 ? chroma(empty).darken(3).hex() : chroma(empty).brighten(4).hex(),
     },
-  };
+  } as IScale;
 }
 
 const light: IScaleColors = {

@@ -19,7 +19,7 @@ export const BestMonth = ({
     .map((item) => ({
       ...item,
       month: dayjs(item.dateTime).format('YYYY-MM'),
-      ratingValue: RATING_MAPPING[item.rating],
+      ratingValue: item.rating && item.rating.length > 0 ? item.rating[0] : 0,
     }))
 
   const bestMonthByRatingValue = _.chain(items)

@@ -1,7 +1,8 @@
 import { NotEnoughDataOverlay } from "@/components/Statistics/NotEnoughDataOverlay";
-import { LogEntry, RATING_KEYS, useLogState } from "../../../hooks/useLogs";
-import { DATE_FORMAT } from "@/constants/Config";
+import { useLogState } from "../../../hooks/useLogs";
+import { DATE_FORMAT, NUMBER_OF_RATINGS } from "@/constants/Config";
 import { BigCard } from "@/components/BigCard";
+import { LogEntry } from "@/types/logFormat";
 import { t } from "@/helpers/translation";
 import React, { ReactNode } from "react";
 import { View } from "react-native";
@@ -50,9 +51,11 @@ const YearInPixels = ({
     const dummyItems = _.range(0, 365).map((i) => ({
         id: `${i}`,
         date: date.add(i, 'day').format(DATE_FORMAT),
-        rating: _.sample(RATING_KEYS.slice(0, 6)),
-        message: 'I am feeling',
-        createdAt: date.add(i, 'day').toISOString(),
+        rating: [_.random(1, NUMBER_OF_RATINGS)],
+        notes: 'I am feeling',
+        dateTime: date.add(i, 'day').toISOString(),
+        tags: [],
+        metrics: {},
     }) as LogEntry)
 
     return (

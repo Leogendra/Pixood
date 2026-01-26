@@ -78,14 +78,14 @@ const CalendarWeek = memo(function CalendarWeek({
     calendarNavigation.openDay(date)
   }, [navigation, calendarNavigation])
 
-  const filteredItemIds = useMemo(() => {
-    return calendarFilters.data.filteredItems.map(item => item.id)
+  const filteredItemDates = useMemo(() => {
+    return calendarFilters.data.filteredItems.map(item => dayjs(item.dateTime).format(DATE_FORMAT))
   }, [JSON.stringify(calendarFilters.data.filteredItems)])
 
   const renderDay = ({ date }) => {
     const items = itemMap[date] || [];
     const averageRating = items.length < 1 ? null : getAverageMood(items)
-    const isFiltered = items.some(item => filteredItemIds.includes(item.id))
+    const isFiltered = filteredItemDates.includes(date)
 
     return (
       <CalendarDay

@@ -12,7 +12,6 @@ import useColors from "../../hooks/useColors";
 import { LogEntry, useLogState } from "../../hooks/useLogs";
 import { useStatistics } from "../../hooks/useStatistics";
 import { MoodAvgData } from "../../hooks/useStatistics/MoodAvg";
-import { EmotionsDistributionCard } from "./EmotionsDistributionCard";
 import { MoodAvgCard } from "./MoodAvgCard";
 import { MoodChart } from "./MoodChart";
 import { MoodPeaksCard } from "./MoodPeaksCards";
@@ -64,7 +63,6 @@ export const HighlightsSection = ({ items }: { items: LogEntry[] }) => {
   const showMoodPeaksNegative = statistics.isHighlighted("mood_peaks_negative");
   const showTagPeaks = statistics.isHighlighted("tags_peaks");
   const showTagsDistribution = statistics.isAvailable("tags_distribution")
-  const showEmotionsDistribution = statistics.isAvailable("emotions_distribution")
   const showMoodChart = logState.items.filter((item) => dayjs(item.dateTime).isAfter(dayjs().subtract(14, "day"))).length >= 4
   const showSleepQualityChart = statistics.isAvailable("sleep_quality_distribution")
 
@@ -86,8 +84,6 @@ export const HighlightsSection = ({ items }: { items: LogEntry[] }) => {
       tags_distribution_item_count?: number
       mood_chart_show: boolean;
       mood_chart_item_count?: number
-      emotions_distribution_show: boolean;
-      emotions_distribution_item_count?: number
       sleep_quality_distribution_show: boolean;
     } = {
       mood_avg_show: showMoodAvg,
@@ -96,7 +92,6 @@ export const HighlightsSection = ({ items }: { items: LogEntry[] }) => {
       tags_peaks_show: showTagPeaks,
       tags_distribution_show: showTagsDistribution,
       mood_chart_show: showMoodChart,
-      emotions_distribution_show: showEmotionsDistribution,
       sleep_quality_distribution_show: showSleepQualityChart,
     }
 
@@ -118,9 +113,6 @@ export const HighlightsSection = ({ items }: { items: LogEntry[] }) => {
     }
     if (showMoodChart) {
       cards.mood_chart_item_count = logState.items.filter((item) => dayjs(item.dateTime).isAfter(dayjs().subtract(14, "day"))).length
-    }
-    if (showEmotionsDistribution) {
-      cards.emotions_distribution_item_count = statistics.state.emotionsDistributionData.emotions.length
     }
 
     setHighlights(cards)
@@ -158,12 +150,6 @@ export const HighlightsSection = ({ items }: { items: LogEntry[] }) => {
           <SleepQualityChartCard
             title={t("statistics_sleep_quality_chart_highlights_title")}
             startDate={dayjs().subtract(14, "days").format(DATE_FORMAT)}
-          />
-        )}
-
-        {showMoodChart && (
-          <EmotionsDistributionCard
-            data={statistics.state.emotionsDistributionData}
           />
         )}
 

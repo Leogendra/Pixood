@@ -10,12 +10,12 @@ describe('Storage', () => {
 
     it('should `load`', async () => {
         await AsyncStorage.setItem(TEST_KEY, '{"test": "test"}');
-        const result = await load(TEST_KEY, { send: () => { } });
+        const result = await load(TEST_KEY);
         expect(result).toEqual({ test: 'test' });
     });
 
     it('should `load` with null', async () => {
-        const result = await load(TEST_KEY, { send: () => { } });
+        const result = await load(TEST_KEY);
         expect(result).toEqual(null);
     })
 

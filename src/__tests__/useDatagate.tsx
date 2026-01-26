@@ -27,21 +27,21 @@ const wrapper = ({ children }) => (
 
 const testItems: LogsState["items"] = [
   _generateItem({
-    date: "2022-01-01",
-    rating: "neutral",
-    message: "test message",
+    dateTime: "2022-01-01T12:00:00Z",
+    rating: [3],
+    notes: "test message",
     tags: [],
   }),
   _generateItem({
-    date: "2022-01-02",
-    rating: "neutral",
-    message: "🦄",
+    dateTime: "2022-01-02T12:00:00Z",
+    rating: [3],
+    notes: "🦄",
     tags: [
       {
-        id: "bb65f208-4e4c-11ed-bdc3-0242ac120002",
+        tagId: "bb65f208-4e4c-11ed-bdc3-0242ac120002",
       },
       {
-        id: "bb65f208-4e4c-11ed-bdc3-0242ac120002",
+        tagId: "bb65f208-4e4c-11ed-bdc3-0242ac120002",
       },
     ],
   })

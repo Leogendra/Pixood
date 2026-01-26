@@ -19,7 +19,6 @@ import {
   TagsDistributionData
 } from "./TagsDistribution";
 import { getTagsPeaksData, TagsPeakData } from "./TagsPeaks";
-import { EmotionsDistributionData, defaultEmotionsDistributionData, getEmotionsDistributionData } from "./EmotionsDistributuon";
 import { SleepQualityDistributionData, defaultSleepQualityDistributionDataForXDays, getSleepQualityDistributionForXDays } from "./SleepQualityDistribution";
 import { DATE_FORMAT } from "@/constants/Config";
 
@@ -41,7 +40,6 @@ interface StatisticsState {
   moodAvgData: MoodAvgData;
   moodPeaksPositiveData: MoodPeaksPositiveData;
   moodPeaksNegativeData: MoodPeaksNegativeData;
-  emotionsDistributionData: EmotionsDistributionData;
   tagsPeaksData: TagsPeakData;
   tagsDistributionData: TagsDistributionData;
   sleepQualityDistributionData: SleepQualityDistributionData;
@@ -75,7 +73,6 @@ export function StatisticsProvider({
     moodAvgData: defaultMoodAvgData,
     moodPeaksPositiveData: defaultMoodPeaksPositiveData,
     moodPeaksNegativeData: defaultMoodPeaksNegativeData,
-    emotionsDistributionData: defaultEmotionsDistributionData,
     tagsDistributionData: defaultTagsDistributionData,
     sleepQualityDistributionData: defaultSleepQualityDistributionDataForXDays(),
     streaks: defaultStreaksData,
@@ -111,8 +108,6 @@ export function StatisticsProvider({
       tags
     );
 
-    const emotionsDistributionData = getEmotionsDistributionData(highlightItems);
-
     const sleepQualityDistributionData = getSleepQualityDistributionForXDays(highlightItems, dayjs().subtract(14, "day").format(DATE_FORMAT), 30);
 
     const newState = {
@@ -123,7 +118,6 @@ export function StatisticsProvider({
       moodPeaksNegativeData,
       tagsPeaksData,
       tagsDistributionData,
-      emotionsDistributionData,
       sleepQualityDistributionData,
       streaks: {
         longest: getLongestStreak(logState.items),
@@ -157,9 +151,6 @@ export function StatisticsProvider({
     }
     if (type === "tags_distribution") {
       return state.tagsDistributionData?.tags.length > 0;
-    }
-    if (type === "emotions_distribution") {
-      return state.emotionsDistributionData?.emotions.length > 3;
     }
     if (type === "sleep_quality_distribution") {
       return state.sleepQualityDistributionData?.length > 7;
@@ -200,13 +191,6 @@ export function StatisticsProvider({
       return (
         isAvailable(type)
       )
-    }
-
-    if (type === "emotions_distribution") {
-      return (
-        isAvailable(type) &&
-        state.emotionsDistributionData.emotions.some((emotion) => emotion.count > 5)
-      );
     }
 
     return false;

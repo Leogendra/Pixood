@@ -5,7 +5,6 @@ import dayjs from "dayjs";
 import { LinearGradient } from "expo-linear-gradient";
 import { Edit, Trash } from "lucide-react-native";
 import { ScrollView, Text, View } from "react-native";
-import { Emotions } from "./Emotions";
 import { Message } from "./Message";
 import { RatingDot } from "./RatingDot";
 import { Sleep } from "./Sleep";
@@ -147,7 +146,6 @@ export const Entry = ({
                 marginTop: 8,
               }}
             >
-              <Emotions item={item} />
             </View>
             <View
               style={{

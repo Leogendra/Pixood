@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { ImportData } from '@/helpers/Import';
 import { INITIAL_STATE } from '@/hooks/useSettings';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface OfflineImportUser {
     id: string;
@@ -39,9 +40,15 @@ export function generateOfflineUser(nbDays: number, userId = 'demo-user'): Offli
     const RATINGS: Array<"extremely_good" | "very_good" | "good" | "neutral" | "bad" | "very_bad" | "extremely_bad"> = [
         'extremely_good', 'very_good', 'good', 'neutral', 'bad', 'very_bad', 'extremely_bad'
     ];
-    const EMOTIONS = [
-        'happy', 'calm', 'stressed', 'anxious', 'tired', 'rested', 'excited', 'proud', 'sad', 'angry', 'grateful', 'bored', 'motivated', 'relaxed', 'worried', 'content'
-    ];
+    const RATING_TO_NUMBER: Record<string, number> = {
+        'extremely_good': 6,
+        'very_good': 5,
+        'good': 4,
+        'neutral': 3,
+        'bad': 2,
+        'very_bad': 1,
+        'extremely_bad': 0,
+    };
 
     const randInt = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
     const uuid = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -74,18 +81,17 @@ export function generateOfflineUser(nbDays: number, userId = 'demo-user'): Offli
         const hour = randInt(7, 22);
         const minute = randInt(0, 59);
         const dt = d.hour(hour).minute(minute).second(0).millisecond(0).toISOString();
-        const tagRefs = pickN(TAGS, randInt(1, Math.min(10, TAGS.length))).map(t => ({ id: t.id }));
-        const emotions = pickN(EMOTIONS, randInt(0, 3));
+        const tagRefs = pickN(TAGS, randInt(1, Math.min(10, TAGS.length))).map(t => ({ tagId: t.id }));
+        const ratingStr = RATINGS[randInt(0, RATINGS.length - 1)];
 
         items.push({
-            id: uuid(),
+            id: uuidv4(),
             date: d.format('YYYY-MM-DD'),
             dateTime: dt,
-            createdAt: dt,
-            rating: RATINGS[randInt(0, RATINGS.length - 1)],
-            message: randomWords(1, 100),
+            rating: [RATING_TO_NUMBER[ratingStr]],
+            notes: randomWords(1, 100),
+            metrics: {},
             tags: tagRefs,
-            emotions,
         });
     }
 

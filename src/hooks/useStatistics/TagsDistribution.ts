@@ -57,7 +57,7 @@ export const dummyTagsDistributionData: TagsDistributionData = {
 
 export const getTagsDistributionData = (items: LogEntry[], tags: Tag[]): TagsDistributionData => {
   const distribution = _.countBy(
-    items.flatMap((item) => item?.tags?.map((tag) => tag?.id))
+    items.flatMap((item) => item?.tags?.map((tag) => tag?.tagId))
   );
   const _tags = Object.keys(distribution)
     .map((key) => ({

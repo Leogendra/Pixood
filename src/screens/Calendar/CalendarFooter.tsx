@@ -8,8 +8,6 @@ import React from "react";
 import { View } from "react-native";
 import { PlusCircle } from "react-native-feather";
 import { PromoCards } from "./PromoCards";
-import { Armchair } from "lucide-react-native";
-import { IS_PROD } from "@/constants/Config";
 
 export const CalendarFooter = () => {
   const colors = useColors();
