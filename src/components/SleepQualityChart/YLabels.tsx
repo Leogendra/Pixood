@@ -16,6 +16,7 @@ export const YLabels = ({
         return (
           // @ts-ignore
           <G
+            key={`sleep-ylabel-${sleepQuality}-${index}`}
             width="8"
             height="16"
             x={(YLegendWidth - 20) / 2}

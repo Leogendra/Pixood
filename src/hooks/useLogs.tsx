@@ -1,7 +1,5 @@
-import { DATE_FORMAT } from "@/constants/Config";
 import { load, store } from "@/helpers/storage";
 import { LogEntry } from "@/types/logFormat";
-import { AtLeast } from "../../types";
 import { Buffer } from "buffer";
 import dayjs from "dayjs";
 import _ from "lodash";
@@ -56,7 +54,8 @@ export interface LogDay {
     date: string;
     items: LogEntry[];
     ratingAvg: number;
-    sleepQualityAvg: number;
+    metricsAvg: Record<string, number>;
+    sleepQualityAvg: number | null;
 }
 
 export interface LogsState {
