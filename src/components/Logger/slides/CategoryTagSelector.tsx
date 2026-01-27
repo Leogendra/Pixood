@@ -88,15 +88,6 @@ export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
                             }}
                         >
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <View
-                                    style={{
-                                        width: 16,
-                                        height: 16,
-                                        borderRadius: 8,
-                                        backgroundColor: category.color,
-                                        marginRight: 12,
-                                    }}
-                                />
                                 <Text style={{
                                     fontSize: 16,
                                     fontWeight: '600',

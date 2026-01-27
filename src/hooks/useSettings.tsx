@@ -11,22 +11,18 @@ import { v4 as uuidv4 } from "uuid";
 import { LoggerStep, STEP_OPTIONS } from "@/components/Logger/config";
 import { load, store } from "@/helpers/storage";
 import { Tag } from "./useTags";
+import { COLOR_PALETTE_PRESETS } from "@/constants/Config";
+import { adjustPaletteSize } from "@/constants/Colors/PaletteUtils";
 
 export const STORAGE_KEY = "PIXEL_TRACKER_SETTINGS";
-
-const SCALE_TYPES = [
-    "ColorBrew-RdYlGn",
-    "ColorBrew-RdYlGn-old",
-    "ColorBrew-PiYG",
-    "ColorBrew-BrBG",
-];
 
 // ATTENTION: If you change the settings state, you need to update
 // the export variables also in the DataGate
 export interface SettingsState {
     loaded: boolean;
     deviceId: string | null;
-    scaleType: typeof SCALE_TYPES[number];
+    palettePresetId: string | null; // null means custom palette
+    customPalette: string[] | null; // Array of 7 hex colors, one per mood rating
     reminderEnabled: Boolean;
     reminderTime: string;
     actionsDone: IAction[];
@@ -40,10 +36,14 @@ interface IAction {
     date: string;
 }
 
+const defaultPreset = COLOR_PALETTE_PRESETS[0];
+const defaultPalette = adjustPaletteSize(defaultPreset.colors);
+
 export const INITIAL_STATE: SettingsState = {
     loaded: false,
     deviceId: null,
-    scaleType: "ColorBrew-RdYlGn",
+    palettePresetId: defaultPreset.id,
+    customPalette: null,
     reminderEnabled: false,
     reminderTime: "18:00",
     actionsDone: [],

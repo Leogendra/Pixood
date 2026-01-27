@@ -10,71 +10,71 @@ import { SearchInputSection } from "./SearchInputSection";
 import { TagsSection } from "./TagsSection";
 
 export const Body = () => {
-  const calendarFilters = useCalendarFilters();
-  const { tags } = useTagsState();
+    const calendarFilters = useCalendarFilters();
+    const { tags } = useTagsState();
 
-  const _tags = tags.filter((tag) => !tag.isArchived);
+    const _tags = tags.filter((tag) => !tag.isArchived);
 
-  const [searchText, setSearchText] = useState("");
+    const [searchText, setSearchText] = useState("");
 
-  const onPressTag = (tag) => {
-    calendarFilters.set({
-      ...calendarFilters.data,
-      tagIds: calendarFilters.data.tagIds.includes(tag.id)
-        ? calendarFilters.data.tagIds.filter((t) => t !== tag.id)
-        : [...calendarFilters.data.tagIds, tag.id],
-    });
-  };
+    const onPressTag = (tag) => {
+        calendarFilters.set({
+            ...calendarFilters.data,
+            tagIds: calendarFilters.data.tagIds.includes(tag.id)
+                ? calendarFilters.data.tagIds.filter((t) => t !== tag.id)
+                : [...calendarFilters.data.tagIds, tag.id],
+        });
+    };
 
-  const onPressRating = (rating) => {
-    calendarFilters.set({
-      ...calendarFilters.data,
-      ratings: calendarFilters.data.ratings.includes(rating)
-        ? calendarFilters.data.ratings.filter((r) => r !== rating)
-        : [...calendarFilters.data.ratings, rating],
-    });
-  };
+    const onPressRating = (rating) => {
+        calendarFilters.set({
+            ...calendarFilters.data,
+            ratings: calendarFilters.data.ratings.includes(rating)
+                ? calendarFilters.data.ratings.filter((r) => r !== rating)
+                : [...calendarFilters.data.ratings, rating],
+        });
+    };
 
-  const onTextChange = (text) => {
-    calendarFilters.set({
-      ...calendarFilters.data,
-      text,
-    });
-  };
+    const onTextChange = (text) => {
+        calendarFilters.set({
+            ...calendarFilters.data,
+            text,
+        });
+    };
 
-  const debounceOnTextChange = useCallback(_.debounce(onTextChange, 200), []);
+    const debounceOnTextChange = useCallback(_.debounce(onTextChange, 200), []);
 
-  return (
-    <>
-      <Header />
-      <View
-        style={{
-          padding: 16,
-        }}
-      >
-        <SearchInputSection
-          value={searchText}
-          onChange={(text) => {
-            setSearchText(text);
-            debounceOnTextChange(text);
-          }}
-        />
-        <RatingSection
-          value={calendarFilters.data.ratings}
-          onChange={onPressRating}
-          allowMultiple={true}
-        />
-        <TagsSection
-          tags={_tags}
-          selectedTags={_tags.filter((tag) =>
-            calendarFilters.data.tagIds.includes(tag.id)
-          )}
-          onSelect={onPressTag}
-        />
-        {calendarFilters.data.filteredItems.length !== 0 && (
-          <ResultsSection count={calendarFilters.data.filteredItems.length} />
-        )}
-      </View>
-    </>
-  );
+    return (
+        <>
+            <Header />
+            <View
+                style={{
+                    padding: 16,
+                }}
+            >
+                <SearchInputSection
+                    value={searchText}
+                    onChange={(text) => {
+                        setSearchText(text);
+                        debounceOnTextChange(text);
+                    }}
+                />
+                <RatingSection
+                    value={calendarFilters.data.ratings}
+                    onChange={onPressRating}
+                    allowMultiple={true}
+                />
+                <TagsSection
+                    tags={_tags}
+                    selectedTags={_tags.filter((tag) =>
+                        calendarFilters.data.tagIds.includes(tag.id)
+                    )}
+                    onSelect={onPressTag}
+                />
+                {calendarFilters.data.filteredItems.length !== 0 && (
+                    <ResultsSection count={calendarFilters.data.filteredItems.length} />
+                )}
+            </View>
+        </>
+    );
 };

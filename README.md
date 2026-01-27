@@ -114,22 +114,9 @@ If `yarn start` is already running, press `w` to open on Web
 The app will open at `http://localhost:19006`
 
 
-## Common Commands
+## Notable files
 
-Clear cache and reinstall
-```bash
-yarn clean
-```
-
-Type check (TypeScript)
-```bash 
-yarn type-check
-```
-
-Run tests
-```bash
-yarn test
-```
+- `src/constants/Config.ts`: Configuration constants including tag colors and app settings.
 
 
 ## Troubleshooting

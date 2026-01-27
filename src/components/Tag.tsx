@@ -2,6 +2,7 @@ import { Pressable, Text, View, ViewStyle, useColorScheme } from "react-native";
 import useColors from "@/hooks/useColors";
 import useHaptics from "@/hooks/useHaptics";
 import { TAG_COLOR_NAMES } from "@/constants/Config";
+import { useSettings } from "@/hooks/useSettings";
 
 export default function Tag({
   title,
@@ -19,6 +20,7 @@ export default function Tag({
   const colors = useColors();
   const haptics = useHaptics();
   const colorScheme = useColorScheme();
+  const { settings } = useSettings();
 
   return (
     <Pressable
@@ -43,15 +45,6 @@ export default function Tag({
         onPress?.();
       }}
     >
-      <View
-        style={{
-          width: 8,
-          height: 8,
-          borderRadius: 8,
-          marginRight: 10,
-          backgroundColor: colors.tags[colorName]?.dot,
-        }}
-      />
       <Text style={{
         color: selected ? colors.tagTextActive : colors.tagText,
         fontSize: 17,

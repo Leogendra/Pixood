@@ -9,7 +9,8 @@ export interface OfflineImportUser {
 }
 
 const baseSettings = {
-    scaleType: INITIAL_STATE.scaleType,
+    palettePresetId: INITIAL_STATE.palettePresetId,
+    customPalette: INITIAL_STATE.customPalette,
     reminderEnabled: INITIAL_STATE.reminderEnabled,
     reminderTime: INITIAL_STATE.reminderTime,
     actionsDone: [],

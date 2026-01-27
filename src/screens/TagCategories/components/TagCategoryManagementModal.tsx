@@ -4,7 +4,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import useColors from '@/hooks/useColors';
 import { useTagCategoriesUpdater } from '@/hooks/useTagCategories';
 import { TagCategory } from '@/types/tagCategories';
-import { TAG_COLOR_NAMES } from '@/constants/Config';
 import Button from '@/components/Button';
 import LinkButton from '@/components/LinkButton';
 import ModalHeader from '@/components/ModalHeader';
@@ -28,15 +27,12 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
     const tagUpdater = useTagCategoriesUpdater();
 
     const [name, setName] = useState('');
-    const [selectedColor, setSelectedColor] = useState('blue');
 
     useEffect(() => {
         if (category && !isCreating) {
             setName(category.name);
-            setSelectedColor(category.color);
         } else {
             setName('');
-            setSelectedColor('blue');
         }
     }, [category, isCreating, visible]);
 
@@ -47,11 +43,10 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
         }
 
         if (isCreating) {
-            tagUpdater.createCategory(name.trim(), selectedColor);
+            tagUpdater.createCategory(name.trim());
         } else if (category) {
             tagUpdater.updateCategory(category.id, {
                 name: name.trim(),
-                color: selectedColor,
             });
         }
 
@@ -133,49 +128,6 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
                             }}
                             maxLength={50}
                         />
-                    </View>
-
-                    {/* Color selection */}
-                    <View style={{ marginBottom: 24 }}>
-                        <Text style={{
-                            fontSize: 16,
-                            fontWeight: '600',
-                            color: colors.text,
-                            marginBottom: 16,
-                        }}>
-                            {t('color')}
-                        </Text>
-                        <View style={{
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            gap: 12,
-                        }}>
-                            {TAG_COLOR_NAMES.map((colorName) => (
-                                <TouchableOpacity
-                                    key={colorName}
-                                    onPress={() => setSelectedColor(colorName)}
-                                    style={{
-                                        width: 48,
-                                        height: 48,
-                                        borderRadius: 24,
-                                        backgroundColor: colors.tags[colorName].dot,
-                                        borderWidth: selectedColor === colorName ? 3 : 1,
-                                        borderColor: selectedColor === colorName ? colors.tint : colors.cardBorder,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {selectedColor === colorName && (
-                                        <Text style={{
-                                            color: colors.tags[colorName].text,
-                                            fontSize: 18,
-                                        }}>
-                                            ✓
-                                        </Text>
-                                    )}
-                                </TouchableOpacity>
-                            ))}
-                        </View>
                     </View>
 
                     {/* Delete button (only in edit mode and if it's not a default category) */}

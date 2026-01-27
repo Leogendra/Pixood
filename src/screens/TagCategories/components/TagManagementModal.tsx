@@ -4,7 +4,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import useColors from '@/hooks/useColors';
 import { useTagCategoriesUpdater } from '@/hooks/useTagCategories';
 import { TagCategory, CategorizedTag } from '@/types/tagCategories';
-import { TAG_COLOR_NAMES } from '@/constants/Config';
 import Button from '@/components/Button';
 import LinkButton from '@/components/LinkButton';
 import ModalHeader from '@/components/ModalHeader';
@@ -30,18 +29,12 @@ export const TagManagementModal: React.FC<TagManagementModalProps> = ({
     const tagUpdater = useTagCategoriesUpdater();
 
     const [title, setTitle] = useState('');
-    const [selectedColor, setSelectedColor] = useState('blue');
 
     useEffect(() => {
         if (tag && !isCreating) {
             setTitle(tag.title);
-            setSelectedColor(tag.color);
-        } else if (category) {
-            setTitle('');
-            setSelectedColor(category.color); // Utilise la couleur de la catégorie par défaut
         } else {
             setTitle('');
-            setSelectedColor('blue');
         }
     }, [tag, category, isCreating, visible]);
 
@@ -57,11 +50,10 @@ export const TagManagementModal: React.FC<TagManagementModalProps> = ({
         }
 
         if (isCreating) {
-            tagUpdater.createTag(category.id, title.trim(), selectedColor);
+            tagUpdater.createTag(category.id, title.trim());
         } else if (tag) {
             tagUpdater.updateTag(tag.id, {
                 title: title.trim(),
-                color: selectedColor,
             });
         }
 
@@ -104,10 +96,9 @@ export const TagManagementModal: React.FC<TagManagementModalProps> = ({
                 },
                 {
                     text: t('archive'),
+                    style: 'default',
                     onPress: () => {
-                        tagUpdater.updateTag(tag.id, {
-                            isArchived: true,
-                        });
+                        tagUpdater.archiveTag(tag.id);
                         onClose();
                     },
                 },
@@ -141,47 +132,8 @@ export const TagManagementModal: React.FC<TagManagementModalProps> = ({
                 />
 
                 <ScrollView style={{ flex: 1, paddingHorizontal: 16 }}>
-                    {/* Category (display only) */}
-                    {category && (
-                        <View style={{ marginTop: 24, marginBottom: 24 }}>
-                            <Text style={{
-                                fontSize: 16,
-                                fontWeight: '600',
-                                color: colors.text,
-                                marginBottom: 8,
-                            }}>
-                                {t('category')}
-                            </Text>
-                            <View style={{
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                backgroundColor: colors.cardBackground,
-                                borderRadius: 12,
-                                padding: 16,
-                                borderWidth: 1,
-                                borderColor: colors.cardBorder,
-                            }}>
-                                <View
-                                    style={{
-                                        width: 16,
-                                        height: 16,
-                                        borderRadius: 8,
-                                        backgroundColor: category.color,
-                                        marginRight: 12,
-                                    }}
-                                />
-                                <Text style={{
-                                    fontSize: 16,
-                                    color: colors.text,
-                                }}>
-                                    {category.name}
-                                </Text>
-                            </View>
-                        </View>
-                    )}
-
                     {/* Tag title */}
-                    <View style={{ marginBottom: 24 }}>
+                    <View style={{ marginTop: 24, marginBottom: 24 }}>
                         <Text style={{
                             fontSize: 16,
                             fontWeight: '600',
@@ -208,49 +160,6 @@ export const TagManagementModal: React.FC<TagManagementModalProps> = ({
                         />
                     </View>
 
-                    {/* Color selection */}
-                    <View style={{ marginBottom: 24 }}>
-                        <Text style={{
-                            fontSize: 16,
-                            fontWeight: '600',
-                            color: colors.text,
-                            marginBottom: 16,
-                        }}>
-                            {t('color')}
-                        </Text>
-                        <View style={{
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            gap: 12,
-                        }}>
-                            {TAG_COLOR_NAMES.map((colorName) => (
-                                <TouchableOpacity
-                                    key={colorName}
-                                    onPress={() => setSelectedColor(colorName)}
-                                    style={{
-                                        width: 48,
-                                        height: 48,
-                                        borderRadius: 24,
-                                        backgroundColor: colors.tags[colorName].dot,
-                                        borderWidth: selectedColor === colorName ? 3 : 1,
-                                        borderColor: selectedColor === colorName ? colors.tint : colors.cardBorder,
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {selectedColor === colorName && (
-                                        <Text style={{
-                                            color: colors.tags[colorName].text,
-                                            fontSize: 18,
-                                        }}>
-                                            ✓
-                                        </Text>
-                                    )}
-                                </TouchableOpacity>
-                            ))}
-                        </View>
-                    </View>
-
                     {/* Actions for an existing tag */}
                     {!isCreating && tag && (
                         <View style={{ marginBottom: 24, gap: 12 }}>
@@ -265,7 +174,7 @@ export const TagManagementModal: React.FC<TagManagementModalProps> = ({
                                 type="danger"
                                 onPress={handleDelete}
                             >
-                                {t('delete_tag')}
+                                {t('delete_tag_confirm_title')}
                             </Button>
                         </View>
                     )}

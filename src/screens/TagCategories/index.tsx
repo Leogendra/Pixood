@@ -155,15 +155,6 @@ export const TagCategories = ({ navigation }: RootStackScreenProps<'TagCategorie
                                 marginBottom: 12,
                             }}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-                                    <View
-                                        style={{
-                                            width: 20,
-                                            height: 20,
-                                            borderRadius: 10,
-                                            backgroundColor: category.color,
-                                            marginRight: 12,
-                                        }}
-                                    />
                                     <Text style={{
                                         fontSize: 18,
                                         fontWeight: '600',

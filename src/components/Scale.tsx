@@ -1,27 +1,24 @@
 import { View, Text, Pressable } from "react-native";
 import { Plus } from "react-native-feather";
 import useHaptics from "@/hooks/useHaptics";
-import { LogEntry } from "@/hooks/useLogs";
-import useScale from "@/hooks/useScale";
 import useColors from "@/hooks/useColors";
-import { SettingsState } from "@/hooks/useSettings";
 import { t } from "@/helpers/translation";
 import ScaleButton from "./ScaleButton";
-import { NUMBER_OF_RATINGS } from "@/constants/Config";
+import useScale from "@/hooks/useScale";
+
+
 
 
 export default function Scale({
-    type,
     value,
     onPress = null,
-    allowMultiple = false,
+    allowMultiple = false, // TODO:
 }: {
-    type: SettingsState['scaleType'];
     value?: number | number[];
     onPress?: any,
     allowMultiple?: boolean;
 }) {
-    let { colors, labels } = useScale(type)
+    let { colors, labels } = useScale()
     const haptics = useHaptics()
     const themeColors = useColors()
 
@@ -37,13 +34,13 @@ export default function Scale({
                     // Deselect if already selected
                     const newValue = currentValue.filter(v => v !== rating)
                     onPress(newValue.length > 0 ? newValue : null)
-                } 
+                }
                 else {
                     // Add to selection
                     const newValue = [...currentValue, rating]
                     onPress(newValue)
                 }
-            } 
+            }
             else {
                 // Classic simple selection
                 onPress(rating)
@@ -100,8 +97,6 @@ export default function Scale({
                         opacity: pressed ? 0.8 : 1,
                     })}
                     onPress={() => {
-                        // This button allows opening an interface to add a mood
-                        // For now, we can just show a message or an action
                         haptics.selection()
                     }}
                 >

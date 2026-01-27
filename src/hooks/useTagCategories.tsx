@@ -131,7 +131,6 @@ const getInitialState = (): TagCategoriesState => {
                 id: uuidv4(),
                 categoryId: activityCategory.id,
                 title: `${t('tags_default_1_title')} 🏡`,
-                color: 'slate',
                 isArchived: false,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
@@ -140,7 +139,6 @@ const getInitialState = (): TagCategoriesState => {
                 id: uuidv4(),
                 categoryId: activityCategory.id,
                 title: `${t('tags_default_2_title')} 🤝`,
-                color: 'orange',
                 isArchived: false,
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
@@ -159,12 +157,11 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
     const [state, dispatch] = useReducer(tagCategoriesReducer, getInitialState());
 
     // Updater functions
-    const createCategory = useCallback(async (name: string, color: string, icon?: string): Promise<TagCategory> => {
+    const createCategory = useCallback(async (name: string, icon?: string): Promise<TagCategory> => {
         const now = new Date().toISOString();
         const newCategory: TagCategory = {
             id: uuidv4(),
             name,
-            color: color as any,
             icon,
             isDefault: false,
             createdAt: now,
@@ -196,7 +193,7 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
         dispatch({ type: 'DELETE_CATEGORY', payload: id });
     }, [state.categories]);
 
-    const createTag = useCallback(async (categoryId: string, title: string, color?: string): Promise<CategorizedTag> => {
+    const createTag = useCallback(async (categoryId: string, title: string): Promise<CategorizedTag> => {
         const category = state.categories.find(c => c.id === categoryId);
         if (!category) throw new Error('Category not found');
 
@@ -205,7 +202,6 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
             id: uuidv4(),
             categoryId,
             title,
-            color: (color || category.color) as any,
             isArchived: false,
             createdAt: now,
             updatedAt: now,

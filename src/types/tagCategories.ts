@@ -1,11 +1,9 @@
-import { TAG_COLOR_NAMES } from '@/constants/Config';
 import { z } from "zod";
 
 // Type for a tag category
 export const TagCategorySchema = z.object({
     id: z.string().uuid(),
     name: z.string().min(1).max(50),
-    color: z.enum(TAG_COLOR_NAMES as [string, ...string[]]),
     icon: z.string().optional(), // Emoji or icon name
     isDefault: z.boolean().default(false), // True for the default "Emotions" category
     createdAt: z.string().datetime(),
@@ -19,7 +17,6 @@ export const CategorizedTagSchema = z.object({
     id: z.string().uuid(),
     categoryId: z.string().uuid(),
     title: z.string().min(1).max(50),
-    color: z.enum(TAG_COLOR_NAMES as [string, ...string[]]),
     isArchived: z.boolean().default(false),
     createdAt: z.string().datetime(),
     updatedAt: z.string().datetime(),
@@ -64,12 +61,12 @@ export type TagCategoriesAction =
 // Interface for CRUD operations
 export interface TagCategoriesUpdater {
     // Categories
-    createCategory: (name: string, color: string, icon?: string) => Promise<TagCategory>;
+    createCategory: (name: string, icon?: string) => Promise<TagCategory>;
     updateCategory: (id: string, updates: Partial<Omit<TagCategory, 'id' | 'createdAt' | 'updatedAt'>>) => Promise<void>;
     deleteCategory: (id: string) => Promise<void>;
 
     // Tags
-    createTag: (categoryId: string, title: string, color?: string) => Promise<CategorizedTag>;
+    createTag: (categoryId: string, title: string) => Promise<CategorizedTag>;
     updateTag: (id: string, updates: Partial<Omit<CategorizedTag, 'id' | 'createdAt' | 'updatedAt'>>) => Promise<void>;
     deleteTag: (id: string) => Promise<void>;
     archiveTag: (id: string) => Promise<void>;
@@ -90,14 +87,12 @@ export interface CategorySelection {
 // Default configuration
 export const DEFAULT_EMOTIONS_CATEGORY: Omit<TagCategory, 'id' | 'createdAt' | 'updatedAt'> = {
     name: 'Émotions',
-    color: 'purple',
     icon: '😊',
     isDefault: true,
 };
 
 export const DEFAULT_ACTIVITY_CATEGORY: Omit<TagCategory, 'id' | 'createdAt' | 'updatedAt'> = {
     name: 'Activités',
-    color: 'blue',
     icon: '🎯',
     isDefault: false,
 };

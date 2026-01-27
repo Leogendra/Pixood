@@ -1,19 +1,36 @@
+import { adjustPaletteSize } from '@/constants/Colors/PaletteUtils';
+import { NUMBER_OF_RATINGS, COLOR_PALETTE_PRESETS } from '@/constants/Config';
+import { getCustomScale } from '@/constants/Colors/Scales';
 import { IScale } from '@/constants/Colors/Scales';
-import { NUMBER_OF_RATINGS } from '@/constants/Config';
+import { useColorScheme } from 'react-native';
+import { useSettings } from "./useSettings";
 import useColors from "./useColors";
-import { SettingsState, useSettings } from "./useSettings";
 
-export default function useScale(
-    type?: SettingsState['scaleType']
-) {
-    const colors = useColors()
-    const { settings } = useSettings()
 
-    const _type = type || settings.scaleType
 
-    // Simply return the scale from colors which already has numeric indices
+
+export default function useScale() {
+    const colors = useColors();
+    const { settings } = useSettings();
+    const colorScheme = useColorScheme();
+    const isDark = colorScheme === 'dark';
+
+    let scale: IScale;
+
+    if (settings.customPalette) {
+        scale = getCustomScale(settings.customPalette, isDark);
+    }
+    else if (settings.palettePresetId) {
+        scale = colors.scales[settings.palettePresetId];
+    }
+    else {
+        const defaultPreset = COLOR_PALETTE_PRESETS[0];
+        const defaultPalette = adjustPaletteSize(defaultPreset.colors);
+        scale = getCustomScale(defaultPalette, isDark);
+    }
+
     return {
-        colors: colors.scales[_type],
+        colors: scale,
         labels: Array.from({ length: NUMBER_OF_RATINGS }, (_, i) => NUMBER_OF_RATINGS - i)
     }
 }
