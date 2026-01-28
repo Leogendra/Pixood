@@ -142,20 +142,22 @@ export const ColorsScreen = ({ navigation }) => {
                         >
                             <View style={{ flex: 1 }}>
                                 <View style={{ flexDirection: 'row' }}>
-                                    {preset.colors.map((c, idx) => (
-                                        <View
+                                    {adjustPaletteSizeInterpolate(preset.colors).map((c, idx) => {
+                                        const isFirst = idx === 0;
+                                        const isLast = idx === adjustPaletteSizeInterpolate(preset.colors).length - 1;
+                                        return (<View
                                             key={idx}
                                             style={{
                                                 flex: 1,
                                                 height: 28,
                                                 backgroundColor: c,
-                                                borderTopLeftRadius: idx === 0 ? 8 : 0,
-                                                borderBottomLeftRadius: idx === 0 ? 8 : 0,
-                                                borderTopRightRadius: idx === preset.colors.length - 1 ? 8 : 0,
-                                                borderBottomRightRadius: idx === preset.colors.length - 1 ? 8 : 0,
+                                                borderTopLeftRadius: isFirst ? 8 : 0,
+                                                borderBottomLeftRadius: isFirst ? 8 : 0,
+                                                borderTopRightRadius: isLast ? 8 : 0,
+                                                borderBottomRightRadius: isLast ? 8 : 0,
                                             }}
-                                        />
-                                    ))}
+                                        />)
+                                    })}
                                 </View>
                             </View>
                         </Radio>

@@ -1,14 +1,17 @@
-import Button from '@/components/Button';
-import { locale, t } from '@/helpers/translation';
-import useColors from "@/hooks/useColors";
-import useHaptics from "@/hooks/useHaptics";
-import { useTemporaryLog } from '@/hooks/useTemporaryLog';
-import { getItemDateTitle } from '@/lib/utils';
-import dayjs from 'dayjs';
-import { useState } from 'react';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Platform, Pressable, Text, View } from 'react-native';
 import { ArrowLeft, Trash, X } from 'react-native-feather';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { useTemporaryLog } from '@/hooks/useTemporaryLog';
+import { locale, t } from '@/helpers/translation';
+import { getItemDateTitle } from '@/lib/utils';
+import useHaptics from "@/hooks/useHaptics";
+import useColors from "@/hooks/useColors";
+import Button from '@/components/Button';
+import { useState } from 'react';
+import dayjs from 'dayjs';
+
+
+
 
 const DatePickerHeader = ({
     onChange,
@@ -72,6 +75,7 @@ const DatePickerHeader = ({
         </View>
     )
 }
+
 
 export const SlideHeader = ({
     isDeleteable,

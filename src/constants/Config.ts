@@ -70,6 +70,6 @@ export const COLOR_PALETTE_PRESETS: ColorPalettePreset[] = [
     {
         id: "7",
         name: "unknown",
-        colors: ["#252f38", "#4c6070", "#e8f1ee", "#fdcd0f", "#fa8702"]
+        colors: ["#252f38", "#597285", "#e8f1ee", "#fdcd0f", "#fa8702"]
     }
 ];

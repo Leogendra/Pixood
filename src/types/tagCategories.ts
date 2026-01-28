@@ -86,13 +86,11 @@ export interface CategorySelection {
 
 // Default configuration
 export const DEFAULT_EMOTIONS_CATEGORY: Omit<TagCategory, 'id' | 'createdAt' | 'updatedAt'> = {
-    name: 'Émotions',
-    icon: '😊',
+    name: 'Emotions',
     isDefault: true,
 };
 
 export const DEFAULT_ACTIVITY_CATEGORY: Omit<TagCategory, 'id' | 'createdAt' | 'updatedAt'> = {
     name: 'Activités',
-    icon: '🎯',
     isDefault: false,
 };

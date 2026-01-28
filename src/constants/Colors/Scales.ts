@@ -53,7 +53,6 @@ const getScaleFromPalette = (palette: string[], emptyColor: string): IScale => {
 const generatePresetsScales = (emptyColorLight: string, emptyColorDark: string) => {
     const light: IScaleColors = {};
     const dark: IScaleColors = {};
-    console.log('Generating preset scales with empty colors:', emptyColorLight, emptyColorDark);
 
     COLOR_PALETTE_PRESETS.forEach(preset => {
         const palette = adjustPaletteSizeInterpolate(preset.colors);
