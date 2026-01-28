@@ -1,4 +1,4 @@
-import { adjustPaletteSize } from '@/constants/Colors/PaletteUtils';
+import { adjustPaletteSizeInterpolate } from '@/constants/Colors/PaletteUtils';
 import { NUMBER_OF_RATINGS, COLOR_PALETTE_PRESETS } from '@/constants/Config';
 import { getCustomScale } from '@/constants/Colors/Scales';
 import { IScale } from '@/constants/Colors/Scales';
@@ -25,7 +25,7 @@ export default function useScale() {
     }
     else {
         const defaultPreset = COLOR_PALETTE_PRESETS[0];
-        const defaultPalette = adjustPaletteSize(defaultPreset.colors);
+        const defaultPalette = adjustPaletteSizeInterpolate(defaultPreset.colors);
         scale = getCustomScale(defaultPalette, isDark);
     }
 

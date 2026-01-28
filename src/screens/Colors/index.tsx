@@ -1,13 +1,14 @@
-import { adjustPaletteSize, isValidHexColor } from '@/constants/Colors/PaletteUtils';
+import { adjustPaletteSizeInterpolate, normalizeColor, getTextColor } from '@/constants/Colors/PaletteUtils';
 import { View, Text, TouchableOpacity, Modal, Pressable } from 'react-native';
 import { PageWithHeaderLayout } from '@/components/PageWithHeaderLayout';
-import { CustomColorPicker } from './ColorPickerWidget';
 import MenuListHeadline from '@/components/MenuListHeadline';
-import React, { useCallback, useState } from 'react';
 import { COLOR_PALETTE_PRESETS } from '@/constants/Config';
 import { ScrollView } from 'react-native-gesture-handler';
+import { CustomColorPicker } from './ColorPickerWidget';
 import { useSettings } from '../../hooks/useSettings';
+import React, { useCallback, useState } from 'react';
 import useColors from '../../hooks/useColors';
+import { Edit2 } from 'react-native-feather';
 import { t } from '@/helpers/translation';
 import { Radio } from './Radio';
 
@@ -19,32 +20,41 @@ export const ColorsScreen = ({ navigation }) => {
     const colors = useColors();
 
     const [selectedPresetId, setSelectedPresetId] = useState(settings.palettePresetId);
-    const [customPalette, setCustomPalette] = useState(
-        settings.customPalette || adjustPaletteSize(COLOR_PALETTE_PRESETS[0].colors)
-    );
+    const [customPalette, setCustomPalette] = useState(() => {
+        if (settings.customPalette) {
+            return settings.customPalette;
+        }
+        const presetId = settings.palettePresetId || COLOR_PALETTE_PRESETS[0].id;
+        const preset = COLOR_PALETTE_PRESETS.find(p => p.id === presetId);
+        return preset ? adjustPaletteSizeInterpolate(preset.colors) : adjustPaletteSizeInterpolate(COLOR_PALETTE_PRESETS[0].colors);
+    });
 
     const [pickerIndex, setPickerIndex] = useState<number | null>(null);
     const [pickerValue, setPickerValue] = useState<string>('#FFFFFF');
 
     const updateCustomColor = (index: number, raw: string) => {
-        const normalized = raw.startsWith('#') ? raw : `#${raw}`;
-        const upper = normalized.toUpperCase();
-        if (!isValidHexColor(upper)) return;
-
-        const next = [...customPalette];
-        next[index] = upper;
-
-        setCustomPalette(next);
-        setSettings(prev => ({
-            ...prev,
-            palettePresetId: null,
-            customPalette: next,
-        }));
+        const normalizedColor = normalizeColor(raw);
+        if (normalizedColor) {
+            const next = [...customPalette];
+            next[index] = normalizedColor;
+            
+            setCustomPalette(next);
+            setSettings(prev => ({
+                ...prev,
+                palettePresetId: null,
+                customPalette: next,
+            }));
+        }
     };
 
 
     const onSelectPreset = useCallback((presetId: string) => {
         setSelectedPresetId(presetId);
+        const preset = COLOR_PALETTE_PRESETS.find(p => p.id === presetId);
+        if (preset) {
+            const adjustedColors = adjustPaletteSizeInterpolate(preset.colors);
+            setCustomPalette(adjustedColors);
+        }
         setSettings(prev => ({
             ...prev,
             palettePresetId: presetId,
@@ -62,30 +72,6 @@ export const ColorsScreen = ({ navigation }) => {
     const savePicker = () => {
         applyPickerValue(pickerValue);
         setPickerIndex(null);
-    };
-
-
-    const normalizeColor = (value: string): string => {
-        let hexColor = value.startsWith('#') ? value : `#${value}`;
-        hexColor = hexColor.toUpperCase();
-        let normalizedColor: string;
-
-        if (/^#[0-9A-F]{6}$/i.test(hexColor)) {
-            normalizedColor = hexColor;
-        }
-        else if (/^#[0-9A-F]{3}$/i.test(hexColor)) {
-            const r = hexColor[1];
-            const g = hexColor[2];
-            const b = hexColor[3];
-            normalizedColor = `#${r}${r}${g}${g}${b}${b}`;
-        }
-        else if (/^#[0-9A-F]{8}$/i.test(hexColor)) {
-            normalizedColor = hexColor.slice(0, 7); // Keep only #RRGGBB
-        }
-        else {
-            return "";
-        }
-        return normalizedColor;
     };
 
 
@@ -133,8 +119,17 @@ export const ColorsScreen = ({ navigation }) => {
                                 backgroundColor: c,
                                 borderRightWidth: idx === customPalette.length - 1 ? 0 : 1,
                                 borderRightColor: colors.cardBorder,
+                                alignItems: 'center',
+                                justifyContent: 'center',
                             }}
-                        />
+                        >
+                            <Edit2 
+                                width={16} 
+                                height={16} 
+                                stroke={getTextColor(c)} 
+                                strokeWidth={3}
+                            />
+                        </TouchableOpacity>
                     ))}
                 </View>
 

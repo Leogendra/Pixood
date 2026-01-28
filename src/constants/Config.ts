@@ -73,8 +73,3 @@ export const COLOR_PALETTE_PRESETS: ColorPalettePreset[] = [
         colors: ["#252f38", "#4c6070", "#e8f1ee", "#fdcd0f", "#fa8702"]
     }
 ];
-// 252f38
-// 4c6070
-// e8f1ee
-// fdcd0f
-// fa8702

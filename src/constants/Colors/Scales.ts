@@ -1,4 +1,4 @@
-import { adjustPaletteSize, getTextColor, getSecondaryTextColor } from './PaletteUtils';
+import { adjustPaletteSizeInterpolate, getTextColor, getSecondaryTextColor } from './PaletteUtils';
 import { COLOR_PALETTE_PRESETS, NUMBER_OF_RATINGS } from '../Config';
 import colors from './TailwindColors';
 import chroma from 'chroma-js';
@@ -31,8 +31,7 @@ const getScaleMood = (color: string): IScaleMood => {
 
 
 const getScaleFromPalette = (palette: string[], emptyColor: string): IScale => {
-    // Palette is ordered from worst (index 1) to best (index NUMBER_OF_RATINGS)
-    const adjusted = adjustPaletteSize(palette, NUMBER_OF_RATINGS);
+    const adjustedPalette = adjustPaletteSizeInterpolate(palette, NUMBER_OF_RATINGS);
 
     const scale: IScale = {
         empty: {
@@ -42,8 +41,8 @@ const getScaleFromPalette = (palette: string[], emptyColor: string): IScale => {
         },
     };
 
-    adjusted.forEach((color, idx) => {
-        const rating = idx + 1; // 1-based rating keys
+    adjustedPalette.forEach((color, idx) => {
+        const rating = idx + 1; // 1-n rating keys
         scale[rating] = getScaleMood(color);
     });
 
@@ -54,9 +53,10 @@ const getScaleFromPalette = (palette: string[], emptyColor: string): IScale => {
 const generatePresetsScales = (emptyColorLight: string, emptyColorDark: string) => {
     const light: IScaleColors = {};
     const dark: IScaleColors = {};
+    console.log('Generating preset scales with empty colors:', emptyColorLight, emptyColorDark);
 
     COLOR_PALETTE_PRESETS.forEach(preset => {
-        const palette = adjustPaletteSize(preset.colors);
+        const palette = adjustPaletteSizeInterpolate(preset.colors);
         light[preset.id] = getScaleFromPalette(palette, emptyColorLight);
         dark[preset.id] = getScaleFromPalette(palette, emptyColorDark);
     });

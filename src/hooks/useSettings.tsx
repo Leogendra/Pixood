@@ -1,3 +1,9 @@
+import { adjustPaletteSizeInterpolate } from "@/constants/Colors/PaletteUtils";
+import { LoggerStep, STEP_OPTIONS } from "@/components/Logger/config";
+import { COLOR_PALETTE_PRESETS } from "@/constants/Config";
+import { load, store } from "@/helpers/storage";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 import _ from "lodash";
 import {
     createContext,
@@ -6,15 +12,11 @@ import {
     useEffect,
     useState
 } from "react";
-import "react-native-get-random-values";
-import { v4 as uuidv4 } from "uuid";
-import { LoggerStep, STEP_OPTIONS } from "@/components/Logger/config";
-import { load, store } from "@/helpers/storage";
-import { Tag } from "./useTags";
-import { COLOR_PALETTE_PRESETS } from "@/constants/Config";
-import { adjustPaletteSize } from "@/constants/Colors/PaletteUtils";
 
 export const STORAGE_KEY = "PIXEL_TRACKER_SETTINGS";
+
+
+
 
 // ATTENTION: If you change the settings state, you need to update
 // the export variables also in the DataGate
@@ -29,6 +31,7 @@ export interface SettingsState {
     steps: LoggerStep[];
 }
 
+
 export type ExportSettings = Omit<SettingsState, 'loaded' | 'deviceId'>;
 
 interface IAction {
@@ -36,14 +39,15 @@ interface IAction {
     date: string;
 }
 
+
 const defaultPreset = COLOR_PALETTE_PRESETS[0];
-const defaultPalette = adjustPaletteSize(defaultPreset.colors);
+const defaultPalette = adjustPaletteSizeInterpolate(defaultPreset.colors);
 
 export const INITIAL_STATE: SettingsState = {
     loaded: false,
     deviceId: null,
     palettePresetId: defaultPreset.id,
-    customPalette: null,
+    customPalette: defaultPalette,
     reminderEnabled: false,
     reminderTime: "18:00",
     actionsDone: [],
@@ -54,6 +58,7 @@ export const INITIAL_STATE: SettingsState = {
         "message"
     ],
 };
+
 
 type Value = {
     settings: SettingsState;
@@ -198,6 +203,7 @@ function SettingsProvider({ children }: { children: React.ReactNode }) {
         </SettingsStateContext.Provider>
     );
 }
+
 
 function useSettings(): Value {
     const context = useContext(SettingsStateContext);
