@@ -1,6 +1,9 @@
 import { ExpoConfig, ConfigContext } from '@expo/config';
 import _ from 'lodash';
 
+
+
+
 const CONFIG = require('./app.json')
 
 export default ({ config }: ConfigContext): ExpoConfig => {
@@ -15,12 +18,6 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         _config.android!.package = `com.gatienh.pixood.dev`
         _config.android!.icon = _config.icon = './assets/images/icon-dev.png';
     }
-
-    // console.log('------------------------------');
-    // console.log('Profile:', PROFILE);
-    // console.log('Building with config:');
-    // console.log(JSON.stringify(_config, null, 2));
-    // console.log('------------------------------');
 
     return _config;
 };

@@ -78,7 +78,7 @@ export const useDatagate = (): {
             if (!options.muted) showImportSuccess()
         } 
     else {
-            console.log('import failed, json schema:', jsonSchemaType);
+            console.error('import failed, json schema:', jsonSchemaType);
             if (!options.muted) showImportError()
         }
     };

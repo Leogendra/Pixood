@@ -100,7 +100,7 @@ export const BigCard = ({
                     dialogTitle: 'Hey I use this app called "Pixood" and I wanted to share this with you!',
                 })
                     .catch((error) => {
-                        console.log(error)
+                        console.error(error)
                     })
             })
             .catch((error) => console.error("Oops, snapshot failed", error))

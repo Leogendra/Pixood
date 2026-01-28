@@ -28,13 +28,14 @@ export const TAG_COLOR_NAMES = [
     "rose",
 ];
 
+
 export interface ColorPalettePreset {
     id: string;
     name: string;
-    colors: [string, string, string, string, string];
+    colors: Array<string>;
 }
 
-// The system will interpolate between the main three to create NUMBER_OF_RATINGS colors
+
 export const COLOR_PALETTE_PRESETS: ColorPalettePreset[] = [
     {
         id: "1",
@@ -44,21 +45,36 @@ export const COLOR_PALETTE_PRESETS: ColorPalettePreset[] = [
     {
         id: "2",
         name: "Reverted",
-        colors: ["#06f8ae", "#97fadd", "#ffffff", "#fdd689", "#fd9f09"]
+        colors: ["#06f8ae", "#97fadd", "#f2ffe5", "#fdd689", "#fd9f09"]
     },
     {
-        id: "4",
-        name: "Rainbow",
-        colors: ["#ff0080", "#ff8c00", "#ffe600", "#8cff00", "#00ffe1"]
-    },
-    {
-        id: "5",
+        id: "3",
         name: "Ocean",
         colors: ["#034efc", "#0ab3fc", "#3de5fc", "#0af7d4", "#02fa9a"]
     },
     {
-        id: "6",
+        id: "4",
         name: "Sunset",
-        colors: ["#ff3e7e", "#ff9a5b", "#fffd82", "#5be0ff", "#3a86ff"]
+        colors: ["#3a86ff", "#5be0ff", "#fffd82", "#ff9a5b", "#ff3e7e"]
+    },
+    {
+        id: "5",
+        name: "unknown",
+        colors: ["#8c510a", "#d8b365", "#f6e8c3", "#5ab4ac", "#01665e"]
+    },
+    {
+        id: "6",
+        name: "YIP",
+        colors: ["#7a59c1", "#576fc1", "#00bcd4", "#94cb6a", "#55b253"]
+    },
+    {
+        id: "7",
+        name: "unknown",
+        colors: ["#252f38", "#4c6070", "#e8f1ee", "#fdcd0f", "#fa8702"]
     }
 ];
+// 252f38
+// 4c6070
+// e8f1ee
+// fdcd0f
+// fa8702

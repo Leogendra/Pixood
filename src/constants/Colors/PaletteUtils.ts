@@ -15,8 +15,6 @@ export function adjustPaletteSize(colors: string[], targetCount: number = NUMBER
         const frontCount = Math.ceil(missing / 2);
         const endCount = missing - frontCount;
 
-        // Insère le gris juste après la première couleur (frontCount fois)
-        // puis juste avant la dernière couleur (endCount fois)
         const first = colors[0];
         const last = colors[colors.length - 1];
         const middle = colors.slice(1, colors.length - 1);
@@ -32,7 +30,7 @@ export function adjustPaletteSize(colors: string[], targetCount: number = NUMBER
 
 
 export function isValidHexColor(color: string): boolean {
-    return /^#[0-9A-F]{6}$/i.test(color);
+    return /^#[0-9A-F]{6}$/i.test(color) || /^#[0-9A-F]{3}$/i.test(color) || /^#[0-9A-F]{8}$/i.test(color);
 }
 
 

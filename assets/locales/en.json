@@ -23,6 +23,8 @@
     "colors_info": "Colors indicate the mood in the calendar. Your previously tracked mood will be switched to the selected color palette.",
     "colors_reset": "Reset to default",
     "colors": "Palette",
+    "your_palette": "Your Palette",
+    "palette_presets": "Palette Presets",
     "create_tag": "Create Tag",
     "create": "Create",
     "data_notice": "All data is stored on your device and only leaves your device when you decide to.",

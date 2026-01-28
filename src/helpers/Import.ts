@@ -1,7 +1,6 @@
+import { ExportSettings } from '@/hooks/useSettings';
 import { LogEntry } from '@/types/logFormat';
 import { LogsState } from '@/hooks/useLogs';
-import { TAG_COLOR_NAMES } from '@/constants/Config';
-import { ExportSettings } from '@/hooks/useSettings';
 import { Tag } from "@/hooks/useTags";
 import { z } from "zod";
 
@@ -38,7 +37,7 @@ export function getJSONSchemaType(json: any): 'pixy' | 'unknown' {
     const result = pixySchema.safeParse(json);
 
     if (!result.success && DEBUG) {
-        console.log(result.error.issues)
+        console.error(result.error.issues)
     }
 
     return result.success ? 'pixy' : 'unknown';
