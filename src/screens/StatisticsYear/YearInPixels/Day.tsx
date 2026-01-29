@@ -13,7 +13,7 @@ export const Day = ({
   rating: number | null;
 }) => {
   const colors = useColors();
-  const scale = useScale();
+  const { colors: scale } = useScale();
 
   return (
     <View
@@ -21,9 +21,9 @@ export const Day = ({
         aspectRatio: 1,
         width: '100%',
         borderRadius: 100,
-        backgroundColor: rating ? scale.colors[rating].background : 'transparent',
+        backgroundColor: rating ? scale[rating].background : 'transparent',
         borderWidth: 2,
-        borderColor: rating ? scale.colors[rating].background : colors.yearPixelsEmptyDot,
+        borderColor: rating ? scale[rating].background : colors.yearPixelsEmptyDot,
         justifyContent: 'center',
         alignItems: 'center',
       }}

@@ -1,6 +1,6 @@
 import { adjustPaletteSizeInterpolate } from "@/constants/Colors/PaletteUtils";
 import { LoggerStep, STEP_OPTIONS } from "@/components/Logger/config";
-import { COLOR_PALETTE_PRESETS } from "@/constants/Config";
+import { STORAGE_KEY, COLOR_PALETTE_PRESETS } from "@/constants/Config";
 import { load, store } from "@/helpers/storage";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
@@ -13,8 +13,6 @@ import {
     useState
 } from "react";
 
-export const STORAGE_KEY = "PIXEL_TRACKER_SETTINGS";
-
 
 
 
@@ -24,7 +22,8 @@ export interface SettingsState {
     loaded: boolean;
     deviceId: string | null;
     palettePresetId: string | null; // null means custom palette
-    customPalette: string[] | null; // Array of 7 hex colors, one per mood rating
+    customPalette: string[] | null;
+    theme: 'light' | 'dark' | 'system';
     reminderEnabled: Boolean;
     reminderTime: string;
     actionsDone: IAction[];
@@ -48,6 +47,7 @@ export const INITIAL_STATE: SettingsState = {
     deviceId: null,
     palettePresetId: defaultPreset.id,
     customPalette: defaultPalette,
+    theme: 'system', // Default to system theme
     reminderEnabled: false,
     reminderTime: "18:00",
     actionsDone: [],
@@ -60,7 +60,7 @@ export const INITIAL_STATE: SettingsState = {
 };
 
 
-type Value = {
+type SettingsContextType = {
     settings: SettingsState;
     setSettings: (
         settings: SettingsState | ((settings: SettingsState) => SettingsState)
@@ -74,7 +74,7 @@ type Value = {
     hasStep: (step: LoggerStep) => boolean;
 }
 
-const SettingsStateContext = createContext({} as Value);
+const SettingsStateContext = createContext({} as SettingsContextType);
 
 function SettingsProvider({ children }: { children: React.ReactNode }) {
 
@@ -205,7 +205,7 @@ function SettingsProvider({ children }: { children: React.ReactNode }) {
 }
 
 
-function useSettings(): Value {
+function useSettings(): SettingsContextType {
     const context = useContext(SettingsStateContext);
     if (context === undefined) {
         throw new Error("useSettings must be used within a SettingsProvider");

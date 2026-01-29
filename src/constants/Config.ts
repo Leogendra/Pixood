@@ -28,6 +28,7 @@ export const TAG_COLOR_NAMES = [
 
 // Storage keys
 export const TAGS_STORAGE_KEY = 'PIXEL_TRACKER_TAG_CATEGORIES';
+export const STORAGE_KEY = "PIXEL_TRACKER_SETTINGS";
 
 
 // Color palette presets

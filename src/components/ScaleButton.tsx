@@ -1,5 +1,6 @@
-import { Pressable, Text, useColorScheme } from "react-native";
+import { Pressable, Text } from "react-native";
 import { Check } from "react-native-feather";
+import { useTheme } from "@/hooks/useTheme";
 import chroma from "chroma-js";
 
 
@@ -22,13 +23,13 @@ export default function ScaleButton({
     isLast?: boolean,
     onPress: () => void,
 }) {
-    let colorScheme = useColorScheme();
+    const theme = useTheme();
 
     return (
         <Pressable
             onPress={onPress}
             style={({ pressed }) => [{
-                borderColor: colorScheme === 'light' ?
+                borderColor: theme === 'light' ?
                     chroma(backgroundColor).darken(0.4).hex() :
                     chroma(backgroundColor).brighten(0.5).hex(),
                 backgroundColor: backgroundColor,

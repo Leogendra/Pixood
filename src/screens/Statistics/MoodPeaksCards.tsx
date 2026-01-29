@@ -20,14 +20,14 @@ const DayDot = ({
   day: LogDay | undefined,
 }) => {
   const colors = useColors()
-  const scale = useScale()
+  const { colors: scale } = useScale()
   const haptics = useHaptics()
   const calendarNavigation = useCalendarNavigation()
 
   const color = day ? {
-    bg: scale.colors[day.ratingAvg].background,
-    text: scale.colors[day.ratingAvg].text,
-    border: scale.colors[day.ratingAvg].text,
+    bg: scale[day.ratingAvg].background,
+    text: scale[day.ratingAvg].text,
+    border: scale[day.ratingAvg].text,
   } : {
     bg: colors.statisticsCalendarDotBackground,
     text: colors.statisticsCalendarDotText,

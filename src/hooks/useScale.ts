@@ -2,8 +2,8 @@ import { adjustPaletteSizeInterpolate } from '@/constants/Colors/PaletteUtils';
 import { NUMBER_OF_RATINGS, COLOR_PALETTE_PRESETS } from '@/constants/Config';
 import { getCustomScale } from '@/constants/Colors/Scales';
 import { IScale } from '@/constants/Colors/Scales';
-import { useColorScheme } from 'react-native';
 import { useSettings } from "./useSettings";
+import { useTheme } from "./useTheme";
 import useColors from "./useColors";
 
 
@@ -12,21 +12,19 @@ import useColors from "./useColors";
 export default function useScale() {
     const colors = useColors();
     const { settings } = useSettings();
-    const colorScheme = useColorScheme();
-    const isDark = colorScheme === 'dark';
+    const theme = useTheme();
 
     let scale: IScale;
 
     if (settings.customPalette) {
-        scale = getCustomScale(settings.customPalette, isDark);
+        scale = getCustomScale(settings.customPalette);
     }
     else if (settings.palettePresetId) {
         scale = colors.scales[settings.palettePresetId];
     }
     else {
-        const defaultPreset = COLOR_PALETTE_PRESETS[0];
-        const defaultPalette = adjustPaletteSizeInterpolate(defaultPreset.colors);
-        scale = getCustomScale(defaultPalette, isDark);
+        const defaultPalette = adjustPaletteSizeInterpolate(COLOR_PALETTE_PRESETS[0].colors);
+        scale = getCustomScale(defaultPalette);
     }
 
     return {

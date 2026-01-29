@@ -8,7 +8,7 @@ import { CustomColorPicker } from './ColorPickerWidget';
 import { useSettings } from '../../hooks/useSettings';
 import React, { useCallback, useState } from 'react';
 import useColors from '../../hooks/useColors';
-import { Edit2 } from 'react-native-feather';
+import { Edit2, Sun, Moon, Smartphone } from 'react-native-feather';
 import { t } from '@/helpers/translation';
 import { Radio } from './Radio';
 
@@ -96,6 +96,102 @@ export const ColorsScreen = ({ navigation }) => {
         >
             <ScrollView style={{ padding: 20 }}>
 
+                <MenuListHeadline>{t('app_theme')}</MenuListHeadline>
+                <View 
+                    style={{ 
+                        flexDirection: 'row',
+                        borderRadius: 12,
+                        borderWidth: 1,
+                        borderColor: colors.cardBorder,
+                        overflow: 'hidden',
+                        marginBottom: 20,
+                    }}
+                >
+                    <Pressable
+                        onPress={() => setSettings(prev => ({ ...prev, theme: 'light' }))}
+                        style={({ pressed }) => ({
+                            flex: 1,
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: settings.theme === 'light' ? colors.tint : colors.cardBackground,
+                            paddingVertical: 12,
+                            borderRightWidth: 1,
+                            borderRightColor: colors.cardBorder,
+                            opacity: pressed ? 0.7 : 1,
+                        })}
+                    >
+                        <Sun 
+                            width={15} 
+                            height={15} 
+                            stroke={settings.theme === 'light' ? '#fff' : colors.text} 
+                        />
+                        <Text style={{ 
+                            color: settings.theme === 'light' ? '#fff' : colors.text,
+                            fontSize: 14,
+                            marginTop: 6,
+                            fontWeight: settings.theme === 'light' ? '600' : '400',
+                        }}>
+                            {t('theme_light')}
+                        </Text>
+                    </Pressable>
+
+                    <Pressable
+                        onPress={() => setSettings(prev => ({ ...prev, theme: 'dark' }))}
+                        style={({ pressed }) => ({
+                            flex: 1,
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: settings.theme === 'dark' ? colors.tint : colors.cardBackground,
+                            borderRightWidth: 1,
+                            borderRightColor: colors.cardBorder,
+                            opacity: pressed ? 0.7 : 1,
+                        })}
+                    >
+                        <Moon 
+                            width={15} 
+                            height={15} 
+                            stroke={settings.theme === 'dark' ? '#fff' : colors.text} 
+                        />
+                        <Text style={{ 
+                            color: settings.theme === 'dark' ? '#fff' : colors.text,
+                            fontSize: 14,
+                            marginTop: 6,
+                            fontWeight: settings.theme === 'dark' ? '600' : '400',
+                        }}>
+                            {t('theme_dark')}
+                        </Text>
+                    </Pressable>
+
+                    <Pressable
+                        onPress={() => setSettings(prev => ({ ...prev, theme: 'system' }))}
+                        style={({ pressed }) => ({
+                            flex: 1,
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: settings.theme === 'system' ? colors.tint : colors.cardBackground,
+                            opacity: pressed ? 0.7 : 1,
+                        })}
+                    >
+                        <Smartphone 
+                            width={15} 
+                            height={15} 
+                            stroke={settings.theme === 'system' ? '#fff' : colors.text} 
+                        />
+                        <Text style={{ 
+                            color: settings.theme === 'system' ? '#fff' : colors.text,
+                            fontSize: 14,
+                            marginTop: 6,
+                            fontWeight: settings.theme === 'system' ? '600' : '400',
+                        }}>
+                            {t('theme_system')}
+                        </Text>
+                    </Pressable>
+                </View>
+
+
                 <MenuListHeadline>{t('your_palette')}</MenuListHeadline>
                 <View
                     style={{
@@ -132,6 +228,7 @@ export const ColorsScreen = ({ navigation }) => {
                         </TouchableOpacity>
                     ))}
                 </View>
+
 
                 <MenuListHeadline>{t('palette_presets')}</MenuListHeadline>
                 {COLOR_PALETTE_PRESETS.map(preset => (

@@ -1,10 +1,27 @@
-import useColors from '@/hooks/useColors';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as Linking from 'expo-linking';
-import { useEffect } from 'react';
-import { Platform, View, useColorScheme } from 'react-native';
+import { StatisticsMonthScreen } from '../screens/StatisticsMonth';
+import { StatisticsYearScreen } from '../screens/StatisticsYear';
+import { DevelopmentTools } from '../screens/DevelopmentTools';
+import { initializeDayjs, t } from '@/helpers/translation';
+import { enableScreens } from 'react-native-screens';
+import { Onboarding } from '../screens/Onboarding';
+import { useSettings } from '@/hooks/useSettings';
 import { RootStackParamList } from '../../types';
+import { StepsScreen } from '../screens/Steps';
+import { useTagsState } from '@/hooks/useTags';
+import Providers from '@/components/Providers';
+import { Platform, View } from 'react-native';
+import { useLogState } from '@/hooks/useLogs';
+import { useTheme } from '@/hooks/useTheme';
+import useColors from '@/hooks/useColors';
+import { BackButton } from './BackButton';
+import { BottomTabs } from './BottomTabs';
+import Colors from '@/constants/Colors';
+import * as Linking from 'expo-linking';
+import { Tags } from '../screens/Tags';
+import { useEffect } from 'react';
+import dayjs from 'dayjs';
 import {
     ColorsScreen,
     DataScreen,
@@ -22,24 +39,11 @@ import {
     SettingsTags,
     SettingsTagsArchive
 } from '../screens';
-import Providers from '@/components/Providers';
-import Colors from '@/constants/Colors';
-import { initializeDayjs, t } from '@/helpers/translation';
-import { useLogState } from '@/hooks/useLogs';
-import { useSettings } from '@/hooks/useSettings';
-import { useTagsState } from '@/hooks/useTags';
-import dayjs from 'dayjs';
-import { enableScreens } from 'react-native-screens';
-import { DevelopmentTools } from '../screens/DevelopmentTools';
-import { Onboarding } from '../screens/Onboarding';
-import { StatisticsMonthScreen } from '../screens/StatisticsMonth';
-import { StatisticsYearScreen } from '../screens/StatisticsYear';
-import { StepsScreen } from '../screens/Steps';
-import { Tags } from '../screens/Tags';
-import { BackButton } from './BackButton';
-import { BottomTabs } from './BottomTabs';
 
 enableScreens();
+
+
+
 
 const NAVIGATION_LINKING = {
     prefixes: [
@@ -73,25 +77,34 @@ const NAVIGATION_LINKING = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-export default function Navigation() {
-    const scheme = useColorScheme();
+
+function NavigationContent() {
+    const theme = useTheme();
 
     return (
         <NavigationContainer
             linking={NAVIGATION_LINKING}
             // @ts-ignore
             theme={
-                scheme === 'dark'
+                theme === 'dark'
                     ? { dark: true, colors: Colors.dark }
                     : { dark: false, colors: Colors.light }
             }
         >
-            <Providers>
-                <RootNavigator />
-            </Providers>
+            <RootNavigator />
         </NavigationContainer>
     );
 }
+
+
+export default function Navigation() {
+    return (
+        <Providers>
+            <NavigationContent />
+        </Providers>
+    );
+}
+
 
 function RootNavigator() {
     const colors = useColors();

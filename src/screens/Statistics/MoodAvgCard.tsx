@@ -9,7 +9,7 @@ export const MoodAvgCard = ({
 }: {
     data: MoodAvgData
 }) => {
-    const scale = useScale();
+    const { colors: scale } = useScale();
 
     return (
         <Card
@@ -37,7 +37,7 @@ export const MoodAvgCard = ({
                                 flexDirection: 'row',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                backgroundColor: scale.colors[item.key].background,
+                                backgroundColor: scale[item.key].background,
                                 flexBasis: `${item.count / data.itemsCount * 100}%`,
                                 height: 24,
                             }} />
