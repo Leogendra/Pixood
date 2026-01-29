@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Modal, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import useColors from '@/hooks/useColors';
-import { useTagCategoriesUpdater } from '@/hooks/useTagCategories';
+import { useTagCategoriesState, useTagCategoriesUpdater } from '@/hooks/useTagCategories';
+import { DEFAULT_TAGS } from '@/constants/Config';
 import { TagCategory } from '@/types/tagCategories';
 import Button from '@/components/Button';
 import LinkButton from '@/components/LinkButton';
@@ -25,8 +26,72 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
     const colors = useColors();
     const insets = useSafeAreaInsets();
     const tagUpdater = useTagCategoriesUpdater();
+    const tagState = useTagCategoriesState();
 
     const [name, setName] = useState('');
+
+    const handleAddPresetTags = async (categoryKey: string) => {
+        // Get the preset name - use translation key pattern or fall back to key
+        const presetName = t(`tag_category_${categoryKey}`);
+        
+        // Check if category with this name already exists
+        const existingCategory = tagState.categories.find(
+            cat => cat.name.toLowerCase() === presetName.toLowerCase()
+        );
+
+        if (existingCategory) {
+            // Show warning and ask for confirmation
+            Alert.alert(
+                t('category_already_exists'),
+                t('category_already_exists_message'),
+                [
+                    {
+                        text: t('back'),
+                        style: 'cancel',
+                    },
+                    {
+                        text: t('continue'),
+                        style: 'default',
+                        onPress: async () => {
+                            await createPresetCategoryAndTags(categoryKey, presetName, existingCategory.id);
+                        },
+                    },
+                ]
+            );
+        } else {
+            // Create directly
+            await createPresetCategoryAndTags(categoryKey, presetName);
+        }
+    };
+
+    const createPresetCategoryAndTags = async (categoryKey: string, presetName: string, existingCategoryId?: string) => {
+        // Create the category if it doesn't exist yet
+        const categoryId = existingCategoryId
+            ? existingCategoryId
+            : (await tagUpdater.createCategory(presetName)).id;
+
+        // Add preset tags to the new category
+        const defaultTagsForCategory = DEFAULT_TAGS[categoryKey as keyof typeof DEFAULT_TAGS];
+        if (defaultTagsForCategory && Array.isArray(defaultTagsForCategory)) {
+            const existingTitles = new Set(
+                tagState.tags
+                    .filter(tag => tag.categoryId === categoryId)
+                    .map(tag => tag.title.trim().toLowerCase())
+            );
+
+            for (const tagTitle of defaultTagsForCategory) {
+                const normalizedTitle = tagTitle.trim().toLowerCase();
+                if (existingTitles.has(normalizedTitle)) {
+                    continue;
+                }
+
+                await tagUpdater.createTag(categoryId, tagTitle);
+                existingTitles.add(normalizedTitle);
+            }
+        }
+
+        onClose();
+    };
 
     useEffect(() => {
         if (category && !isCreating) {
@@ -130,8 +195,9 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
                         />
                     </View>
 
-                    {/* Delete button (only in edit mode and if it's not a default category) */}
-                    {!isCreating && category && !category.isDefault && (
+
+                    {/* Delete button */}
+                    {!isCreating && category && (
                         <View style={{ marginBottom: 24 }}>
                             <Button
                                 type="danger"
@@ -139,6 +205,110 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
                             >
                                 {t('delete_category')}
                             </Button>
+                        </View>
+                    )}
+
+
+                    {/* Want inspiration section */}
+                    {isCreating && (
+                        <View style={{ marginBottom: 24 }}>
+                            <Text style={{
+                                fontSize: 16,
+                                fontWeight: '600',
+                                color: colors.text,
+                                marginBottom: 12,
+                            }}>
+                                💡 {t('want_inspiration')}
+                            </Text>
+                            <Text style={{
+                                fontSize: 14,
+                                color: colors.textSecondary,
+                                marginBottom: 12,
+                            }}>
+                                {t('add_preset_tags_description')}
+                            </Text>
+
+                            {Object.keys(DEFAULT_TAGS).map((categoryKey) => {
+                                const defaultTagsForKey = DEFAULT_TAGS[categoryKey as keyof typeof DEFAULT_TAGS];
+                                const tagList = Array.isArray(defaultTagsForKey) ? defaultTagsForKey : [];
+                                if (tagList.length === 0) return null;
+
+                                return (
+                                    <View
+                                        key={categoryKey}
+                                        style={{
+                                            backgroundColor: colors.cardBackground,
+                                            borderRadius: 12,
+                                            padding: 12,
+                                            marginBottom: 10,
+                                            borderWidth: 1,
+                                            borderColor: colors.cardBorder,
+                                        }}
+                                    >
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                            marginBottom: 10,
+                                        }}>
+                                            <Text style={{
+                                                fontSize: 14,
+                                                fontWeight: '600',
+                                                color: colors.text,
+                                                flex: 1,
+                                                textTransform: 'capitalize',
+                                            }}>
+                                                {categoryKey}
+                                            </Text>
+                                            <TouchableOpacity
+                                                onPress={() => handleAddPresetTags(categoryKey)}
+                                                style={{
+                                                    backgroundColor: colors.tint,
+                                                    paddingHorizontal: 12,
+                                                    paddingVertical: 6,
+                                                    borderRadius: 6,
+                                                }}
+                                            >
+                                                <Text style={{
+                                                    color: colors.primaryButtonText,
+                                                    fontSize: 13,
+                                                    fontWeight: '600',
+                                                }}>
+                                                    + {t('add')}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        </View>
+
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            flexWrap: 'wrap',
+                                            gap: 6,
+                                        }}>
+                                            {tagList.map((tag, idx) => (
+                                                <View
+                                                    key={idx}
+                                                    style={{
+                                                        paddingHorizontal: 10,
+                                                        paddingVertical: 4,
+                                                        backgroundColor: colors.backgroundSecondary,
+                                                        borderRadius: 12,
+                                                        borderWidth: 1,
+                                                        borderColor: colors.cardBorder,
+                                                    }}
+                                                >
+                                                    <Text style={{
+                                                        fontSize: 12,
+                                                        color: colors.text,
+                                                        fontWeight: '500',
+                                                    }}>
+                                                        {tag}
+                                                    </Text>
+                                                </View>
+                                            ))}
+                                        </View>
+                                    </View>
+                                );
+                            })}
                         </View>
                     )}
 

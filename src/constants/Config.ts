@@ -1,12 +1,10 @@
+// Global configuration constants
+export const NUMBER_OF_RATINGS = 7;
 export const MIN_TAG_LENGTH = 3;
 export const MAX_TAG_LENGTH = 30;
-
-export const NUMBER_OF_RATINGS = 7;
 export const MAX_TAGS = 100;
 export const STATISTIC_MIN_LOGS = 1;
-
 export const DATE_FORMAT = "YYYY-MM-DD";
-
 export const TAG_COLOR_NAMES = [
     "slate",
     "red",
@@ -28,7 +26,11 @@ export const TAG_COLOR_NAMES = [
     "rose",
 ];
 
+// Storage keys
+export const TAGS_STORAGE_KEY = 'PIXEL_TRACKER_TAG_CATEGORIES';
 
+
+// Color palette presets
 export interface ColorPalettePreset {
     id: string;
     name: string;
@@ -73,3 +75,12 @@ export const COLOR_PALETTE_PRESETS: ColorPalettePreset[] = [
         colors: ["#252f38", "#597285", "#e8f1ee", "#fdcd0f", "#fa8702"]
     }
 ];
+
+
+// name will be localized in the app
+export const DEFAULT_TAGS = {
+    emotions: ["happy", "sad", "angry", "anxious", "excited", "calm", "frustrated", "grateful", "optimistic", "tired"],
+    activities: ["work", "exercise", "reading", "meditation", "socializing", "hobby", "travel", "cooking", "cleaning", "shopping"],
+    weather: ["sunny", "rainy", "cloudy", "snowy", "windy", "stormy", "humid", "foggy", "cold", "hot"],
+    health: ["feeling_good", "sick", "headache", "back_pain", "allergy", "insomnia", "fatigue", "nausea", "fever", "cough", "stress"],
+};

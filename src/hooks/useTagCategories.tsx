@@ -1,27 +1,24 @@
-import { load, store } from '@/helpers/storage';
-import { t } from '@/helpers/translation';
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { TAGS_STORAGE_KEY, DEFAULT_TAGS } from '@/constants/Config';
 import { useLogState, useLogUpdater } from './useLogs';
+import { load, store } from '@/helpers/storage';
 import { useSettings } from './useSettings';
+import { t } from '@/helpers/translation';
+import { v4 as uuidv4 } from "uuid";
 import {
     TagCategoriesState,
     TagCategoriesAction,
     TagCategory,
     CategorizedTag,
     TagCategoriesUpdater,
-    DEFAULT_EMOTIONS_CATEGORY,
-    DEFAULT_ACTIVITY_CATEGORY,
-    TagSelection
 } from '@/types/tagCategories';
 
-export const STORAGE_KEY = 'PIXEL_TRACKER_TAG_CATEGORIES';
 
-// Contexts
+
 const TagCategoriesStateContext = createContext({} as TagCategoriesState);
 const TagCategoriesUpdaterContext = createContext({} as TagCategoriesUpdater);
 
-// Reducer
+
 const tagCategoriesReducer = (state: TagCategoriesState, action: TagCategoriesAction): TagCategoriesState => {
     switch (action.type) {
         case 'LOAD_DATA':
@@ -71,10 +68,6 @@ const tagCategoriesReducer = (state: TagCategoriesState, action: TagCategoriesAc
                 tags: state.tags.filter(tag => tag.id !== action.payload),
             };
 
-        case 'MIGRATE_FROM_OLD_SYSTEM':
-            // This action will be implemented to migrate from the old system
-            return state;
-
         case 'RESET':
             return {
                 loaded: true,
@@ -88,65 +81,16 @@ const tagCategoriesReducer = (state: TagCategoriesState, action: TagCategoriesAc
     }
 };
 
-// Default data generators
-const generateDefaultEmotionsCategory = (): TagCategory => {
-    const now = new Date().toISOString();
-    return {
-        id: uuidv4(),
-        ...DEFAULT_EMOTIONS_CATEGORY,
-        createdAt: now,
-        updatedAt: now,
-    };
-};
 
-const generateDefaultActivityCategory = (): TagCategory => {
-    const now = new Date().toISOString();
-    return {
-        id: uuidv4(),
-        ...DEFAULT_ACTIVITY_CATEGORY,
-        name: t('tag_category_activities'),
-        createdAt: now,
-        updatedAt: now,
-    };
-};
-
-// Convert emotions to categorized tags - Deprecated since emotions were removed
-// Returns empty array as emotions are no longer supported
-const convertEmotionsToTags = (emotionsCategory: TagCategory): CategorizedTag[] => {
-    return [];
-};
-
-// Initial state
 const getInitialState = (): TagCategoriesState => {
-    const emotionsCategory = generateDefaultEmotionsCategory();
-    const activityCategory = generateDefaultActivityCategory();
-
     return {
         loaded: false,
-        categories: [emotionsCategory, activityCategory],
-        tags: [
-            ...convertEmotionsToTags(emotionsCategory),
-            // Some default activity tags
-            {
-                id: uuidv4(),
-                categoryId: activityCategory.id,
-                title: `${t('tags_default_1_title')} 🏡`,
-                isArchived: false,
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-            },
-            {
-                id: uuidv4(),
-                categoryId: activityCategory.id,
-                title: `${t('tags_default_2_title')} 🤝`,
-                isArchived: false,
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString(),
-            },
-        ],
+        categories: [],
+        tags: [],
         version: 1,
     };
 };
+
 
 // Provider Component
 export function TagCategoriesProvider({ children }: { children: React.ReactNode }) {
@@ -162,10 +106,7 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
         const newCategory: TagCategory = {
             id: uuidv4(),
             name,
-            icon,
-            isDefault: false,
             createdAt: now,
-            updatedAt: now,
         };
 
         dispatch({ type: 'CREATE_CATEGORY', payload: newCategory });
@@ -180,23 +121,19 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
         const updatedCategory: TagCategory = {
             ...category,
             ...updates,
-            updatedAt: new Date().toISOString(),
         };
 
         dispatch({ type: 'UPDATE_CATEGORY', payload: updatedCategory });
     }, [state.categories]);
 
+
     const deleteCategory = useCallback(async (id: string) => {
         const category = state.categories.find(c => c.id === id);
-        if (!category || category.isDefault) return; // Do not delete default categories
-
         dispatch({ type: 'DELETE_CATEGORY', payload: id });
     }, [state.categories]);
 
-    const createTag = useCallback(async (categoryId: string, title: string): Promise<CategorizedTag> => {
-        const category = state.categories.find(c => c.id === categoryId);
-        if (!category) throw new Error('Category not found');
 
+    const createTag = useCallback(async (categoryId: string, title: string): Promise<CategorizedTag> => {
         const now = new Date().toISOString();
         const newTag: CategorizedTag = {
             id: uuidv4(),
@@ -204,13 +141,13 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
             title,
             isArchived: false,
             createdAt: now,
-            updatedAt: now,
         };
 
         dispatch({ type: 'CREATE_TAG', payload: newTag });
 
         return newTag;
-    }, [state.categories]);
+    }, []);
+
 
     const updateTag = useCallback(async (id: string, updates: Partial<Omit<CategorizedTag, 'id' | 'createdAt' | 'updatedAt'>>) => {
         const tag = state.tags.find(t => t.id === id);
@@ -219,11 +156,11 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
         const updatedTag: CategorizedTag = {
             ...tag,
             ...updates,
-            updatedAt: new Date().toISOString(),
         };
 
         dispatch({ type: 'UPDATE_TAG', payload: updatedTag });
     }, [state.tags]);
+
 
     const deleteTag = useCallback(async (id: string) => {
         dispatch({ type: 'DELETE_TAG', payload: id });
@@ -240,21 +177,21 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
         logsUpdater.updateLogs(newItems);
     }, [logsState.items, logsUpdater]);
 
+
     const archiveTag = useCallback(async (id: string) => {
         await updateTag(id, { isArchived: true });
     }, [updateTag]);
 
-    const migrateFromOldSystem = useCallback(async () => {
-        // This function will be implemented to migrate from the old useTags system
-    }, []);
 
     const importData = useCallback(async (data: TagCategoriesState) => {
         dispatch({ type: 'LOAD_DATA', payload: data });
     }, []);
 
+
     const reset = useCallback(async () => {
         dispatch({ type: 'RESET' });
     }, []);
+
 
     const updaterValue: TagCategoriesUpdater = useMemo(() => ({
         createCategory,
@@ -264,7 +201,6 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
         updateTag,
         deleteTag,
         archiveTag,
-        migrateFromOldSystem,
         importData,
         reset,
     }), [
@@ -275,36 +211,41 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
         updateTag,
         deleteTag,
         archiveTag,
-        migrateFromOldSystem,
         importData,
         reset,
     ]);
+
 
     // Load from storage
     useEffect(() => {
         if (!settings.loaded) return;
 
         (async () => {
-            const stored = await load<TagCategoriesState>(STORAGE_KEY);
+            const stored = await load<TagCategoriesState>(TAGS_STORAGE_KEY);
             if (stored !== null) {
+                // Already has data, just load it (don't override with defaults)
                 dispatch({ type: 'LOAD_DATA', payload: stored });
-            } else {
-                // First launch, initialize with default data
-                dispatch({ type: 'LOAD_DATA', payload: getInitialState() });
+            } 
+            else {
+                // First launch: initialize with default data only once
+                const initialState = getInitialState();
+                dispatch({ type: 'LOAD_DATA', payload: initialState });
             }
         })();
     }, [settings.loaded]);
 
+
     // Save to storage
     useEffect(() => {
         if (state.loaded) {
-            store<Omit<TagCategoriesState, 'loaded'>>(STORAGE_KEY, {
+            store<Omit<TagCategoriesState, 'loaded'>>(TAGS_STORAGE_KEY, {
                 categories: state.categories,
                 tags: state.tags,
                 version: state.version,
             });
         }
     }, [state]);
+
 
     return (
         <TagCategoriesStateContext.Provider value={state}>
@@ -315,7 +256,7 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
     );
 }
 
-// Custom hooks
+
 export function useTagCategoriesState(): TagCategoriesState {
     const context = useContext(TagCategoriesStateContext);
     if (context === undefined) {
@@ -323,6 +264,7 @@ export function useTagCategoriesState(): TagCategoriesState {
     }
     return context;
 }
+
 
 export function useTagCategoriesUpdater(): TagCategoriesUpdater {
     const context = useContext(TagCategoriesUpdaterContext);
@@ -332,7 +274,7 @@ export function useTagCategoriesUpdater(): TagCategoriesUpdater {
     return context;
 }
 
-// Helper hooks
+
 export function useTagsByCategory(categoryId: string): CategorizedTag[] {
     const { tags } = useTagCategoriesState();
     return useMemo(() =>
@@ -340,6 +282,7 @@ export function useTagsByCategory(categoryId: string): CategorizedTag[] {
         [tags, categoryId]
     );
 }
+
 
 export function useAvailableCategories(): TagCategory[] {
     const { categories } = useTagCategoriesState();

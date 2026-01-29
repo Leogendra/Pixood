@@ -5,6 +5,7 @@ import { TagCategory, CategorizedTag } from '../../types/tagCategories';
 import { TagManagementModal } from './components/TagManagementModal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getTextColor } from '@/constants/Colors/PaletteUtils';
+import { DEFAULT_TAGS } from '@/constants/Config';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RootStackScreenProps } from '../../../types';
 import ModalHeader from '@/components/ModalHeader';
@@ -100,6 +101,23 @@ export const TagCategories = ({ navigation }: RootStackScreenProps<'TagCategorie
                 style={{ flex: 1 }}
                 contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16 }}
             >
+                {tagState.categories.length === 0 && (
+                    <View style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        paddingVertical: 40,
+                    }}>
+                        <Text style={{
+                            color: colors.textSecondary,
+                            fontSize: 16,
+                            textAlign: 'center',
+                        }}>
+                            {t('tags_no_tags')}
+                        </Text>
+                    </View>
+                )}
+
                 {tagState.categories.map((category: TagCategory) => {
                     const categoryTags = getCategoryTags(category.id);
 
@@ -159,6 +177,17 @@ export const TagCategories = ({ navigation }: RootStackScreenProps<'TagCategorie
                             <View style={{
                                 padding: 16,
                             }}>
+                                {categoryTags.length === 0 && (
+                                    <Text style={{
+                                        color: colors.textSecondary,
+                                        fontSize: 14,
+                                        marginBottom: 12,
+                                        fontStyle: 'italic',
+                                    }}>
+                                        {t('tags_activity_empty')}
+                                    </Text>
+                                )}
+
                                 <View style={{
                                     flexDirection: 'row',
                                     flexWrap: 'wrap',

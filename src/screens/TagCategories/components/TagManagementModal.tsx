@@ -163,12 +163,13 @@ export const TagManagementModal: React.FC<TagManagementModalProps> = ({
                     {/* Actions for an existing tag */}
                     {!isCreating && tag && (
                         <View style={{ marginBottom: 24, gap: 12 }}>
-                            <Button
+                            {/* TODO: add archive system */}
+                            {/* <Button
                                 type="secondary"
                                 onPress={handleArchive}
                             >
                                 {t('archive_tag')}
-                            </Button>
+                            </Button> */}
 
                             <Button
                                 type="danger"
