@@ -1,17 +1,19 @@
-import * as Linking from 'expo-linking';
-import { ScrollView, Text, View } from 'react-native';
 import { Bell, BookOpen, CheckCircle, Database, Droplet, Github, PieChart, Smartphone } from 'react-native-feather';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import MenuList from '@/components/MenuList';
 import MenuListHeadline from '@/components/MenuListHeadline';
-import MenuListItem from '@/components/MenuListItem';
-import TextInfo from '@/components/TextInfo';
-import { t } from '@/helpers/translation';
-import useColors from '../../hooks/useColors';
-import pkg from '../../../package.json';
 import { RootStackScreenProps } from '../../../types';
+import { ScrollView, Text, View } from 'react-native';
+import MenuListItem from '@/components/MenuListItem';
 import { UserDataImportList } from './UserData';
+import useColors from '../../hooks/useColors';
+import MenuList from '@/components/MenuList';
+import { t } from '@/helpers/translation';
 import { Tag } from 'lucide-react-native';
+import pkg from '../../../package.json';
+import * as Linking from 'expo-linking';
+
+
+
 
 export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>) => {
     const insets = useSafeAreaInsets();
