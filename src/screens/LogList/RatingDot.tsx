@@ -1,17 +1,21 @@
 import useColors from '@/hooks/useColors';
-import { LogItem } from '@/hooks/useLogs';
-import { useSettings } from '@/hooks/useSettings';
+import { LogEntry } from '@/hooks/useLogs';
+import useScale from '@/hooks/useScale';
 import { View } from 'react-native';
 
 export const RatingDot = ({
   rating,
 }: {
-  rating: LogItem['rating'];
+  rating: LogEntry['rating'];
 }) => {
-  const colors = useColors();
-  const { settings } = useSettings();
+  const { colors: scale } = useScale();
 
-  const backgroundColor = colors.scales[settings.scaleType][rating].background;
+  // Calculate average rating to get the color
+  const avgRating = rating && rating.length > 0
+    ? Math.round(rating.reduce((a, b) => a + b, 0) / rating.length)
+    : 4; // default to neutral
+
+  const backgroundColor = scale[avgRating]?.background || scale.empty.background;
 
   return (
     <View
@@ -27,5 +31,4 @@ export const RatingDot = ({
       }}
     />
   )
-
-};
+}

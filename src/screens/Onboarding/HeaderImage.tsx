@@ -1,4 +1,5 @@
-import { Image, ImageProps, Platform, useColorScheme } from 'react-native';
+import { Image, ImageProps, Platform } from 'react-native';
+import { useTheme } from '@/hooks/useTheme';
 
 const HEADER_IMAGES = {
   androidDark: [
@@ -37,9 +38,9 @@ export const HeaderImage = ({ index, style, ...props }: {
   props?: ImageProps;
 }) => {
   const isAndroid = Platform.OS === 'android';
-  const scheme = useColorScheme();
+  const theme = useTheme();
 
-  if (scheme === 'dark') {
+  if (theme === 'dark') {
     return <Image style={style} {...props} source={isAndroid ? HEADER_IMAGES.androidDark[index] : HEADER_IMAGES.iosDark[index]} />;
   } else {
     return <Image style={style} {...props} source={isAndroid ? HEADER_IMAGES.androidLight[index] : HEADER_IMAGES.iosLight[index]} />;

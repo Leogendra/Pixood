@@ -1,14 +1,15 @@
+import { t } from '../../helpers/translation';
 import useColors from '@/hooks/useColors';
-import { LogItem } from '@/hooks/useLogs';
+import { LogEntry } from '@/hooks/useLogs';
 import { useNavigation } from '@react-navigation/native';
-import { t } from 'i18n-js';
+// Removed t from i18n-js import
 import { Text, View } from 'react-native';
 import { SectionHeader } from './SectionHeader';
 
 export const Message = ({
   item,
 }: {
-  item: LogItem;
+  item: LogEntry;
 }) => {
   const navigation = useNavigation();
   const colors = useColors();
@@ -32,7 +33,7 @@ export const Message = ({
           flexDirection: 'row',
         }}
       >
-        {item?.message?.length > 0 ? (
+        {item?.notes?.length > 0 ? (
           <View
             style={{
               width: '100%',
@@ -52,7 +53,7 @@ export const Message = ({
                   lineHeight: 23,
                   width: '100%',
                 }}
-              >{item.message}</Text>
+              >{item.notes}</Text>
             </View>
           </View>
         ) : (

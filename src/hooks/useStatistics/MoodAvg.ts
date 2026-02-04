@@ -1,11 +1,12 @@
-import { LogItem, RATING_KEYS } from "../useLogs";
+import { LogEntry } from "../useLogs";
 import { getLogDays } from '@/lib/utils';
+import { NUMBER_OF_RATINGS } from '@/constants/Config';
 
 export interface MoodAvgData {
-  ratingHighestKey: LogItem["rating"];
+  ratingHighestKey: 'negative' | 'neutral' | 'positive';
   ratingHighestPercentage: number;
   distribution: {
-    key: LogItem["rating"];
+    key: number;
     count: number;
   }[];
   itemsCount: number;
@@ -18,9 +19,7 @@ export const defaultMoodAvgData: MoodAvgData = {
   distribution: [],
 }
 
-export const getMoodAvgData = (items: LogItem[]): MoodAvgData => {
-  const keys: LogItem["rating"][] = [...RATING_KEYS].reverse()
-
+export const getMoodAvgData = (items: LogEntry[]): MoodAvgData => {
   const moods = {
     negative: 0,
     neutral: 0,
@@ -29,26 +28,29 @@ export const getMoodAvgData = (items: LogItem[]): MoodAvgData => {
 
   const avgMoods = getLogDays(items)
 
-  avgMoods.forEach((item) => {
-    if (["bad", "very_bad", "extremely_bad"].includes(item.ratingAvg)) {
+  // Count mood categories based on numeric rating averages
+  avgMoods.forEach((day) => {
+    const avg = day.ratingAvg;
+    
+    if (avg <= 3) {
       moods.negative++
-    }
-
-    if (["good", "very_good", "extremely_good"].includes(item.ratingAvg)) {
+    } else if (avg >= 5) {
       moods.positive++
-    }
-
-    if (["neutral"].includes(item.ratingAvg)) {
+    } else {
       moods.neutral++
     }
   })
 
   const rating_total = moods.negative + moods.neutral + moods.positive;
 
-  const rating_distribution = keys.map((key) => {
-    const count = items.filter((item) => item.rating === key).length;
+  // Create distribution for each rating value (1 to NUMBER_OF_RATINGS)
+  const rating_distribution = Array.from({ length: NUMBER_OF_RATINGS }, (_, i) => {
+    const ratingValue = i + 1;
+    const count = items.reduce((acc, item) => {
+      return acc + (item.rating?.filter(r => r === ratingValue).length || 0);
+    }, 0);
     return {
-      key: key as LogItem["rating"],
+      key: ratingValue,
       count,
     };
   });
@@ -60,11 +62,11 @@ export const getMoodAvgData = (items: LogItem[]): MoodAvgData => {
 
   const ratingHighestKey = Object.keys(moods).reduce((a, b) =>
     moods[a] > moods[b] ? a : b
-  ) as LogItem["rating"];
+  ) as 'negative' | 'neutral' | 'positive';
 
-  const percentage = Math.round(
+  const percentage = rating_total > 0 ? Math.round(
     (moods[ratingHighestKey] / rating_total) * 100
-  );
+  ) : 0;
 
   return {
     ratingHighestKey,

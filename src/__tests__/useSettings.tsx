@@ -1,4 +1,5 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
+// Removed AsyncStorage import
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { act, renderHook } from '@testing-library/react-hooks'
 import _ from 'lodash'
 import { INITIAL_STATE, SettingsProvider, STORAGE_KEY, useSettings } from '../hooks/useSettings'
@@ -158,16 +159,16 @@ describe('useSettings()', () => {
     await hook.waitForNextUpdate()
 
     await act(() => {
-      hook.result.current.state.toggleStep('feedback')
+      hook.result.current.state.toggleStep('tags')
     })
 
-    expect(hook.result.current.state.settings.steps.length).toEqual(5)
+    expect(hook.result.current.state.settings.steps.includes('tags')).toEqual(false)
 
     await act(() => {
-      hook.result.current.state.toggleStep('feedback')
+      hook.result.current.state.toggleStep('tags')
     })
 
-    expect(hook.result.current.state.settings.steps[4]).toEqual('message')
+    expect(hook.result.current.state.settings.steps.includes('tags')).toEqual(true)
   })
 
   test('should `toggleStep` with value', async () => {
@@ -184,9 +185,8 @@ describe('useSettings()', () => {
       "rating",
       "sleep",
       "emotions",
-      "message",
-      "feedback",
       "tags",
+      "message",
     ])
   })
 
@@ -195,10 +195,10 @@ describe('useSettings()', () => {
     await hook.waitForNextUpdate()
 
     await act(() => {
-      hook.result.current.state.toggleStep('feedback')
+      hook.result.current.state.toggleStep('tags')
     })
 
-    expect(hook.result.current.state.hasStep('feedback')).toEqual(false)
+    expect(hook.result.current.state.hasStep('tags')).toEqual(false)
   })
 
 })

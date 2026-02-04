@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import useColors from '../../../hooks/useColors';
-import { useAnalytics } from '../../../hooks/useAnalytics';
 import { useStatistics } from '../../../hooks/useStatistics';
 import { MoodAvgCard } from '../MoodAvgCard';
 import { MoodPeaksCard } from '../MoodPeaksCards';
@@ -20,8 +19,8 @@ import { SleepQualityChartCard } from '../SleepQualityGraph';
 export const StatisticsHighlights = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const colors = useColors()
-  const analytics = useAnalytics();
   const statistics = useStatistics()
+  const [highlights, setHighlights] = useState<Record<string, any>>({});
 
   const showMoodAvg = statistics.isAvailable("mood_avg")
   const showMoodPeaksPositve = statistics.isAvailable("mood_peaks_positive")
@@ -83,10 +82,7 @@ export const StatisticsHighlights = ({ navigation }) => {
       cards.mood_chart_item_count = logState.items.filter((item) => dayjs(item.dateTime).isAfter(dayjs().subtract(14, "day"))).length
     }
 
-    analytics.track('statistics_all_highlights', {
-      itemsCount: statistics.state.itemsCount,
-      ...cards
-    })
+    setHighlights(cards)
   }, [JSON.stringify(statistics.state)])
 
   return (

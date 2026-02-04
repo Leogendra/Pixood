@@ -1,23 +1,34 @@
+import { adjustPaletteSizeInterpolate } from '@/constants/Colors/PaletteUtils';
+import { NUMBER_OF_RATINGS, COLOR_PALETTE_PRESETS } from '@/constants/Config';
+import { getCustomScale } from '@/constants/Colors/Scales';
 import { IScale } from '@/constants/Colors/Scales';
+import { useSettings } from "./useSettings";
+import { useTheme } from "./useTheme";
 import useColors from "./useColors";
-import { RATING_KEYS } from "./useLogs";
-import { SettingsState, useSettings } from "./useSettings";
 
-export default function useScale(
-  type?: SettingsState['scaleType']
-) {
-  const colors = useColors()
-  const { settings } = useSettings()
 
-  const _type = type || settings.scaleType
 
-  const scaleColors = {} as IScale
-  RATING_KEYS.forEach((label, index) => {
-    scaleColors[label] = colors.scales[_type][label]
-  })
 
-  return {
-    colors: scaleColors,
-    labels: RATING_KEYS
-  }
+export default function useScale() {
+    const colors = useColors();
+    const { settings } = useSettings();
+    const theme = useTheme();
+
+    let scale: IScale;
+
+    if (settings.customPalette) {
+        scale = getCustomScale(settings.customPalette);
+    }
+    else if (settings.palettePresetId) {
+        scale = colors.scales[settings.palettePresetId];
+    }
+    else {
+        const defaultPalette = adjustPaletteSizeInterpolate(COLOR_PALETTE_PRESETS[0].colors);
+        scale = getCustomScale(defaultPalette);
+    }
+
+    return {
+        colors: scale,
+        labels: Array.from({ length: NUMBER_OF_RATINGS }, (_, i) => NUMBER_OF_RATINGS - i)
+    }
 }

@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { LogItem, RATING_MAPPING } from "../useLogs";
+import { LogEntry } from "../useLogs";
 
 type PeriodDataPoint = {
   date: Date;
@@ -13,7 +13,7 @@ export interface MoodTrendData {
   ratingsPeriode2: PeriodDataPoint[];
   diff: number;
   status: 'improved' | 'declined';
-  items: (LogItem & { value: number })[]
+  items: (LogEntry & { value: number })[]
 }
 
 export const defaultMoodTrendData: MoodTrendData = {
@@ -28,28 +28,32 @@ export const defaultMoodTrendData: MoodTrendData = {
 
 export const SCALE_TYPE = 'week';
 export const SCALE_RANGE = 24;
-const DEFAULT_WEEK_AVG = 3;
+const DEFAULT_WEEK_AVG = 4; // Middle of 1-7 scale
 
-export const getMoodTrendData = (items: LogItem[]): MoodTrendData => {
+// Helper to calculate average rating from an array of ratings
+const calculateAverage = (ratings: number[]): number => {
+  if (ratings.length === 0) return DEFAULT_WEEK_AVG;
+  return ratings.reduce((a, b) => a + b, 0) / ratings.length;
+}
+
+export const getMoodTrendData = (items: LogEntry[]): MoodTrendData => {
   const ratingsPeriode1: PeriodDataPoint[] = []
   const ratingsPeriode2: PeriodDataPoint[] = []
 
   for (let i = SCALE_RANGE / 2; i < SCALE_RANGE; i++) {
     const start = dayjs().subtract(i, SCALE_TYPE).startOf(SCALE_TYPE);
-    const end = dayjs().subtract(i, SCALE_TYPE).endOf(SCALE_TYPE);
     const _items = items
-      .map(item => ({
-        ...item,
-        value: RATING_MAPPING[item.rating],
-      }))
       .filter((item) => {
         const itemDate = dayjs(item.dateTime);
         return itemDate.isSame(start, SCALE_TYPE)
       })
-    let ratingAverage = DEFAULT_WEEK_AVG;
-    if (_items.length > 0) {
-      ratingAverage = Math.floor(_items.reduce((acc, item) => acc + item.value, 0) / _items.length * 100) / 100;
-    }
+    
+    // Collect all rating values from all entries in this week
+    const allRatings = _items.flatMap(item => item.rating || []);
+    const ratingAverage = allRatings.length > 0 
+      ? Math.floor(calculateAverage(allRatings) * 100) / 100
+      : DEFAULT_WEEK_AVG;
+    
     ratingsPeriode1.push({
       date: start.toDate(),
       value: ratingAverage,
@@ -58,20 +62,17 @@ export const getMoodTrendData = (items: LogItem[]): MoodTrendData => {
 
   for (let i = 0; i < SCALE_RANGE / 2; i++) {
     const start = dayjs().subtract(i, SCALE_TYPE).startOf(SCALE_TYPE);
-    const end = dayjs().subtract(i, SCALE_TYPE).endOf(SCALE_TYPE);
     const _items = items
-      .map(item => ({
-        ...item,
-        value: RATING_MAPPING[item.rating],
-      }))
       .filter((item) => {
         const itemDate = dayjs(item.dateTime);
         return itemDate.isSame(start, SCALE_TYPE)
       })
-    let ratingAverage = DEFAULT_WEEK_AVG;
-    if (_items.length > 0) {
-      ratingAverage = Math.floor(_items.reduce((acc, item) => acc + item.value, 0) / _items.length * 100) / 100;
-    }
+    
+    const allRatings = _items.flatMap(item => item.rating || []);
+    const ratingAverage = allRatings.length > 0
+      ? Math.floor(calculateAverage(allRatings) * 100) / 100
+      : DEFAULT_WEEK_AVG;
+    
     ratingsPeriode2.push({
       date: start.toDate(),
       value: ratingAverage,
@@ -90,7 +91,9 @@ export const getMoodTrendData = (items: LogItem[]): MoodTrendData => {
     status: avgPeriod1 < avgPeriod2 ? 'improved' : 'declined',
     items: items.map(item => ({
       ...item,
-      value: RATING_MAPPING[item.rating],
+      value: item.rating && item.rating.length > 0 
+        ? calculateAverage(item.rating) 
+        : DEFAULT_WEEK_AVG,
     }))
   }
 }

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { View } from 'react-native';
 import { t } from '@/helpers/translation';
-import { LogItem } from '../../hooks/useLogs';
+import { LogEntry } from '../../hooks/useLogs';
 import { StatsCard } from "./StatsCard";
 
 export const Stats = ({
@@ -10,11 +10,11 @@ export const Stats = ({
   prevItems,
 }: {
   date,
-  items: LogItem[];
-  prevItems: LogItem[];
+  items: LogEntry[];
+  prevItems: LogEntry[];
 }) => {
-  const words = items.reduce((acc, item) => acc + item.message.split(' ').length, 0);
-  const wordsPrev = prevItems.reduce((acc, item) => acc + item.message.split(' ').length, 0);
+  const words = items.reduce((acc, item) => acc + item.notes.split(' ').length, 0);
+  const wordsPrev = prevItems.reduce((acc, item) => acc + item.notes.split(' ').length, 0);
   const wordsDiff = _.round(Math.abs(words - wordsPrev));
 
   const wordsPerDay = _.round(words / date.daysInMonth(), 2);

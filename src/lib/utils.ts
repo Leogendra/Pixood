@@ -3,138 +3,130 @@ import dayjs from 'dayjs';
 import _ from 'lodash';
 import { t } from '@/helpers/translation';
 import { DATE_FORMAT } from '@/constants/Config';
-import { LogDay, LogItem, RATING_MAPPING, SLEEP_QUALITY_MAPPING } from '@/hooks/useLogs';
+import { LogDay, LogEntry } from '@/hooks/useLogs';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
-export const getItemsCoverage = (items: LogItem[]) => {
-  let itemsCoverage = 0;
+export const getItemsCoverage = (items: LogEntry[]) => {
+    let itemsCoverage = 0;
 
-  const itemsSorted = _.sortBy(items, (item) => item.dateTime);
+    const itemsSorted = _.sortBy(items, (item) => item.dateTime);
 
-  if (itemsSorted.length > 0) {
-    const days = dayjs().diff(dayjs(itemsSorted[0].dateTime), "day");
-    itemsCoverage = Math.round((itemsSorted.length / days) * 100);
-  }
+    if (itemsSorted.length > 0) {
+        const days = dayjs().diff(dayjs(itemsSorted[0].dateTime), "day");
+        itemsCoverage = Math.round((itemsSorted.length / days) * 100);
+    }
 
-  return itemsCoverage;
+    return itemsCoverage;
 };
 
-export const getAverageMood = (items: LogItem[]): LogItem['rating'] | null => {
-  let averageRating = 0;
+export const getAverageMood = (items: LogEntry[]): number | null => {
+    if (items.length === 0) return null;
 
-  if (items.length > 0) {
-    const sum = items.reduce((acc, item) => acc + RATING_MAPPING[item.rating], 0);
-    averageRating = Math.round(sum / items.length);
-  } else {
-    return null;
-  }
+    // Flatten all ratings from all items into a single array
+    const allRatings = items.flatMap(item => item.rating || []);
 
-  return _.invert(RATING_MAPPING)[averageRating] as LogItem['rating'];
+    if (allRatings.length === 0) return null;
+
+    const sum = allRatings.reduce((acc, rating) => acc + rating, 0);
+    return Math.round(sum / allRatings.length);
 }
 
-export const getAverageSleepQuality = (items: LogItem[]): number | null => {
-  let averageSleepQuality = 0;
-
-  if (items.length > 0) {
-    const sum = items.reduce((acc, item) => acc + SLEEP_QUALITY_MAPPING[item.sleep?.quality], 0);
-    averageSleepQuality = Math.round(sum / items.length);
-  } else {
-    return null;
-  }
-
-  return averageSleepQuality;
+export const getAverageSleepQuality = (items: LogEntry[]): number | null => {
+    const allSleep = items.flatMap((item) => (item.metrics?.sleep ?? []).filter((v) => typeof v === 'number'));
+    if (allSleep.length === 0) return null;
+    const sum = allSleep.reduce((acc, v) => acc + v, 0);
+    return Math.round(sum / allSleep.length * 100) / 100;
 }
 
-export const getLogDays = (items: LogItem[]): LogDay[] => {
-  const moodsPerDay = _.groupBy(items, (item) => dayjs(item.dateTime).format(DATE_FORMAT))
+export const getLogDays = (items: LogEntry[]): LogDay[] => {
+    const moodsPerDay = _.groupBy(items, (item) => dayjs(item.dateTime).format(DATE_FORMAT))
 
-  return Object.keys(moodsPerDay).map((date) => {
-    const items = moodsPerDay[date]
-    const avgMood = getAverageMood(items)
-    const avgSleepQuality = getAverageSleepQuality(items)
+    return Object.keys(moodsPerDay).map((date) => {
+        const items = moodsPerDay[date]
+        const avgMood = getAverageMood(items)
+        // Compute average per metric (record of number[])
+        const metricsAccumulator: Record<string, number[]> = {}
 
-    if (avgMood === null) return null
+        items.forEach((item) => {
+            Object.entries(item.metrics || {}).forEach(([key, values]) => {
+                const numericValues = values.filter((v) => typeof v === 'number') as number[];
+                if (numericValues.length === 0) return;
+                metricsAccumulator[key] = [...(metricsAccumulator[key] || []), ...numericValues];
+            })
+        })
 
-    return {
-      date,
-      ratingAvg: avgMood,
-      sleepQualityAvg: avgSleepQuality,
-      items,
+        const metricsAvg = Object.fromEntries(
+            Object.entries(metricsAccumulator).map(([key, values]) => {
+                const sum = values.reduce((acc, v) => acc + v, 0);
+                const avg = sum / values.length;
+                return [key, Math.round(avg * 100) / 100];
+            })
+        );
+
+        const avgSleepQuality = metricsAvg.sleep ?? null;
+
+        if (avgMood === null) return null
+
+        return {
+            date,
+            ratingAvg: avgMood,
+            metricsAvg,
+            sleepQualityAvg: avgSleepQuality,
+            items,
+        }
+    }).filter((item) => item !== null) as LogDay[]
+}
+
+export const getItemDateTitle = (dateTime: LogEntry['dateTime']) => {
+    const isSmallScreen = SCREEN_WIDTH < 350;
+
+    if (dayjs(dateTime).isSame(dayjs(), 'day')) {
+        return `${t('today')}, ${dayjs(dateTime).format('HH:mm')}`
     }
-  }).filter((item) => item !== null) as LogDay[]
-}
 
-export const getItemDateTitle = (dateTime: LogItem['dateTime']) => {
-  const isSmallScreen = SCREEN_WIDTH < 350;
+    if (dayjs(dateTime).isSame(dayjs().subtract(1, 'day'), 'day')) {
+        return `${t('yesterday')}, ${dayjs(dateTime).format('HH:mm')}`
+    }
 
-  if (dayjs(dateTime).isSame(dayjs(), 'day')) {
-    return `${t('today')}, ${dayjs(dateTime).format('HH:mm')}`
-  }
-
-  if (dayjs(dateTime).isSame(dayjs().subtract(1, 'day'), 'day')) {
-    return `${t('yesterday')}, ${dayjs(dateTime).format('HH:mm')}`
-  }
-
-  return (
-    isSmallScreen ?
-      dayjs(dateTime).format('l - LT') :
-      dayjs(dateTime).format('ddd, L - LT')
-  )
+    return (
+        isSmallScreen ?
+            dayjs(dateTime).format('l - LT') :
+            dayjs(dateTime).format('ddd, L - LT')
+    )
 }
 
 export const getDayDateTitle = (date: LogDay['date']) => {
 
-  if (dayjs(date).isSame(dayjs(), 'day')) {
-    return t('today')
-  }
+    if (dayjs(date).isSame(dayjs(), 'day')) {
+        return t('today')
+    }
 
-  if (dayjs(date).isSame(dayjs().subtract(1, 'day'), 'day')) {
-    return t('yesterday')
-  }
+    if (dayjs(date).isSame(dayjs().subtract(1, 'day'), 'day')) {
+        return t('yesterday')
+    }
 
-  return dayjs(date).format('dddd, L')
+    return dayjs(date).format('dddd, L')
 }
 
 var isoDateRegExp = new RegExp(/(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/);
 
 export const isISODate = (date: string) => {
-  return isoDateRegExp.test(date);
+    return isoDateRegExp.test(date);
 };
 
-export const getMostUsedEmotions = (items: LogItem[]) => {
-  const emotions = items.reduce((acc, item) => {
-    if (item.emotions) {
-      item.emotions.forEach((emotion) => {
-        if (acc[emotion]) {
-          acc[emotion] += 1;
-        } else {
-          acc[emotion] = 1;
-        }
-      });
-    }
-
-    return acc;
-  }, {} as Record<string, number>);
-
-  return Object.keys(emotions)
-    .map((emotion) => ({
-      key: emotion,
-      count: emotions[emotion],
-    }))
-    .sort((a, b) => b.count - a.count);
-}
+// Removed getMostUsedEmotions - emotions feature has been deprecated
 
 export const wait = async (timeout: number) => {
-  return new Promise(resolve => {
-    setTimeout(resolve, timeout);
-  });
+    return new Promise(resolve => {
+        setTimeout(resolve, timeout);
+    });
 };
 
-export const getItemsCountPerDayAverage = (items: LogItem[]) => {
-  if (items.length === 0) return 0;
+export const getItemsCountPerDayAverage = (items: LogEntry[]) => {
+    if (items.length === 0) return 0;
 
-  const itemsSorted = _.sortBy(items, (item) => item.dateTime);
-  const days = dayjs().diff(dayjs(itemsSorted[0].dateTime), "day");
-  return Math.round(items.length / days);
+    const itemsSorted = _.sortBy(items, (item) => item.dateTime);
+    const days = dayjs().diff(dayjs(itemsSorted[0].dateTime), "day");
+    return Math.round(items.length / days);
 }

@@ -1,11 +1,11 @@
-import { BigCard } from "@/components/BigCard"
 import { NotEnoughDataOverlay } from "@/components/Statistics/NotEnoughDataOverlay"
+import { useLogState } from "@/hooks/useLogs"
 import { t } from "@/helpers/translation"
 import useColors from "@/hooks/useColors"
-import { RATING_MAPPING, useLogState } from "@/hooks/useLogs"
+import { Text, View } from "react-native"
 import dayjs, { Dayjs } from "dayjs"
 import _ from 'lodash'
-import { Text, View } from "react-native"
+
 
 export const BestMonth = ({
   date,
@@ -19,7 +19,7 @@ export const BestMonth = ({
     .map((item) => ({
       ...item,
       month: dayjs(item.dateTime).format('YYYY-MM'),
-      ratingValue: RATING_MAPPING[item.rating],
+      ratingValue: item.rating && item.rating.length > 0 ? item.rating[0] : 0,
     }))
 
   const bestMonthByRatingValue = _.chain(items)

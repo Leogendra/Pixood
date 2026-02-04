@@ -6,7 +6,7 @@ import useScale from "@/hooks/useScale";
 export const Bar = ({
   height, ratingName,
 }) => {
-  const scale = useScale();
+  const { colors: scale } = useScale();
 
   return (
     <View
@@ -21,7 +21,7 @@ export const Bar = ({
         style={{
           height,
           width: '100%',
-          backgroundColor: scale.colors[ratingName].background,
+          backgroundColor: scale[ratingName].background,
           borderTopLeftRadius: 4,
           borderTopRightRadius: 4,
         }} />

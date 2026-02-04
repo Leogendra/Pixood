@@ -1,5 +1,4 @@
 import { Card } from '@/components/Statistics/Card';
-import { CardFeedback } from '@/components/Statistics/CardFeedback';
 import { DATE_FORMAT } from '@/constants/Config';
 import { t } from '@/helpers/translation';
 import { useCalendarNavigation } from '@/hooks/useCalendarNavigation';
@@ -21,14 +20,14 @@ const DayDot = ({
   day: LogDay | undefined,
 }) => {
   const colors = useColors()
-  const scale = useScale()
+  const { colors: scale } = useScale()
   const haptics = useHaptics()
   const calendarNavigation = useCalendarNavigation()
 
   const color = day ? {
-    bg: scale.colors[day.ratingAvg].background,
-    text: scale.colors[day.ratingAvg].text,
-    border: scale.colors[day.ratingAvg].text,
+    bg: scale[day.ratingAvg].background,
+    text: scale[day.ratingAvg].text,
+    border: scale[day.ratingAvg].text,
   } : {
     bg: colors.statisticsCalendarDotBackground,
     text: colors.statisticsCalendarDotText,
@@ -168,12 +167,6 @@ export const MoodPeaksCard = ({
         data={data}
         startDate={startDate}
         endDate={endDate}
-      />
-      <CardFeedback
-        analyticsId={`mood_peaks_${type}`}
-        analyticsData={{
-          days_count: data.days.length,
-        }}
       />
     </Card>
   )

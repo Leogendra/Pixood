@@ -3,7 +3,6 @@ import { load, store } from '@/helpers/storage';
 import { t } from '@/helpers/translation';
 import _ from 'lodash';
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from "react";
-import { useAnalytics } from './useAnalytics';
 import { useLogState, useLogUpdater } from './useLogs';
 import { useSettings } from './useSettings';
 
@@ -117,8 +116,8 @@ function TagsProvider({
     dispatch({ type: 'delete', payload: tagId })
 
     const newItems = logsState.items.map((item) => {
-      if (item.tags.some((tag: Tag) => tag.id === tagId)) {
-        const tags = item.tags.filter(itemTag => itemTag.id !== tagId) || [];
+      if (item.tags.some((tag) => tag.tagId === tagId)) {
+        const tags = item.tags.filter(itemTag => itemTag.tagId !== tagId) || [];
         item.tags = tags;
       }
       return item;
@@ -145,13 +144,6 @@ function TagsProvider({
       const json = await load<State>(STORAGE_KEY)
       if (json !== null) {
         dispatch({ type: 'import', payload: json })
-      } else if (settings?.tags) {
-        dispatch({
-          type: 'import',
-          payload: {
-            tags: settings.tags
-          }
-        })
       } else {
         dispatch({ type: 'reset', payload: INITIAL_STATE })
       }

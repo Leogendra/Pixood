@@ -16,6 +16,7 @@ export const YLabels = ({
         return (
           // @ts-ignore
           <G
+            key={`sleep-ylabel-${sleepQuality}-${index}`}
             width="8"
             height="16"
             x={(YLegendWidth - 20) / 2}
@@ -23,7 +24,7 @@ export const YLabels = ({
           >
             <Mask
               id={`mask0_1_5${index}`}
-              style={{ maskType: 'alpha' }}
+              // style={{ maskType: 'alpha' }} // Removed - not supported in React Native SVG
               // @ts-ignore
               maskUnits="userSpaceOnUse"
               x="0"

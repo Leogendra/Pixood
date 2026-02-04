@@ -1,38 +1,87 @@
-import * as Updates from 'expo-updates';
-
+// Global configuration constants
+export const NUMBER_OF_RATINGS = 7;
 export const MIN_TAG_LENGTH = 3;
 export const MAX_TAG_LENGTH = 30;
-
-export const MAX_TAGS = 50;
-export const MAX_ENTRIES_PER_DAY = 50;
-export const STATISTIC_MIN_LOGS = 7;
-
-export const DATE_FORMAT = 'YYYY-MM-DD';
-
+export const MAX_TAGS = 100;
+export const STATISTIC_MIN_LOGS = 1;
+export const DATE_FORMAT = "YYYY-MM-DD";
 export const TAG_COLOR_NAMES = [
-  "slate",
-  "red",
-  "orange",
-  "amber",
-  "yellow",
-  "lime",
-  "green",
-  "emerald",
-  "teal",
-  "cyan",
-  "sky",
-  "blue",
-  "indigo",
-  "violet",
-  "purple",
-  "fuchsia",
-  "pink",
-  "rose",
+    "slate",
+    "red",
+    "orange",
+    "amber",
+    "yellow",
+    "lime",
+    "green",
+    "emerald",
+    "teal",
+    "cyan",
+    "sky",
+    "blue",
+    "indigo",
+    "violet",
+    "purple",
+    "fuchsia",
+    "pink",
+    "rose",
 ];
 
-export const TRACKING_ENABLED = !__DEV__;
+// Storage keys
+export const TAGS_STORAGE_KEY = 'PIXEL_TRACKER_TAG_CATEGORIES';
+export const STORAGE_KEY = "PIXEL_TRACKER_SETTINGS";
 
-export const CHANGELOG_URL = 'https://pixy.hellonext.co/embed/c?no_header=true'
-export const FEEDBACK_FEATURES_URL = 'https://pixy.hellonext.co/embed/b/feedback?no_header=true'
 
-export const IS_PROD = Updates.channel === 'production';
+// Color palette presets
+export interface ColorPalettePreset {
+    id: string;
+    name: string;
+    colors: Array<string>;
+}
+
+
+export const COLOR_PALETTE_PRESETS: ColorPalettePreset[] = [
+    {
+        id: "1",
+        name: "Default",
+        colors: ["#E22230", "#E28422", "#FBEE45", "#A0E865", "#039D07"]
+    },
+    {
+        id: "2",
+        name: "Reverted",
+        colors: ["#06f8ae", "#97fadd", "#f2ffe5", "#fdd689", "#fd9f09"]
+    },
+    {
+        id: "3",
+        name: "Ocean",
+        colors: ["#034efc", "#0ab3fc", "#3de5fc", "#0af7d4", "#02fa9a"]
+    },
+    {
+        id: "4",
+        name: "Sunset",
+        colors: ["#3a86ff", "#5be0ff", "#fffd82", "#ff9a5b", "#ff3e7e"]
+    },
+    {
+        id: "5",
+        name: "unknown",
+        colors: ["#8c510a", "#d8b365", "#f6e8c3", "#5ab4ac", "#01665e"]
+    },
+    {
+        id: "6",
+        name: "YIP",
+        colors: ["#7a59c1", "#576fc1", "#00bcd4", "#94cb6a", "#55b253"]
+    },
+    {
+        id: "7",
+        name: "unknown",
+        colors: ["#252f38", "#597285", "#e8f1ee", "#fdcd0f", "#fa8702"]
+    }
+];
+
+
+// name will be localized in the app
+export const DEFAULT_TAGS = {
+    emotions: ["happy", "sad", "angry", "anxious", "excited", "calm", "frustrated", "grateful", "optimistic", "tired"],
+    activities: ["work", "exercise", "reading", "meditation", "socializing", "hobby", "travel", "cooking", "cleaning", "shopping"],
+    weather: ["sunny", "rainy", "cloudy", "snowy", "windy", "stormy", "humid", "foggy", "cold", "hot"],
+    health: ["feeling_good", "sick", "headache", "back_pain", "allergy", "insomnia", "fatigue", "nausea", "fever", "cough", "stress"],
+};

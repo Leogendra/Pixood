@@ -1,6 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { renderHook, act } from "@testing-library/react-hooks";
-import { AnalyticsProvider } from "../hooks/useAnalytics";
 import {
   LogsProvider,
   useLogState,
@@ -25,11 +24,9 @@ import { _generateItem } from "./utils";
 
 const wrapper = ({ children }) => (
   <SettingsProvider>
-    <AnalyticsProvider>
       <LogsProvider>
         <TagsProvider>{children}</TagsProvider>
       </LogsProvider>
-    </AnalyticsProvider>
   </SettingsProvider>
 );
 
@@ -60,16 +57,16 @@ const testTags: Tag[] = [
 
 const testItems: LogsState['items'] = [
   _generateItem({
-    date: '2022-01-01',
-    rating: 'neutral',
-    message: 'test message',
-    tags: [...testTags],
+    dateTime: '2022-01-01T12:00:00Z',
+    rating: [3],
+    notes: 'test message',
+    tags: testTags.map(t => ({ tagId: t.id })),
   }),
   _generateItem({
-    date: '2022-01-02',
-    rating: 'neutral',
-    message: '🦄',
-    tags: [...testTags],
+    dateTime: '2022-01-02T12:00:00Z',
+    rating: [3],
+    notes: '🦄',
+    tags: testTags.map(t => ({ tagId: t.id })),
   })
 ]
 

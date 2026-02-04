@@ -1,15 +1,11 @@
 import { View } from 'react-native';
 import useColors from '../../hooks/useColors';
+import useScale from '../../hooks/useScale';
 import { RATING_KEYS } from '../../hooks/useLogs';
 import { ColorDot } from './ColorDot';
 
-export function Scale({
-  type,
-}: {
-  type: string;
-}) {
-  const colors = useColors();
-  const scaleColors = colors.scales[type];
+export function Scale() {
+  const { colors: scaleColors } = useScale();
   const scaleKeys = RATING_KEYS.slice().reverse()
 
   return (

@@ -14,6 +14,8 @@ import { Archive } from 'lucide-react-native';
 import { ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+// DEPRECATED - use TagCategoriesScreen instead
+
 export const SettingsTags = ({ navigation }: RootStackScreenProps<'SettingsTags'>) => {
   const colors = useColors()
   const insets = useSafeAreaInsets();

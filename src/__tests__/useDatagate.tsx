@@ -1,10 +1,10 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// Removed AsyncStorage import
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { act, renderHook } from "@testing-library/react-hooks";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { Alert } from 'react-native';
-import { AnalyticsProvider } from "../hooks/useAnalytics";
 import { useDatagate } from "../hooks/useDatagate";
 
 import _ from "lodash";
@@ -19,31 +19,29 @@ import { _generateItem } from "./utils";
 
 const wrapper = ({ children }) => (
   <SettingsProvider>
-    <AnalyticsProvider>
       <LogsProvider>
         <TagsProvider>{children}</TagsProvider>
       </LogsProvider>
-    </AnalyticsProvider>
   </SettingsProvider>
 );
 
 const testItems: LogsState["items"] = [
   _generateItem({
-    date: "2022-01-01",
-    rating: "neutral",
-    message: "test message",
+    dateTime: "2022-01-01T12:00:00Z",
+    rating: [3],
+    notes: "test message",
     tags: [],
   }),
   _generateItem({
-    date: "2022-01-02",
-    rating: "neutral",
-    message: "🦄",
+    dateTime: "2022-01-02T12:00:00Z",
+    rating: [3],
+    notes: "🦄",
     tags: [
       {
-        id: "bb65f208-4e4c-11ed-bdc3-0242ac120002",
+        tagId: "bb65f208-4e4c-11ed-bdc3-0242ac120002",
       },
       {
-        id: "bb65f208-4e4c-11ed-bdc3-0242ac120002",
+        tagId: "bb65f208-4e4c-11ed-bdc3-0242ac120002",
       },
     ],
   })

@@ -1,9 +1,9 @@
 import _ from "lodash";
-import { LogItem } from "@/hooks/useLogs";
+import { LogEntry } from "@/types/logFormat";
 import { ImportData } from "./Import";
 
 interface MigratedData extends ImportData {
-  items: LogItem[];
+  items: LogEntry[];
 }
 
 export const migrateImportData = (data: ImportData): MigratedData => {
@@ -25,7 +25,7 @@ export const migrateImportData = (data: ImportData): MigratedData => {
     return newItem;
   });
 
-  let _tags = (tags || settings?.tags || []).map((tag) => {
+  let _tags = (tags || []).map((tag) => {
     if (tag.color === "stone") {
       tag.color = "slate";
     }
