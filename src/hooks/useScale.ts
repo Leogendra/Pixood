@@ -17,14 +17,14 @@ export default function useScale() {
     let scale: IScale;
 
     if (settings.customPalette) {
-        scale = getCustomScale(settings.customPalette);
+        scale = getCustomScale(settings.customPalette, theme);
     }
     else if (settings.palettePresetId) {
         scale = colors.scales[settings.palettePresetId];
     }
     else {
         const defaultPalette = adjustPaletteSizeInterpolate(COLOR_PALETTE_PRESETS[0].colors);
-        scale = getCustomScale(defaultPalette);
+        scale = getCustomScale(defaultPalette, theme);
     }
 
     return {
