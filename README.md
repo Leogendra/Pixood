@@ -41,8 +41,25 @@ yarn start
 This will launch the Expo CLI in your terminal with options to run on different platforms.
 
 
-## Running on Different Platforms
+### Building APK
 
+To build an APK without Expo/EAS, you must generate the Android project and then use Gradle.
+
+1. Generate the Android folder
+```bash
+npx expo prebuild --platform android
+```
+
+2. Build the release APK
+```bash
+cd android
+./gradlew assembleRelease
+```
+
+The generated APK will be located in `android/app/build/outputs/apk/release/`.
+
+## Running on Different Platforms
+ 
 ### A. Run on Android Emulator
 
 #### Setup (first time only):
