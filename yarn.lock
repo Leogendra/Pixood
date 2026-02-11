@@ -3637,11 +3637,11 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*":
-  version: 25.2.1
-  resolution: "@types/node@npm:25.2.1"
+  version: 25.2.3
+  resolution: "@types/node@npm:25.2.3"
   dependencies:
     undici-types: ~7.16.0
-  checksum: 46c46b19b358258e065b13a521ea44e025edddbd68b6769979a2e7d78b4561d6fc570511ed46a267ab39d7abd657e9833a1e08abb60d64d206086ae35e94310c
+  checksum: 315b6a7c7f7e5b39b92fffc65fcc0de10543c7ac0dc3754aa072ae9c8a82e6eb90ca1b6156766f07d0ba1e210e39f999f75b4b3a7b88ddab30e3c3ba827e85bf
   languageName: node
   linkType: hard
 
@@ -3703,11 +3703,11 @@ __metadata:
   linkType: hard
 
 "@types/react@npm:*, @types/react@npm:>=16.9.0":
-  version: 19.2.13
-  resolution: "@types/react@npm:19.2.13"
+  version: 19.2.14
+  resolution: "@types/react@npm:19.2.14"
   dependencies:
     csstype: ^3.2.2
-  checksum: fc3ca7226a7f1c54fa3ef185019f4cfb76f9088f4fed8a7eec0ddfcecfe41fa64c649ce6cf7facbce871343a8cb600a5afed68e15f6e85fe4163c5c8db8fc2b8
+  checksum: ddd330292abf2dc2cfa65188e1c5f67cc6e90f8d8ffb088f753a38db9d123f942c23d324a6b7e8027ff04f22b395492150f54b9b520b6cbec1e8841e669f2c19
   languageName: node
   linkType: hard
 
@@ -7840,9 +7840,9 @@ __metadata:
   linkType: hard
 
 "flow-parser@npm:0.*":
-  version: 0.299.0
-  resolution: "flow-parser@npm:0.299.0"
-  checksum: 57853a40b0073743a4df416ba3ac043c199f37198e69f3df4bc0ef51004f9cd1a43ae78cdb868a2d4f00ee92a8cc714c982065fc5f98cdefd7b899a3ce43f283
+  version: 0.300.0
+  resolution: "flow-parser@npm:0.300.0"
+  checksum: aa63b7c721c306c0b7dcd09428c94657a4a292c7af46325373c575250b7112f4af6fa5d1a84888f4b3b68a4ebc45ee24d48dd99a180d083cc1b072b7580d7474
   languageName: node
   linkType: hard
 
@@ -8197,13 +8197,13 @@ __metadata:
   linkType: hard
 
 "glob@npm:^13.0.0":
-  version: 13.0.1
-  resolution: "glob@npm:13.0.1"
+  version: 13.0.2
+  resolution: "glob@npm:13.0.2"
   dependencies:
     minimatch: ^10.1.2
     minipass: ^7.1.2
     path-scurry: ^2.0.0
-  checksum: 6952c5d1326b3e6f6d5e4198099337f96a9908c8f9488359fac4299bf1dc90e752aec2f55e5fda7f54071d58ce802147c64ac07ffb5bf8825254309fa9c13f34
+  checksum: 2e66a89f66af9813e7e0385f7b66228a6ec849f531467c3e92a634d8fbddf3595279301277938edaf5aa25b9e12999556d5934a6b9c83920a851007b9d837de1
   languageName: node
   linkType: hard
 
@@ -9442,10 +9442,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isexe@npm:^3.1.1":
-  version: 3.1.2
-  resolution: "isexe@npm:3.1.2"
-  checksum: 86c239573fca3dad0c000a82e3857374f38c8af3dea1ab03a7b69e96e83ef119b344a9a62513cbb88f282ac8d81cd3612ed338ae7cba6cf9ce70587bd2a43e9a
+"isexe@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "isexe@npm:4.0.0"
+  checksum: 2ead327ef596042ef9c9ec5f236b316acfaedb87f4bb61b3c3d574fb2e9c8a04b67305e04733bde52c24d9622fdebd3270aadb632adfbf9cadef88fe30f479e5
   languageName: node
   linkType: hard
 
@@ -10643,9 +10643,9 @@ __metadata:
   linkType: hard
 
 "lru-cache@npm:^11.0.0, lru-cache@npm:^11.1.0, lru-cache@npm:^11.2.1":
-  version: 11.2.5
-  resolution: "lru-cache@npm:11.2.5"
-  checksum: b3cd18066c81e0540429507036e0a37f860325348f6a85376ed71196e5b893668af410849574c5fb49110bc0afff76b4f87646cb93b2482a315c9e7b8435630f
+  version: 11.2.6
+  resolution: "lru-cache@npm:11.2.6"
+  checksum: 26fe602c92a0cb7a8da9a85db162ddd810d84507d9c4ef8d95a785a805648f9579e1148aaeac260f6b6315197bcf27c1b7e60a0a066621d6e95b3587699a0c70
   languageName: node
   linkType: hard
 
@@ -14907,11 +14907,11 @@ __metadata:
   linkType: hard
 
 "ssri@npm:^13.0.0":
-  version: 13.0.0
-  resolution: "ssri@npm:13.0.0"
+  version: 13.0.1
+  resolution: "ssri@npm:13.0.1"
   dependencies:
     minipass: ^7.0.3
-  checksum: 9705dff9e686b11f3035fb4c3d44ce690359a15a54adcd6a18951f2763f670877321178dc72c37a2b804dba3287ecaa48726dbd0cff79b2715b1cc24521b3af3
+  checksum: 42acbdbd485e9a5a198de2198b6fd474d1e84bff6bea5d95aa0a8aa26ea78ce44f2097ac481e767f0406de7ceccfa4669584116d4fcf2d4e2dba7034d7c34930
   languageName: node
   linkType: hard
 
@@ -16312,8 +16312,8 @@ __metadata:
   linkType: hard
 
 "webpack@npm:^5.64.4":
-  version: 5.105.0
-  resolution: "webpack@npm:5.105.0"
+  version: 5.105.1
+  resolution: "webpack@npm:5.105.1"
   dependencies:
     "@types/eslint-scope": ^3.7.7
     "@types/estree": ^1.0.8
@@ -16345,7 +16345,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 15ee99e08e5ff88a34e84641b99bfe1416d4e0f7fc8929e50ca33294cf731188ce233ce9f311f51298abdc106ae03e8b2321dc74a8120f90ddeeec43ba744659
+  checksum: 89f98730b1cff1bf1c46fc2716584f48b4ef826a54c6b07ceadec05f0c118f1f8e4720ee753cff63e6be216c93f78ac9496209aa1110ccae448aa78cd5801107
   languageName: node
   linkType: hard
 
@@ -16475,13 +16475,13 @@ __metadata:
   linkType: hard
 
 "which@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "which@npm:6.0.0"
+  version: 6.0.1
+  resolution: "which@npm:6.0.1"
   dependencies:
-    isexe: ^3.1.1
+    isexe: ^4.0.0
   bin:
     node-which: bin/which.js
-  checksum: df19b2cd8aac94b333fa29b42e8e371a21e634a742a3b156716f7752a5afe1d73fb5d8bce9b89326f453d96879e8fe626eb421e0117eb1a3ce9fd8c97f6b7db9
+  checksum: dbea77c7d3058bf6c78bf9659d2dce4d2b57d39a15b826b2af6ac2e5a219b99dc8a831b79fdbc453c0598adb4f3f84cf9c2491fd52beb9f5d2dececcad117f68
   languageName: node
   linkType: hard
 
