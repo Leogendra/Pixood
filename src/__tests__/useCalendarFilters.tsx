@@ -2,8 +2,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { act, renderHook } from '@testing-library/react-hooks'
 import { CalendarFiltersProvider, useCalendarFilters } from '../hooks/useCalendarFilters'
-import { LogsProvider, LogsState, STORAGE_KEY } from '../hooks/useLogs'
+import { LogsProvider, LogsState } from '../hooks/useLogs'
 import { SettingsProvider } from '../hooks/useSettings'
+import { SETTINGS_STORAGE_KEY } from '@/constants/Config'
 import { _generateItem } from './utils'
 
 const wrapper = ({ children }) => (
@@ -133,7 +134,7 @@ xdescribe('useCalendarFilters()', () => {
     })
 
     test('should filter for `ratings`', async () => {
-        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ items: testItems }))
+        AsyncStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ items: testItems }))
 
         const hook = _renderHook()
         await hook.waitForNextUpdate()
@@ -154,7 +155,7 @@ xdescribe('useCalendarFilters()', () => {
     })
 
     test('should filter for `tags`', async () => {
-        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ items: testItems }))
+        AsyncStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ items: testItems }))
 
         const hook = _renderHook()
         await hook.waitForNextUpdate()
@@ -188,7 +189,7 @@ xdescribe('useCalendarFilters()', () => {
     })
 
     test('should filter for `text`', async () => {
-        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ items: testItems }))
+        AsyncStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ items: testItems }))
 
         const hook = _renderHook()
         await hook.waitForNextUpdate()
@@ -222,7 +223,7 @@ xdescribe('useCalendarFilters()', () => {
     })
 
     test('should filter for `text` and `ratings`', async () => {
-        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ items: testItems }))
+        AsyncStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ items: testItems }))
 
         const hook = _renderHook()
         await hook.waitForNextUpdate()
@@ -243,7 +244,7 @@ xdescribe('useCalendarFilters()', () => {
     })
 
     test('should filter for `text` and `tags`', async () => {
-        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ items: testItems }))
+        AsyncStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ items: testItems }))
 
         const hook = _renderHook()
         await hook.waitForNextUpdate()

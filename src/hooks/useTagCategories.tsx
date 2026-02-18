@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from "react";
-import { TAGS_STORAGE_KEY, DEFAULT_TAGS } from '@/constants/Config';
+import { TAG_CATEGORIES_STORAGE_KEY, DEFAULT_TAGS } from '@/constants/Config';
 import { useLogState, useLogUpdater } from './useLogs';
 import { load, store } from '@/helpers/storage';
 import { useSettings } from './useSettings';
@@ -221,7 +221,7 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
         if (!settings.loaded) return;
 
         (async () => {
-            const stored = await load<TagCategoriesState>(TAGS_STORAGE_KEY);
+            const stored = await load<TagCategoriesState>(TAG_CATEGORIES_STORAGE_KEY);
             if (stored !== null) {
                 // Already has data, just load it (don't override with defaults)
                 dispatch({ type: 'LOAD_DATA', payload: stored });
@@ -238,7 +238,7 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
     // Save to storage
     useEffect(() => {
         if (state.loaded) {
-            store<Omit<TagCategoriesState, 'loaded'>>(TAGS_STORAGE_KEY, {
+            store<Omit<TagCategoriesState, 'loaded'>>(TAG_CATEGORIES_STORAGE_KEY, {
                 categories: state.categories,
                 tags: state.tags,
                 version: state.version,

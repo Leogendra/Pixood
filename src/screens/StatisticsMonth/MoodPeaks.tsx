@@ -19,25 +19,21 @@ export const MoodPeaks = ({
         days: [{
             date: dayjs().format(DATE_FORMAT),
             ratingAvg: 2,
-            sleepQualityAvg: 1,
             metricsAvg: {},
             items: [],
         }, {
             date: dayjs(date).add(4, 'day').format(DATE_FORMAT),
             ratingAvg: 1,
-            sleepQualityAvg: 1,
             metricsAvg: {},
             items: [],
         }, {
             date: dayjs(date).add(8, 'day').format(DATE_FORMAT),
             ratingAvg: 2,
-            sleepQualityAvg: 1,
             metricsAvg: {},
             items: [],
         }, {
             date: dayjs(date).add(12, 'day').format(DATE_FORMAT),
             ratingAvg: 1,
-            sleepQualityAvg: 1,
             metricsAvg: {},
             items: [],
         }]

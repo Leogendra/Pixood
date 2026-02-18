@@ -253,9 +253,6 @@ const light = {
     chatBotMessageBackground: colors.white,
     chatBotMessageText: colors.black,
 
-    sleepQualityEmpty: colors.indigo[100],
-    sleepQualityFull: colors.indigo[500],
-
     switchThumbColor: '#333',
     scales: scales.light,
     tags: tagsLight,
@@ -475,9 +472,6 @@ const dark: IColors & {
     chatBotMessageText: colors.white,
     chatUserMessageBackground: colors.blue[800],
     chatUserMessageText: colors.white,
-
-    sleepQualityEmpty: colors.indigo[800],
-    sleepQualityFull: colors.indigo[400],
 
     switchThumbColor: '#FFF',
     scales: scales.dark,

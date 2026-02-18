@@ -1,4 +1,4 @@
-import { TAG_COLOR_NAMES } from '@/constants/Config';
+import { TAG_COLOR_NAMES, TAGS_STORAGE_KEY } from '@/constants/Config';
 import { load, store } from '@/helpers/storage';
 import { t } from '@/helpers/translation';
 import _ from 'lodash';
@@ -6,7 +6,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useReducer 
 import { useLogState, useLogUpdater } from './useLogs';
 import { useSettings } from './useSettings';
 
-export const STORAGE_KEY = 'PIXEL_TRACKER_TAGS'
+export const STORAGE_KEY = TAGS_STORAGE_KEY;
 
 export type Tag = {
   id: string;

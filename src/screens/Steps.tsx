@@ -4,7 +4,6 @@ import MenuList from '@/components/MenuList';
 import MenuListItem from '@/components/MenuListItem';
 import { PageWithHeaderLayout } from '@/components/PageWithHeaderLayout';
 import { t } from '@/helpers/translation';
-import { BedDouble } from 'lucide-react-native';
 import { ReactElement } from 'react';
 import { ScrollView, Switch, Text, View } from 'react-native';
 import { Bell, FileText, Heart, MessageSquare, Sun, Tag } from 'react-native-feather';
@@ -20,7 +19,6 @@ export const StepsScreen = ({ navigation }: RootStackScreenProps<'Steps'>) => {
   } = {
     'rating': <Sun width={20} height={20} stroke={colors.text} />,
     'message': <FileText width={20} height={20} color={colors.text} />,
-    'sleep': <BedDouble size={20} color={colors.text} />,
     'tags': <Tag width={20} height={20} color={colors.text} />,
     'reminder': <Bell width={20} height={20} color={colors.text} />,
   }
@@ -70,14 +68,7 @@ export const StepsScreen = ({ navigation }: RootStackScreenProps<'Steps'>) => {
                       color: colors.text,
                     }}
                   >{t(`logger_step_${option}`)}</Text>
-                  {option === 'sleep' && (
-                    <Indicator
-                      colorName='purple'
-                      style={{
-                        marginLeft: 8,
-                      }}
-                    >{t('new')}</Indicator>
-                  )}
+
                 </View>
 
               }

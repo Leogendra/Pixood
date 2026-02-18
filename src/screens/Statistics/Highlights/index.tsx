@@ -14,7 +14,9 @@ import dayjs from 'dayjs';
 import { DATE_FORMAT } from '@/constants/Config';
 import { MoodChart } from '../MoodChart';
 import { useLogState } from '../../../hooks/useLogs';
-import { SleepQualityChartCard } from '../SleepQualityGraph';
+
+
+
 
 export const StatisticsHighlights = ({ navigation }) => {
   const insets = useSafeAreaInsets();
@@ -30,7 +32,6 @@ export const StatisticsHighlights = ({ navigation }) => {
 
   const logState = useLogState();
 
-  const showSleepQualityChart = statistics.isAvailable("sleep_quality_distribution")
   const showMoodChart = logState.items.filter((item) => dayjs(item.dateTime).isAfter(dayjs().subtract(14, "day"))).length >= 4
 
   useEffect(() => {
@@ -51,7 +52,6 @@ export const StatisticsHighlights = ({ navigation }) => {
       tags_distribution_item_count?: number
       mood_chart_show: boolean;
       mood_chart_item_count?: number
-      sleep_quality_chart_show: boolean;
     } = {
       mood_avg_show: showMoodAvg,
       mood_peaks_positive_show: showMoodPeaksPositve,
@@ -59,7 +59,6 @@ export const StatisticsHighlights = ({ navigation }) => {
       tags_peaks_show: showTagPeaks,
       tags_distribution_show: showTagsDistribution,
       mood_chart_show: showMoodChart,
-      sleep_quality_chart_show: showSleepQualityChart,
     }
 
     if (showMoodAvg) {
@@ -119,13 +118,6 @@ export const StatisticsHighlights = ({ navigation }) => {
               {showMoodChart && (
                 <MoodChart
                   title={t("statistics_mood_chart_highlights_title")}
-                  startDate={dayjs().subtract(14, "days").format(DATE_FORMAT)}
-                />
-              )}
-
-              {showSleepQualityChart && (
-                <SleepQualityChartCard
-                  title={t("statistics_sleep_quality_chart_highlights_title")}
                   startDate={dayjs().subtract(14, "days").format(DATE_FORMAT)}
                 />
               )}

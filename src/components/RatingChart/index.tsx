@@ -1,6 +1,6 @@
 import Svg, { Line, Polyline } from 'react-native-svg';
 import useColors from '@/hooks/useColors';
-import { RATING_KEYS } from '@/hooks/useLogs';
+import { NUMBER_OF_RATINGS } from '@/constants/Config';
 import { Grid } from './Grid';
 import { XLabels } from './XLabels';
 import { YLabels } from './YLabels';
@@ -37,10 +37,10 @@ export const RatingChart = ({
     const XLegendHeight = 32;
     const YLegendWidth = 32;
 
-    const _height = Math.round(height / RATING_KEYS.length) * RATING_KEYS.length;
+    const _height = Math.round(height / NUMBER_OF_RATINGS) * NUMBER_OF_RATINGS;
     const _width = width - YLegendWidth - paddingRight - paddingLeft;
 
-    const rowHeight = Math.round(height / RATING_KEYS.length);
+    const rowHeight = Math.round(height / NUMBER_OF_RATINGS);
     const outerHeight = _height + XLegendHeight + rowHeight * 1;
     const outerWidth = width;
 

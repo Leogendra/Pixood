@@ -1,6 +1,6 @@
 import { Line } from 'react-native-svg';
 import useColors from '@/hooks/useColors';
-import { RATING_KEYS } from '@/hooks/useLogs';
+import { NUMBER_OF_RATINGS } from '@/constants/Config';
 
 export const Grid = ({
     width, relativeY,
@@ -9,11 +9,11 @@ export const Grid = ({
 
     return (
         <>
-            {RATING_KEYS.slice(0, RATING_KEYS.length - 1).map((rating, index) => {
+            {Array.from({ length: NUMBER_OF_RATINGS - 1 }).map((_, index) => {
                 const y = relativeY(index);
                 return (
                     <Line
-                        key={`l-${rating}-${index}`}
+                        key={`l-${index}`}
                         x1={0}
                         y1={y - 1}
                         x2={width}

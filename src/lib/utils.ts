@@ -32,13 +32,6 @@ export const getAverageMood = (items: LogEntry[]): number | null => {
     return Math.round(sum / allRatings.length);
 }
 
-export const getAverageSleepQuality = (items: LogEntry[]): number | null => {
-    const allSleep = items.flatMap((item) => (item.metrics?.sleep ?? []).filter((v) => typeof v === 'number'));
-    if (allSleep.length === 0) return null;
-    const sum = allSleep.reduce((acc, v) => acc + v, 0);
-    return Math.round(sum / allSleep.length * 100) / 100;
-}
-
 export const getLogDays = (items: LogEntry[]): LogDay[] => {
     const moodsPerDay = _.groupBy(items, (item) => dayjs(item.dateTime).format(DATE_FORMAT))
 
@@ -64,15 +57,12 @@ export const getLogDays = (items: LogEntry[]): LogDay[] => {
             })
         );
 
-        const avgSleepQuality = metricsAvg.sleep ?? null;
-
         if (avgMood === null) return null
 
         return {
             date,
             ratingAvg: avgMood,
             metricsAvg,
-            sleepQualityAvg: avgSleepQuality,
             items,
         }
     }).filter((item) => item !== null) as LogDay[]

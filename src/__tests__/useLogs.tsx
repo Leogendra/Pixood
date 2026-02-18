@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { act, renderHook } from '@testing-library/react-hooks'
-import { LogsProvider, LogsState, STORAGE_KEY, useLogState, useLogUpdater } from '../hooks/useLogs'
+import { LogsProvider, LogsState, LOGS_STORAGE_KEY, useLogState, useLogUpdater } from '../hooks/useLogs'
 import { SettingsProvider } from '../hooks/useSettings'
 import { _generateItem } from './utils'
 
@@ -61,7 +61,7 @@ describe('useLogs()', () => {
     })
 
     test('should load `state` from async storage', async () => {
-        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ items: testItems }))
+        await AsyncStorage.setItem(LOGS_STORAGE_KEY, JSON.stringify({ items: testItems }))
 
         const hook = _renderHook()
         await hook.waitForNextUpdate()
@@ -76,7 +76,7 @@ describe('useLogs()', () => {
     })
 
     test('should initiate `state` with empty `items` when async storage is falsely', async () => {
-        await AsyncStorage.setItem(STORAGE_KEY, '🐇')
+        await AsyncStorage.setItem(LOGS_STORAGE_KEY, '🐇')
         const hook = _renderHook()
         await hook.waitForNextUpdate()
         expect(console.error).toHaveBeenCalled();
@@ -125,7 +125,7 @@ describe('useLogs()', () => {
     })
 
     test('should updateLogs', async () => {
-        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ items: [] }))
+        await AsyncStorage.setItem(LOGS_STORAGE_KEY, JSON.stringify({ items: [] }))
 
         const hook = _renderHook()
         await hook.waitForNextUpdate()
@@ -166,7 +166,7 @@ describe('useLogs()', () => {
     })
 
     test('should reset', async () => {
-        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ items: [] }))
+        await AsyncStorage.setItem(LOGS_STORAGE_KEY, JSON.stringify({ items: [] }))
 
         const hook = _renderHook()
         await hook.waitForNextUpdate()

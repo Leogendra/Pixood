@@ -1,10 +1,10 @@
 import { View } from "react-native";
-import { RATING_KEYS } from "@/hooks/useLogs";
+import { NUMBER_OF_RATINGS } from "@/constants/Config";
 import useScale from "@/hooks/useScale";
 
 
 export const Bar = ({
-  height, ratingName,
+  height, ratingValue,
 }) => {
   const { colors: scale } = useScale();
 
@@ -13,7 +13,7 @@ export const Bar = ({
       style={{
         alignItems: "center",
         justifyContent: "flex-end",
-        flex: RATING_KEYS.length,
+        flex: NUMBER_OF_RATINGS,
         marginHorizontal: 2,
       }}
     >
@@ -21,7 +21,7 @@ export const Bar = ({
         style={{
           height,
           width: '100%',
-          backgroundColor: scale[ratingName].background,
+          backgroundColor: scale[ratingValue].background,
           borderTopLeftRadius: 4,
           borderTopRightRadius: 4,
         }} />

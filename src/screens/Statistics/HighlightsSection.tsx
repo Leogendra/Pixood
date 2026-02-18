@@ -15,7 +15,6 @@ import { MoodAvgData } from "../../hooks/useStatistics/MoodAvg";
 import { MoodAvgCard } from "./MoodAvgCard";
 import { MoodChart } from "./MoodChart";
 import { MoodPeaksCard } from "./MoodPeaksCards";
-import { SleepQualityChartCard } from "./SleepQualityGraph";
 import { Subtitle } from "./Subtitle";
 import { TagPeaksCard } from "./TagPeaksCards";
 import { TagsDistributionCard } from "./TagsDistributionCard";
@@ -64,7 +63,6 @@ export const HighlightsSection = ({ items }: { items: LogEntry[] }) => {
   const showTagPeaks = statistics.isHighlighted("tags_peaks");
   const showTagsDistribution = statistics.isAvailable("tags_distribution")
   const showMoodChart = logState.items.filter((item) => dayjs(item.dateTime).isAfter(dayjs().subtract(14, "day"))).length >= 4
-  const showSleepQualityChart = statistics.isAvailable("sleep_quality_distribution")
 
   useEffect(() => {
     if (!statistics.state.loaded) return;
@@ -84,7 +82,6 @@ export const HighlightsSection = ({ items }: { items: LogEntry[] }) => {
       tags_distribution_item_count?: number
       mood_chart_show: boolean;
       mood_chart_item_count?: number
-      sleep_quality_distribution_show: boolean;
     } = {
       mood_avg_show: showMoodAvg,
       mood_peaks_positive_show: showMoodPeaksPositve,
@@ -92,7 +89,6 @@ export const HighlightsSection = ({ items }: { items: LogEntry[] }) => {
       tags_peaks_show: showTagPeaks,
       tags_distribution_show: showTagsDistribution,
       mood_chart_show: showMoodChart,
-      sleep_quality_distribution_show: showSleepQualityChart,
     }
 
     if (showMoodAvg) {
@@ -142,13 +138,6 @@ export const HighlightsSection = ({ items }: { items: LogEntry[] }) => {
         {showMoodChart && (
           <MoodChart
             title={t("statistics_mood_chart_highlights_title")}
-            startDate={dayjs().subtract(14, "days").format(DATE_FORMAT)}
-          />
-        )}
-
-        {showSleepQualityChart && (
-          <SleepQualityChartCard
-            title={t("statistics_sleep_quality_chart_highlights_title")}
             startDate={dayjs().subtract(14, "days").format(DATE_FORMAT)}
           />
         )}

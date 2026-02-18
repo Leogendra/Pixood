@@ -7,7 +7,6 @@ import { Edit, Trash } from "lucide-react-native";
 import { ScrollView, Text, View } from "react-native";
 import { Message } from "./Message";
 import { RatingDot } from "./RatingDot";
-import { Sleep } from "./Sleep";
 import { Tags } from "./Tags";
 
 const EntryHeader = ({
@@ -134,19 +133,6 @@ export const Entry = ({
               paddingBottom: 24,
             }}
           >
-            <View
-              style={{
-                marginTop: 8,
-              }}
-            >
-              <Sleep item={item} />
-            </View>
-            <View
-              style={{
-                marginTop: 8,
-              }}
-            >
-            </View>
             <View
               style={{
                 marginTop: 8,
