@@ -277,7 +277,7 @@ function RootNavigator() {
                         name="Colors"
                         component={ColorsScreen}
                         options={{
-                            title: t('colors'),
+                            title: t('settings_palette'),
                             ...defaultPageOptions,
                         }}
                     />

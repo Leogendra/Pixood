@@ -48,17 +48,11 @@ export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>)
                         isLink
                     />
                     <MenuListItem
-                        title={t('colors')}
+                        title={t('settings_palette')}
                         iconLeft={<Droplet width={18} color={colors.menuListItemIcon} />}
                         onPress={() => navigation.navigate('Colors')}
                         isLink
                     />
-                    {/* <MenuListItem
-                        title={t('tags')}
-                        iconLeft={<Tag width={18} color={colors.menuListItemIcon} />}
-                        onPress={() => navigation.navigate('SettingsTags')}
-                        isLink
-                    /> */}
                     <MenuListItem
                         title={t('tag_categories_management')}
                         iconLeft={<Tag width={18} color={colors.menuListItemIcon} />}
@@ -98,18 +92,12 @@ export const SettingsScreen = ({ navigation }: RootStackScreenProps<'Settings'>)
                         iconLeft={<Github width={18} color={colors.menuListItemIcon} />}
                         isLast
                     />
-                    {/* <MenuListItem
-                        title={t('rate_this_app')}
-                        onPress={() => askToRateApp()}
-                        iconLeft={<Star width={18} color={colors.menuListItemIcon} />}
-                        isLast
-                    /> */}
                 </MenuList>
 
                 <MenuListHeadline>{t('settings_development')}</MenuListHeadline>
                 <MenuList>
                     <MenuListItem
-                        title={`${t('onboarding')}`}
+                        title={`${t('settings_onboarding')}`}
                         iconLeft={<Smartphone width={18} color={colors.menuListItemIcon} />}
                         onPress={() => navigation.navigate('Onboarding')}
                     />

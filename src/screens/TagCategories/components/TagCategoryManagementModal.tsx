@@ -31,7 +31,6 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
     const [name, setName] = useState('');
 
     const handleAddPresetTags = async (categoryKey: string) => {
-        // Get the preset name - use translation key pattern or fall back to key
         const presetName = t(`tag_category_${categoryKey}`);
         
         // Check if category with this name already exists
@@ -40,7 +39,6 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
         );
 
         if (existingCategory) {
-            // Show warning and ask for confirmation
             Alert.alert(
                 t('category_already_exists'),
                 t('category_already_exists_message'),
@@ -58,8 +56,8 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
                     },
                 ]
             );
-        } else {
-            // Create directly
+        } 
+        else {
             await createPresetCategoryAndTags(categoryKey, presetName);
         }
     };
@@ -85,7 +83,7 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
                     continue;
                 }
 
-                await tagUpdater.createTag(categoryId, tagTitle);
+                await tagUpdater.createTag(categoryId, t(`tag_name_${tagTitle}`));
                 existingTitles.add(normalizedTitle);
             }
         }
@@ -93,13 +91,16 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
         onClose();
     };
 
+
     useEffect(() => {
         if (category && !isCreating) {
             setName(category.name);
-        } else {
+        } 
+        else {
             setName('');
         }
     }, [category, isCreating, visible]);
+
 
     const handleSave = () => {
         if (!name.trim()) {
@@ -117,6 +118,7 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
 
         onClose();
     };
+
 
     const handleDelete = () => {
         if (!category) return;
@@ -140,6 +142,7 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
             ]
         );
     };
+
 
     return (
         <Modal
@@ -229,9 +232,8 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
                             </Text>
 
                             {Object.keys(DEFAULT_TAGS).map((categoryKey) => {
-                                const defaultTagsForKey = DEFAULT_TAGS[categoryKey as keyof typeof DEFAULT_TAGS];
-                                const tagList = Array.isArray(defaultTagsForKey) ? defaultTagsForKey : [];
-                                if (tagList.length === 0) return null;
+                                const tagList = DEFAULT_TAGS[categoryKey as keyof typeof DEFAULT_TAGS];
+                                if (tagList.length === 0) { return null; }
 
                                 return (
                                     <View
@@ -256,9 +258,8 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
                                                 fontWeight: '600',
                                                 color: colors.text,
                                                 flex: 1,
-                                                textTransform: 'capitalize',
                                             }}>
-                                                {categoryKey}
+                                                {t(`tag_category_${categoryKey}`)}
                                             </Text>
                                             <TouchableOpacity
                                                 onPress={() => handleAddPresetTags(categoryKey)}
@@ -301,7 +302,7 @@ export const TagCategoryManagementModal: React.FC<TagCategoryManagementModalProp
                                                         color: colors.text,
                                                         fontWeight: '500',
                                                     }}>
-                                                        {tag}
+                                                        {t(`tag_name_${tag}`)}
                                                     </Text>
                                                 </View>
                                             ))}
