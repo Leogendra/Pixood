@@ -1,15 +1,18 @@
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { SlideMoodButton } from "../components/SlideMoodButton";
+import { SlideHeadline } from "../components/SlideHeadline";
+import { CategoryTagSelector } from "./CategoryTagSelector";
 import { getLogEditMarginTop } from "@/helpers/responsive";
+import { useTemporaryLog } from "@/hooks/useTemporaryLog";
+import { NUMBER_OF_RATINGS } from "@/constants/Config";
+import { ScrollView, Text, View } from "react-native";
+import { LogEntry } from "@/hooks/useLogs";
 import { t } from "@/helpers/translation";
 import useColors from "@/hooks/useColors";
-import { LogEntry } from "@/hooks/useLogs";
-import { useTemporaryLog } from "@/hooks/useTemporaryLog";
-import { ScrollView, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { SlideHeadline } from "../components/SlideHeadline";
-import { SlideMoodButton } from "../components/SlideMoodButton";
-import { CategoryTagSelector } from "./CategoryTagSelector";
 import TextArea from "../../TextArea";
-import { NUMBER_OF_RATINGS } from "@/constants/Config";
+
+
+
 
 const RATING_VALUES = Array.from({ length: NUMBER_OF_RATINGS }, (_, i) => i + 1);
 
@@ -45,39 +48,37 @@ export const UnifiedLoggerSlide = ({
                 }}
                 contentContainerStyle={{
                     paddingTop: marginTop,
-                    paddingBottom: insets.bottom + 40,
+                    paddingBottom: insets.bottom + 50,
                 }}
                 showsVerticalScrollIndicator={false}
             >
-                {/* Section Mood Rating */}
+
+                {/* Rating section */}
                 <View style={{ marginBottom: 40 }}>
                     <SlideHeadline style={{ marginBottom: 8 }}>
                         {t('log_modal_mood_question')}
                     </SlideHeadline>
-                    <Text style={{
-                        color: colors.textSecondary,
-                        fontSize: 16,
-                        marginBottom: 24,
-                    }}>
-                        {t('log_modal_mood_description')}
-                    </Text>
-                    <View style={{
-                        flexDirection: 'row',
-                        flexWrap: 'wrap',
-                        gap: 8,
-                        justifyContent: 'center',
-                    }}>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            flexWrap: 'nowrap',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: 8,
+                        }}
+                    >
+
                         {RATING_VALUES.map((rating) => (
                             <SlideMoodButton
                                 key={rating}
                                 rating={rating}
                                 selected={tempLog.data.rating?.includes(rating) || false}
                                 onPress={() => {
-                                    // Toggle rating in array
                                     const currentRatings = tempLog.data.rating || [];
                                     if (currentRatings.includes(rating)) {
                                         onRatingChange(currentRatings.filter(r => r !== rating));
-                                    } else {
+                                    }
+                                    else {
                                         onRatingChange([...currentRatings, rating]);
                                     }
                                 }}
@@ -86,18 +87,11 @@ export const UnifiedLoggerSlide = ({
                     </View>
                 </View>
 
-                {/* Section Tags par Catégories */}
+                {/* Tags section */}
                 <View style={{ marginBottom: 40 }}>
                     <SlideHeadline style={{ marginBottom: 8 }}>
                         {t('log_modal_tags_question')}
                     </SlideHeadline>
-                    <Text style={{
-                        color: colors.textSecondary,
-                        fontSize: 16,
-                        marginBottom: 16,
-                    }}>
-                        {t('log_modal_tags_description')}
-                    </Text>
                     <CategoryTagSelector
                         selectedTagIds={tempLog.data.selectedCategorizedTagIds || []}
                         onTagsChange={onTagsChange}
@@ -106,24 +100,19 @@ export const UnifiedLoggerSlide = ({
                     />
                 </View>
 
-                {/* Section Message/Notes */}
+                {/* Notes section */}
                 <View style={{ marginBottom: 20 }}>
                     <SlideHeadline style={{ marginBottom: 8 }}>
-                        {t('log_modal_message_question')}
+                        {t('log_modal_note_question')}
                     </SlideHeadline>
-                    <Text style={{
-                        color: colors.textSecondary,
-                        fontSize: 16,
-                        marginBottom: 16,
-                    }}>
-                        {t('log_modal_message_description')}
-                    </Text>
                     <TextArea
                         value={tempLog.data.notes}
                         onChange={onMessageChange}
-                        maxLength={10000}
+                        maxLength={99999}
                         style={{
                             minHeight: 100,
+                            // height: fitContent
+
                         }}
                     />
                 </View>

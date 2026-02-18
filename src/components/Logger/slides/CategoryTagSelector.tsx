@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import { CategorizedTag, TagCategory } from '@/types/tagCategories';
+import { useTagCategoriesState } from '@/hooks/useTagCategories';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { t } from '@/helpers/translation';
 import useColors from '@/hooks/useColors';
-import { useTagCategoriesState } from '@/hooks/useTagCategories';
-import { CategorizedTag, TagCategory } from '@/types/tagCategories';
+import React, { useState } from 'react';
+
+
+
 
 interface CategoryTagSelectorProps {
     selectedTagIds: string[];
@@ -11,6 +14,7 @@ interface CategoryTagSelectorProps {
     showDisable?: boolean;
     onDisableStep?: () => void;
 }
+
 
 export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
     selectedTagIds,
@@ -30,6 +34,7 @@ export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
         );
     };
 
+
     const toggleTag = (tagId: string) => {
         const newSelectedTags = selectedTagIds.includes(tagId)
             ? selectedTagIds.filter(id => id !== tagId)
@@ -38,14 +43,17 @@ export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
         onTagsChange(newSelectedTags);
     };
 
+
     const getCategoryTags = (categoryId: string): CategorizedTag[] => {
         return tagState.tags.filter(tag => tag.categoryId === categoryId && !tag.isArchived);
     };
+
 
     const getSelectedTagsCount = (categoryId: string): number => {
         const categoryTags = getCategoryTags(categoryId);
         return categoryTags.filter(tag => selectedTagIds.includes(tag.id)).length;
     };
+
 
     if (!tagState.loaded) {
         return (
@@ -62,6 +70,7 @@ export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
         );
     }
 
+    
     return (
         <View>
             {tagState.categories.map((category: TagCategory) => {
@@ -183,29 +192,6 @@ export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
                     </View>
                 );
             })}
-
-            {/* Disable option */}
-            {showDisable && (
-                <TouchableOpacity
-                    onPress={onDisableStep}
-                    style={{
-                        padding: 16,
-                        backgroundColor: colors.cardBackground,
-                        borderRadius: 12,
-                        borderWidth: 1,
-                        borderColor: colors.cardBorder,
-                        marginTop: 8,
-                    }}
-                >
-                    <Text style={{
-                        color: colors.textSecondary,
-                        textAlign: 'center',
-                        fontSize: 14,
-                    }}>
-                        {t('log_tags_disable')}
-                    </Text>
-                </TouchableOpacity>
-            )}
         </View>
     );
 };
