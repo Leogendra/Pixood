@@ -89,7 +89,7 @@ const EntryHeader = ({
                         onDelete(item);
                     }}
                 >
-                    <Trash color={colors.tint} size={22} />
+                    <Trash color={colors.tintSecondary} size={22} />
                 </LinkButton>
             </View>
         </View>

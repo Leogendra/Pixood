@@ -50,12 +50,13 @@ export const LogList = ({ route, navigation }: RootStackScreenProps<'LogList'>) 
 
     const remove = (item: LogEntry) => {
         logUpdater.deleteLog(item.id);
-        // navigation.goBack();
     };
 
 
     const _delete = (item: LogEntry) => {
-        askToRemove().then(() => remove(item));
+        askToRemove()
+            .then(() => remove(item))
+            .catch(() => {}); // user cancelled
     };
 
 

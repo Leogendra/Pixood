@@ -56,6 +56,7 @@ const light = {
     backgroundTertiary: colors.neutral[50],
     link: tintColorLight,
     tint: tintColorLight,
+    tintSecondary: colors.red[500],
 
     loadingIndicator: colors.neutral[500],
 
@@ -284,6 +285,7 @@ const dark: IColors & {
     backgroundTertiary: colors.neutral[700],
     link: tintColorDark,
     tint: tintColorDark,
+    tintSecondary: colors.red[500],
 
     loadingIndicator: '#fff',
 
