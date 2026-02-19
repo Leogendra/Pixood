@@ -47,7 +47,7 @@
     "log_modal_message_placeholder_4": "When did you feel authentic today?",
     "log_modal_message_placeholder_5": "When did you feel challenged today?",
     "log_modal_message_placeholder_6": "What are you looking for in the future?",
-    "log_modal_mood_question": "How was your day?",
+    "log_modal_score_question": "How was your day?",
     "log_modal_tags_question": "Add tags",
     "log_modal_note_question": "Add a note",
     "entries_per_day": "Avg. entries per day",
@@ -55,6 +55,9 @@
     "view_log_message": "Words",
     "view_log_message_empty": "A mysterious day, since it has nothing to reveal about itself.",
     "view_log_tags_empty": "No tags yet.",
+    "discard_changes": "Discard Changes",
+    "keep_editing": "Keep Editing",
+    "rating_required_message": "Select at least one mood before saving.",
 
     "app_theme": "App Theme",
     "theme_dark": "Dark",

@@ -11,6 +11,7 @@ import { RootStackParamList } from '../../types';
 import { StepsScreen } from '../screens/Steps';
 import { useTagsState } from '@/hooks/useTags';
 import Providers from '@/components/Providers';
+import { ToastProvider } from '@/hooks/useToast';
 import { Platform, View } from 'react-native';
 import { useLogState } from '@/hooks/useLogs';
 import { useTheme } from '@/hooks/useTheme';
@@ -91,7 +92,9 @@ function NavigationContent() {
                     : { dark: false, colors: Colors.light }
             }
         >
-            <RootNavigator />
+            <ToastProvider>
+                <RootNavigator />
+            </ToastProvider>
         </NavigationContainer>
     );
 }

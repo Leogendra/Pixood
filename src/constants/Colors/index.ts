@@ -78,6 +78,13 @@ const light = {
     logActionBorder: tintColorLight,
     logActionText: colors.neutral[500],
 
+    toastBackgroundError: "#EF4444",
+    toastBackgroundSuccess: "#22C55E",
+    toastBackgroundInfo: "#3B82F6",
+    toastTextError: '#FFF',
+    toastTextSuccess: '#FFF',
+    toastTextInfo: '#FFF',
+
     tagBackground: colors.white,
     tagText: colors.neutral[800],
     tagBorder: colors.white,
@@ -298,6 +305,13 @@ const dark: IColors & {
     logActionBackground: colors.neutral[800],
     logActionBorder: tintColorDark,
     logActionText: colors.neutral[300],
+
+    toastBackgroundError: "#EF4444",
+    toastBackgroundSuccess: "#22C55E",
+    toastBackgroundInfo: "#3B82F6",
+    toastTextError: '#FFF',
+    toastTextSuccess: '#FFF',
+    toastTextInfo: '#FFF',
 
     tagBackground: colors.neutral[900],
     tagText: colors.neutral[200],

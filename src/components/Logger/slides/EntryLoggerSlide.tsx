@@ -61,10 +61,10 @@ export const EntryLoggerSlide = ({
                     showsVerticalScrollIndicator={false}
                 >
 
-                    {/* Rating section */}
+                    {/* Score section */}
                     <View style={{ marginBottom: 40 }}>
                         <SlideHeadline style={{ marginBottom: 8 }}>
-                            {t('log_modal_mood_question')}
+                            {t('log_modal_score_question')}
                         </SlideHeadline>
                         <View
                             style={{
