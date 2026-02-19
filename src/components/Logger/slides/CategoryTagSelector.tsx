@@ -135,7 +135,7 @@ export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
                             </View>
                         </TouchableOpacity>
 
-                        {/* Category tags */}
+                        {/* Tag categories */}
                         {isExpanded && (
                             <View style={{
                                 marginTop: 8,

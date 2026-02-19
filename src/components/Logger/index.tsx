@@ -1,20 +1,23 @@
-import { DATE_FORMAT } from '@/constants/Config';
 import { askToCancel, askToDisableStep, askToRemove } from '@/helpers/prompts';
-import useColors from '@/hooks/useColors';
-import { useLogState, useLogUpdater } from '@/hooks/useLogs';
-import { LogEntry } from '@/types/logFormat';
-import { useSettings } from '@/hooks/useSettings';
 import { TemporaryLogState, useTemporaryLog } from '@/hooks/useTemporaryLog';
-import { useNavigation } from '@react-navigation/native';
-import dayjs from 'dayjs';
-import { useRef } from 'react';
 import { Keyboard, Platform, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { v4 as uuidv4 } from "uuid";
-import { SlideAction } from './components/SlideAction';
+import { useLogState, useLogUpdater } from '@/hooks/useLogs';
+import { EntryLoggerSlide } from './slides/EntryLoggerSlide';
+import { useNavigation } from '@react-navigation/native';
 import { SlideHeader } from './components/SlideHeader';
+import { SlideAction } from './components/SlideAction';
+import { DATE_FORMAT } from '@/constants/Config';
+import { useSettings } from '@/hooks/useSettings';
+import { LogEntry } from '@/types/logFormat';
+import useColors from '@/hooks/useColors';
 import { LoggerStep } from './config';
-import { UnifiedLoggerSlide } from './slides/UnifiedLoggerSlide';
+import { v4 as uuidv4 } from "uuid";
+import { useRef } from 'react';
+import dayjs from 'dayjs';
+
+
+
 
 export type LoggerMode = 'create' | 'edit'
 export type LoggerInterface = 'unified'
@@ -233,7 +236,7 @@ export const Logger = ({
                         }}
                     />
                 </View>
-                <UnifiedLoggerSlide
+                <EntryLoggerSlide
                     onRatingChange={(rating) => tempLog.update({ rating })}
                     onTagsChange={(tagIds) => tempLog.update({ selectedCategorizedTagIds: tagIds })}
                     onMessageChange={(notes) => tempLog.update({ notes })}
