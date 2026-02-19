@@ -1,177 +1,181 @@
-import LinkButton from "@/components/LinkButton";
-import useColors from "@/hooks/useColors";
-import { LogEntry } from "@/hooks/useLogs";
-import dayjs from "dayjs";
 import { LinearGradient } from "expo-linear-gradient";
 import { Edit, Trash } from "lucide-react-native";
 import { ScrollView, Text, View } from "react-native";
-import { Message } from "./Message";
+import LinkButton from "@/components/LinkButton";
+import { LogEntry } from "@/hooks/useLogs";
+import useColors from "@/hooks/useColors";
 import { RatingDot } from "./RatingDot";
+import { Message } from "./Message";
 import { Tags } from "./Tags";
+import dayjs from "dayjs";
+
+
+
 
 const EntryHeader = ({
-  item,
-  onEdit,
-  onDelete,
+    item,
+    onEdit,
+    onDelete,
 }: {
-  item: LogEntry;
-  onEdit: (item: LogEntry) => void;
-  onDelete: (item: LogEntry) => void;
+    item: LogEntry;
+    onEdit: (item: LogEntry) => void;
+    onDelete: (item: LogEntry) => void;
 }) => {
-  const colors = useColors();
+    const colors = useColors();
 
-  return (
-    <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderBottomColor: colors.logCardBorder,
-        borderBottomWidth: 1,
-        paddingBottom: 12,
-      }}
-    >
-      <RatingDot
-        rating={item.rating}
-      />
-      <View
-        style={{
-          marginLeft: 12,
-          justifyContent: 'center',
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 20,
-            fontWeight: 'bold',
-            color: colors.text,
-          }}
-        >{dayjs(item.dateTime).format('LT')}</Text>
-      </View>
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-        }}
-      >
-        <LinkButton
-          onPress={() => {
-            onEdit(item);
-          }}
-          style={{
-            marginLeft: -8,
-            marginTop: -8,
-            marginBottom: -8,
-            marginRight: 4,
-            paddingTop: 16,
-            paddingBottom: 16,
-            paddingLeft: 16,
-            paddingRight: 16,
-          }}
+    return (
+        <View
+            style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                borderBottomColor: colors.logCardBorder,
+                borderBottomWidth: 1,
+                paddingBottom: 12,
+            }}
         >
-          <Edit color={colors.tint} size={22} />
-        </LinkButton>
-        <LinkButton
-          style={{
-            marginLeft: -8,
-            marginTop: -8,
-            marginBottom: -8,
-            marginRight: -8,
-            paddingTop: 16,
-            paddingBottom: 16,
-            paddingLeft: 16,
-            paddingRight: 16,
-          }}
-          onPress={() => {
-            onDelete(item);
-          }}
-        >
-          <Trash color={colors.tint} size={22} />
-        </LinkButton>
-      </View>
-    </View>
-  );
+            <RatingDot
+                rating={item.rating}
+            />
+            <View
+                style={{
+                    marginLeft: 12,
+                    justifyContent: 'center',
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 20,
+                        fontWeight: 'bold',
+                        color: colors.text,
+                    }}
+                >{dayjs(item.dateTime).format('LT')}</Text>
+            </View>
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                }}
+            >
+                <LinkButton
+                    onPress={() => {
+                        onEdit(item);
+                    }}
+                    style={{
+                        marginLeft: -8,
+                        marginTop: -8,
+                        marginBottom: -8,
+                        marginRight: 4,
+                        paddingTop: 16,
+                        paddingBottom: 16,
+                        paddingLeft: 16,
+                        paddingRight: 16,
+                    }}
+                >
+                    <Edit color={colors.tint} size={22} />
+                </LinkButton>
+                <LinkButton
+                    style={{
+                        marginLeft: -8,
+                        marginTop: -8,
+                        marginBottom: -8,
+                        marginRight: -8,
+                        paddingTop: 16,
+                        paddingBottom: 16,
+                        paddingLeft: 16,
+                        paddingRight: 16,
+                    }}
+                    onPress={() => {
+                        onDelete(item);
+                    }}
+                >
+                    <Trash color={colors.tint} size={22} />
+                </LinkButton>
+            </View>
+        </View>
+    );
 };
 
-export const Entry = ({
-  item,
-  onEdit,
-  onDelete,
-}: {
-  item: LogEntry;
-  onEdit: (item: LogEntry) => void;
-  onDelete: (item: LogEntry) => void;
-}) => {
-  const colors = useColors();
 
-  return (
-    <View
-      style={{
-        flex: 1,
-      }}
-    >
-      <View
-        style={{
-          flex: 1,
-          paddingTop: 16,
-          paddingHorizontal: 16,
-          borderRadius: 12,
-          borderWidth: 1,
-          borderColor: colors.logCardBorder,
-          backgroundColor: colors.logCardBackground,
-          position: 'relative',
-        }}
-      >
-        <EntryHeader
-          item={item}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
-        <ScrollView>
-          <View
+export const Entry = ({
+    item,
+    onEdit,
+    onDelete,
+}: {
+    item: LogEntry;
+    onEdit: (item: LogEntry) => void;
+    onDelete: (item: LogEntry) => void;
+}) => {
+    const colors = useColors();
+
+    return (
+        <View
             style={{
-              paddingBottom: 24,
+                flex: 1,
             }}
-          >
+        >
             <View
-              style={{
-                marginTop: 8,
-              }}
+                style={{
+                    flex: 1,
+                    paddingTop: 16,
+                    paddingHorizontal: 16,
+                    borderRadius: 12,
+                    borderWidth: 1,
+                    borderColor: colors.logCardBorder,
+                    backgroundColor: colors.logCardBackground,
+                    position: 'relative',
+                }}
             >
-              <Tags item={item} />
+                <EntryHeader
+                    item={item}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                />
+                <ScrollView>
+                    <View
+                        style={{
+                            paddingBottom: 24,
+                        }}
+                    >
+                        <View
+                            style={{
+                                marginTop: 8,
+                            }}
+                        >
+                            <Tags item={item} />
+                        </View>
+                        <View
+                            style={{
+                                marginTop: 8,
+                            }}
+                        >
+                            <Message item={item} />
+                        </View>
+                    </View>
+                </ScrollView>
+                <LinearGradient
+                    colors={[colors.logCardBackground, colors.logCardBackgroundTransparent]}
+                    style={{
+                        position: 'absolute',
+                        height: 24,
+                        top: 67,
+                        left: 16,
+                        right: 16,
+                        zIndex: 999,
+                    }}
+                    pointerEvents="none" />
+                <LinearGradient
+                    colors={[colors.logCardBackgroundTransparent, colors.logCardBackground]}
+                    style={{
+                        position: 'absolute',
+                        height: 24,
+                        bottom: 0,
+                        left: 16,
+                        right: 16,
+                        zIndex: 999,
+                    }}
+                    pointerEvents="none" />
             </View>
-            <View
-              style={{
-                marginTop: 8,
-              }}
-            >
-              <Message item={item} />
-            </View>
-          </View>
-        </ScrollView>
-        <LinearGradient
-          colors={[colors.logCardBackground, colors.logCardBackgroundTransparent]}
-          style={{
-            position: 'absolute',
-            height: 24,
-            top: 67,
-            left: 16,
-            right: 16,
-            zIndex: 999,
-          }}
-          pointerEvents="none" />
-        <LinearGradient
-          colors={[colors.logCardBackgroundTransparent, colors.logCardBackground]}
-          style={{
-            position: 'absolute',
-            height: 24,
-            bottom: 0,
-            left: 16,
-            right: 16,
-            zIndex: 999,
-          }}
-          pointerEvents="none" />
-      </View>
-    </View>
-  );
+        </View>
+    );
 };

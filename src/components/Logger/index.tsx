@@ -85,6 +85,7 @@ export const LoggerEdit = ({
 
     const initialItem: TemporaryLogState = {
         ...LogEntry,
+        // selectedCategorizedTagIds: LogEntry.tags.map(tag => tag.tagId), // debug 
     }
 
     const avaliableSteps = getAvailableStepsForEdit({

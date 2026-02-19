@@ -25,9 +25,11 @@ const CalendarDayContainer = memo(({
     )
 })
 
+
 type DayMapItem = {
     dateString: string;
 }
+
 
 const CalendarWeek = memo(function CalendarWeek({
     startDate,
@@ -52,6 +54,7 @@ const CalendarWeek = memo(function CalendarWeek({
     if (isFirst) justifyContent = 'flex-end';
     if (isLast) justifyContent = 'flex-start';
 
+
     const days = useMemo(() => {
         const days: string[] = [];
         let date = dayjs(startDate);
@@ -64,11 +67,13 @@ const CalendarWeek = memo(function CalendarWeek({
         return days;
     }, [startDate, endDate])
 
+
     const emptyDays = useMemo(() => {
         const emptyDays: null[] = [];
         for (let i = 0; i < 7 - days.length; i++) emptyDays.push(null);
         return emptyDays;
     }, [days]);
+
 
     const daysMap: DayMapItem[] = days.map(dateString => {
         return {
@@ -76,13 +81,16 @@ const CalendarWeek = memo(function CalendarWeek({
         }
     });
 
+
     const onPressDay = useCallback((date: string) => {
         calendarNavigation.openDay(date)
     }, [navigation, calendarNavigation])
 
+
     const filteredItemDates = useMemo(() => {
         return calendarFilters.data.filteredItems.map(item => dayjs(item.dateTime).format(DATE_FORMAT))
     }, [JSON.stringify(calendarFilters.data.filteredItems)])
+
 
     const renderDay = ({ date }) => {
         const items = itemMap[date] || [];
@@ -100,6 +108,7 @@ const CalendarWeek = memo(function CalendarWeek({
         )
     }
 
+    
     return (
         <View
             style={{
@@ -122,11 +131,13 @@ const CalendarWeek = memo(function CalendarWeek({
     )
 })
 
+
 const styles = StyleSheet.create({
     dayContainer: {
         flex: 7,
         margin: 3,
     }
 })
+
 
 export default CalendarWeek
