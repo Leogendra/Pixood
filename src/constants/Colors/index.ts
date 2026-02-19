@@ -281,7 +281,7 @@ const dark: IColors & {
     textSecondary: colors.neutral[400],
     background: '#000',
     backgroundSecondary: colors.neutral[800],
-    backgroundTertiary: colors.neutral[800],
+    backgroundTertiary: colors.neutral[700],
     link: tintColorDark,
     tint: tintColorDark,
 
@@ -389,7 +389,7 @@ const dark: IColors & {
     dangerButtonText: colors.red[500],
     dangerButtonBorder: colors.neutral[800],
 
-    textInputBackground: colors.neutral[800],
+    textInputBackground: colors.neutral[700],
     textInputText: colors.neutral[200],
     textInputPlaceholder: colors.neutral[500],
     textInputBorder: colors.neutral[900],
