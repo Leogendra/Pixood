@@ -1,10 +1,11 @@
 import { askToImport, askToReset, showImportError, showImportSuccess, showResetSuccess } from "@/helpers/prompts";
-import { LOGS_STORAGE_KEY, TAGS_STORAGE_KEY, SETTINGS_STORAGE_KEY } from "@/constants/Config";
+import { LOGS_STORAGE_KEY, SETTINGS_STORAGE_KEY, TAGS_STORAGE_KEY, TAG_CATEGORIES_STORAGE_KEY } from "@/constants/Config";
+import { useTagCategoriesState, useTagCategoriesUpdater } from "./useTagCategories";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LogsState, useLogState, useLogUpdater } from "./useLogs";
 import { getJSONSchemaType, ImportData } from "@/helpers/Import";
-import { Tag, useTagsState, useTagsUpdater } from "./useTags";
 import { ExportSettings, useSettings } from "./useSettings";
+import { TagCategoriesState } from "@/types/tagCategories";
 import { migrateImportData } from "@/helpers/migration";
 import * as DocumentPicker from "expo-document-picker";
 import { Alert, Platform } from "react-native";
@@ -16,11 +17,45 @@ import dayjs from "dayjs";
 type ResetType = "factory" | "data"
 
 // Simplified export format builder using current in-memory state
-const transformToExportFormat = (items: LogsState["items"], tags: Tag[], settings: ExportSettings) => ({
-    items,
-    tags,
-    settings,
-});
+const transformToExportFormat = (
+    items: LogsState["items"],
+    settings: ExportSettings,
+    tagCategoriesState: TagCategoriesState,
+) => {
+    const categoryById = new Map(tagCategoriesState.categories.map(category => [category.id, category]));
+    const categorizedTagById = new Map(tagCategoriesState.tags.map(tag => [tag.id, tag]));
+
+    const formattedItems = items.map((item) => {
+        const groups = new Map<string, Set<string>>();
+
+        for (const tagRef of item.tags || []) {
+            const categorizedTag = categorizedTagById.get(tagRef.tagId);
+            if (!categorizedTag) continue;
+
+            const categoryName = categoryById.get(categorizedTag.categoryId)?.name;
+            if (!categoryName) continue;
+
+            const current = groups.get(categoryName) || new Set<string>();
+            current.add(categorizedTag.title);
+            groups.set(categoryName, current);
+        }
+
+        return {
+            ...item,
+            tags: Array.from(groups.entries()).map(([category, tagSet]) => ({
+                category,
+                tags: Array.from(tagSet.values()),
+            })),
+        };
+    });
+
+    return {
+        items: formattedItems,
+        settings,
+    };
+};
+
+const normalize = (value?: string) => (value || '').trim().toLowerCase();
 
 
 export const useDatagate = (): {
@@ -32,16 +67,17 @@ export const useDatagate = (): {
 } => {
     const logState = useLogState();
     const logUpdater = useLogUpdater();
-    const { tags } = useTagsState();
-    const tagsUpdater = useTagsUpdater();
+    const tagCategoriesState = useTagCategoriesState();
+    const tagCategoriesUpdater = useTagCategoriesUpdater();
     const { resetSettings, importSettings, settings } = useSettings();
 
 
     const dangerouslyImportDirectlyToAsyncStorage = async (data: ImportData) => {
         await AsyncStorage.multiRemove([
-            TAGS_STORAGE_KEY,
             LOGS_STORAGE_KEY,
             SETTINGS_STORAGE_KEY,
+            TAG_CATEGORIES_STORAGE_KEY,
+            TAGS_STORAGE_KEY,
         ]);
 
         await AsyncStorage.setItem(
@@ -59,21 +95,83 @@ export const useDatagate = (): {
                     date: new Date().toISOString(),
                     title: 'onboarding',
                 }],
-                tags: data.tags ?? [],
             })
         );
     };
 
     const _import = async (data: ImportData, options: { muted: boolean } = { muted: false }) => {
-        const migratedData = migrateImportData(data);
-        const jsonSchemaType = getJSONSchemaType(migratedData);
+        const jsonSchemaType = getJSONSchemaType(data);
 
-        if (jsonSchemaType === "pixy") {
+        if (jsonSchemaType === "pixood") {
+            const migratedData = migrateImportData(data);
+            const incomingTagCategories = migratedData.tagCategories;
+            let mergedTagCategories = {
+                categories: [...tagCategoriesState.categories],
+                tags: [...tagCategoriesState.tags],
+                version: Math.max(tagCategoriesState.version || 1, incomingTagCategories?.version || 1),
+            };
+
+            if (incomingTagCategories) {
+                const categoryIdRemap = new Map<string, string>();
+                const existingCategoriesByName = new Map(
+                    mergedTagCategories.categories.map(category => [normalize(category.name), category])
+                );
+
+                for (const importedCategory of incomingTagCategories.categories) {
+                    const key = normalize(importedCategory.name);
+                    const existingCategory = existingCategoriesByName.get(key);
+
+                    if (existingCategory) {
+                        categoryIdRemap.set(importedCategory.id, existingCategory.id);
+                    }
+                    else {
+                        mergedTagCategories.categories.push(importedCategory);
+                        existingCategoriesByName.set(key, importedCategory);
+                        categoryIdRemap.set(importedCategory.id, importedCategory.id);
+                    }
+                }
+
+                const existingTagsByCategoryAndTitle = new Map(
+                    mergedTagCategories.tags.map(tag => [`${tag.categoryId}|${normalize(tag.title)}`, tag])
+                );
+                const tagIdRemap = new Map<string, string>();
+
+                for (const importedTag of incomingTagCategories.tags) {
+                    const targetCategoryId = categoryIdRemap.get(importedTag.categoryId) || importedTag.categoryId;
+                    const key = `${targetCategoryId}|${normalize(importedTag.title)}`;
+                    const existingTag = existingTagsByCategoryAndTitle.get(key);
+
+                    if (existingTag) {
+                        tagIdRemap.set(importedTag.id, existingTag.id);
+                        continue;
+                    }
+
+                    const nextTag = {
+                        ...importedTag,
+                        categoryId: targetCategoryId,
+                    };
+
+                    mergedTagCategories.tags.push(nextTag);
+                    existingTagsByCategoryAndTitle.set(key, nextTag);
+                    tagIdRemap.set(importedTag.id, nextTag.id);
+                }
+
+                migratedData.items = migratedData.items.map((item) => ({
+                    ...item,
+                    tags: item.tags.map((tag) => ({
+                        tagId: tagIdRemap.get(tag.tagId) || tag.tagId,
+                    })),
+                }));
+            }
+
             logUpdater.import({
                 items: migratedData.items,
             });
-            tagsUpdater.import({
-                tags: migratedData.tags || []
+            await tagCategoriesUpdater.importData({
+                loaded: true,
+                categories: mergedTagCategories.categories,
+                tags: mergedTagCategories.tags,
+                version: mergedTagCategories.version,
             });
             importSettings(migratedData.settings);
             if (!options.muted) showImportSuccess()
@@ -86,7 +184,7 @@ export const useDatagate = (): {
 
     const reset = () => {
         logUpdater.reset();
-        tagsUpdater.reset();
+        tagCategoriesUpdater.reset();
     }
 
     const factoryReset = () => {
@@ -135,7 +233,7 @@ export const useDatagate = (): {
 
     const openExportDialog = async () => {
         // Use the new simplified export format
-        const data = transformToExportFormat(logState.items, tags, settings);
+        const data = transformToExportFormat(logState.items, settings, tagCategoriesState);
 
 
         if (Platform.OS === "web") {

@@ -283,5 +283,8 @@
     "reset_factory_confirm_title": "Reset all data & settings",
     "reset_factory_description": "Settings include reminder, colors, and onboarding.",
     "reset_factory_success_message": "All data and settings have been reset.",
-    "reset_factory_success_title": "Reset"
+    "reset_factory_success_title": "Reset",
+    "logger_step_rating": "Mood",
+    "logger_step_tags": "Tags",
+    "logger_step_message": "Notes"
 }

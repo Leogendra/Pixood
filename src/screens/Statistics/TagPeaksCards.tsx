@@ -7,7 +7,6 @@ import useColors from '../../hooks/useColors';
 import useHaptics from '../../hooks/useHaptics';
 import { LogEntry } from '../../hooks/useLogs';
 import { TagsPeakData } from '../../hooks/useStatistics/TagsPeaks';
-import { Tag as ITag } from '../../hooks/useTags';
 import { HeaderWeek } from './HeaderWeek';
 import _ from 'lodash';
 import { useCalendarNavigation } from '@/hooks/useCalendarNavigation';
@@ -15,19 +14,21 @@ import { useCalendarNavigation } from '@/hooks/useCalendarNavigation';
 const DayDot = ({
     date,
     isHighlighted,
-    colorName,
     item,
 }: {
     date: Dayjs,
     isHighlighted: boolean,
-    colorName: string,
     item: LogEntry | undefined,
 }) => {
     const colors = useColors()
     const haptics = useHaptics()
     const calendarNavigation = useCalendarNavigation()
 
-    const color = isHighlighted ? colors.tags[colorName] : {
+    const color = isHighlighted ? {
+        background: colors.tint,
+        text: colors.primaryButtonText,
+        border: colors.tint,
+    } : {
         background: colors.statisticsCalendarDotBackground,
         text: colors.statisticsCalendarDotText,
         border: colors.statisticsCalendarDotBorder,
@@ -71,7 +72,7 @@ const BodyWeek = ({
     start,
 }: {
     items: LogEntry[],
-    tag: ITag,
+    tag: TagsPeakData['tags'][0],
     start: Dayjs,
 }) => {
     const days = [0, 1, 2, 3, 4, 5, 6]
@@ -103,7 +104,6 @@ const BodyWeek = ({
                             date={date}
                             isHighlighted={isHighlighted}
                             item={item}
-                            colorName={tag?.color}
                         />
                     </View>
                 )
@@ -139,7 +139,7 @@ export const TagPeaksCard = ({
                     <Text
                         style={{
                             fontSize: 17,
-                            color: colors.tags[tag?.color]?.text,
+                            color: colors.text,
                         }}
                     >{tag?.title}&nbsp;</Text>
                     {t('statistics_tag_peaks_title', {

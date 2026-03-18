@@ -1,13 +1,12 @@
 import _ from "lodash";
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { LogEntry, useLogState } from './useLogs';
-import { Tag } from "./useTags";
 
 
 interface FiltersData {
   text: string,
   ratings: number[],
-  tagIds: Tag['id'][],
+  tagIds: string[],
 }
 
 export interface CalendarFiltersData extends FiltersData {

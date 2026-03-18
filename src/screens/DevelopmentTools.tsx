@@ -11,7 +11,7 @@ import { ScrollView, Text, View, ViewStyle } from "react-native";
 import useColors from "../hooks/useColors";
 import { useLogState } from "../hooks/useLogs";
 import { useSettings } from "../hooks/useSettings";
-import { useTagsState } from "../hooks/useTags";
+import { useTagCategoriesState } from "../hooks/useTagCategories";
 import { Trash } from "lucide-react-native";
 
 const Card = ({
@@ -62,7 +62,7 @@ const Card = ({
 export const DevelopmentTools = () => {
   const colors = useColors();
   const logState = useLogState();
-  const { tags } = useTagsState()
+  const { tags } = useTagCategoriesState()
   const { settings, setSettings, removeActionDone } = useSettings();
 
   const words_total = logState.items

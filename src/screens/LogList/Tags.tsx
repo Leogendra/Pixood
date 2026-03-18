@@ -1,20 +1,18 @@
-import { t } from '../../helpers/translation';
-import useColors from '@/hooks/useColors';
-import { LogEntry } from '@/hooks/useLogs';
-import { useTagsState } from '@/hooks/useTags';
 import { useNavigation } from '@react-navigation/native';
-// Removed t from i18n-js import
-import { Text, View } from 'react-native';
-import { useTheme } from '@/hooks/useTheme';
 import { SectionHeader } from './SectionHeader';
+import { useTagCategoriesState } from '@/hooks/useTagCategories';
+import { t } from '../../helpers/translation';
+import { useTheme } from '@/hooks/useTheme';
+import { LogEntry } from '@/hooks/useLogs';
+import { Text, View } from 'react-native';
+import useColors from '@/hooks/useColors';
+
 
 const Tag = ({
     title,
-    colorName,
     style = {},
 }: {
     title: string;
-    colorName: string;
     style?: any;
 }) => {
     const colors = useColors();
@@ -37,15 +35,6 @@ const Tag = ({
                 ...style,
             }}
         >
-            <View
-                style={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: 8,
-                    marginRight: 10,
-                    backgroundColor: colors.tags[colorName]?.dot,
-                }}
-            />
             <Text style={{
                 color: colors.tagText,
                 fontSize: 17,
@@ -54,13 +43,14 @@ const Tag = ({
     )
 };
 
+
 export const Tags = ({
     item,
 }: {
     item: LogEntry;
 }) => {
     const colors = useColors();
-    const { tags } = useTagsState();
+    const { tags } = useTagCategoriesState();
     const navigation = useNavigation();
 
     return (
@@ -83,17 +73,15 @@ export const Tags = ({
                     flexWrap: 'wrap',
                 }}
             >
-                {item && item.tags.length > 0 ? item.tags.map(tag => {
-                    const _tag = tags.find(t => t.id === tag.tagId);
+                {item && item.tags.length > 0 ? item.tags.map((tagId, index) => {
+                    const tag = tags.find(t => t.id === tagId.tagId);
 
-                    if (!_tag)
-                        return null;
+                    if (!tag) { return null; }
 
                     return (
                         <Tag
-                            key={tag.tagId}
-                            title={_tag.title}
-                            colorName={_tag.color}
+                            key={tagId.tagId}
+                            title={tag.title}
                             style={{
                                 backgroundColor: colors.entryBackground,
                                 borderColor: colors.entryItemBorder,

@@ -5,7 +5,6 @@ import { TemporaryLogProvider } from "@/hooks/useTemporaryLog";
 import { StatisticsProvider } from "@/hooks/useStatistics";
 import { SettingsProvider } from "@/hooks/useSettings";
 import { LogsProvider } from "@/hooks/useLogs";
-import { TagsProvider } from "@/hooks/useTags";
 
 
 
@@ -15,15 +14,13 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
         <SafeAreaProvider>
             <SettingsProvider>
                 <LogsProvider>
-                    <TagsProvider>
-                        <TagCategoriesProvider>
-                            <TemporaryLogProvider>
-                                <CalendarFiltersProvider>
-                                    <StatisticsProvider>{children}</StatisticsProvider>
-                                </CalendarFiltersProvider>
-                            </TemporaryLogProvider>
-                        </TagCategoriesProvider>
-                    </TagsProvider>
+                    <TagCategoriesProvider>
+                        <TemporaryLogProvider>
+                            <CalendarFiltersProvider>
+                                <StatisticsProvider>{children}</StatisticsProvider>
+                            </CalendarFiltersProvider>
+                        </TemporaryLogProvider>
+                    </TagCategoriesProvider>
                 </LogsProvider>
             </SettingsProvider>
         </SafeAreaProvider>

@@ -1,16 +1,16 @@
 import _ from "lodash";
 import { LogEntry } from "../useLogs";
-import { Tag } from "../useTags";
+import { CategorizedTag } from "@/types/tagCategories";
 
 export interface TagsPeakData {
-  tags: (Tag & {
+  tags: (CategorizedTag & {
     items: LogEntry[];
   })[]
 }
 
 const MIN_PEAKS = 3;
 
-export const getTagsPeaksData = (items: LogEntry[], settingsTags: Tag[]): TagsPeakData => {
+export const getTagsPeaksData = (items: LogEntry[], settingsTags: CategorizedTag[]): TagsPeakData => {
   const distribution = _.countBy(
     items.flatMap((item) => item.tags.map((tag) => tag.tagId))
   );

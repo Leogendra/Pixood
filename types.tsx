@@ -27,12 +27,8 @@ export type RootStackParamList = {
     Privacy: undefined;
     Changelog: undefined;
     Steps: undefined;
-    Tags: undefined;
     TagCategories: undefined;
     DevelopmentTools: undefined;
-
-    SettingsTags: undefined;
-    SettingsTagsArchive: undefined;
 
     Statistics: undefined;
     StatisticsHighlights: undefined;
@@ -58,10 +54,6 @@ export type RootStackParamList = {
         date: string;
     };
 
-    TagEdit: {
-        id: string;
-    };
-    TagCreate: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

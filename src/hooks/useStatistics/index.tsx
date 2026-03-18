@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import _ from "lodash";
 import { createContext, useContext, useState } from "react";
 import { LogEntry, useLogState } from "../useLogs";
-import { useTagsState } from "../useTags";
+import { useTagCategoriesState } from "../useTagCategories";
 import { defaultMoodAvgData, getMoodAvgData, MoodAvgData } from "./MoodAvg";
 import {
   defaultMoodPeaksNegativeData,
@@ -60,7 +60,7 @@ export function StatisticsProvider({
   children: React.ReactNode;
 }) {
   const logState = useLogState()
-  const { tags } = useTagsState()
+  const { tags } = useTagCategoriesState()
   const [isLoading, setIsLoading] = useState(false);
   const [prevHighlightItems, setPrevHighlightItems] = useState<LogEntry[]>([]);
   const [prevTrendsItems, setPrevTrendsItems] = useState<LogEntry[]>([]);

@@ -14,13 +14,13 @@ import {
   useLogUpdater
 } from "../hooks/useLogs";
 import { ExportSettings, INITIAL_STATE, SettingsProvider, useSettings } from "../hooks/useSettings";
-import { Tag, TagsProvider, useTagsState, useTagsUpdater } from "../hooks/useTags";
+import { TagCategoriesProvider, useTagCategoriesState, useTagCategoriesUpdater } from "../hooks/useTagCategories";
 import { _generateItem } from "./utils";
 
 const wrapper = ({ children }) => (
   <SettingsProvider>
       <LogsProvider>
-        <TagsProvider>{children}</TagsProvider>
+        <TagCategoriesProvider>{children}</TagCategoriesProvider>
       </LogsProvider>
   </SettingsProvider>
 );
@@ -47,34 +47,6 @@ const testItems: LogsState["items"] = [
   })
 ];
 
-const initalTags = [
-  {
-    "color": "orange",
-    "id": "1",
-    "title": "Happy 🥳"
-  },
-  {
-    "color": "purple",
-    "id": "2",
-    "title": "Struggles ☔️"
-  },
-  {
-    "color": "sky",
-    "id": "3",
-    "title": "Work 💼"
-  },
-  {
-    "color": "green",
-    "id": "4",
-    "title": "Exercise 🏃"
-  },
-  {
-    "color": "yellow",
-    "id": "5",
-    "title": "Friends 🤗"
-  }
-]
-
 const testSettings = {
   ...INITIAL_STATE,
   actionsDone: [{
@@ -83,26 +55,13 @@ const testSettings = {
   }]
 }
 
-const testTags: Tag[] = [
-  {
-    id: "1",
-    title: "test1",
-    color: "slate",
-  },
-  {
-    id: "2",
-    title: "test2",
-    color: "lime",
-  },
-];
-
 const _renderHook = () => {
   return renderHook(() => ({
     datagate: useDatagate(),
     logState: useLogState(),
     logUpdater: useLogUpdater(),
-    tagsState: useTagsState(),
-    tagsUpdater: useTagsUpdater(),
+    tagCategoriesState: useTagCategoriesState(),
+    tagCategoriesUpdater: useTagCategoriesUpdater(),
     settingsState: useSettings(),
   }), { wrapper });
 };
@@ -134,7 +93,6 @@ describe("useLogs()", () => {
     jest.spyOn(FileSystem, 'readAsStringAsync').mockResolvedValueOnce(JSON.stringify({
       items: testItems,
       settings: testSettings,
-      tags: testTags
     }));
 
     await hook.waitForNextUpdate();
@@ -153,10 +111,6 @@ describe("useLogs()", () => {
       loaded: true,
       items: testItems,
     });
-    expect(hook.result.current.tagsState).toEqual({
-      loaded: true,
-      tags: testTags
-    });
     expect(hook.result.current.settingsState.settings).toEqual({
       ...testSettings,
       loaded: true,
@@ -174,7 +128,6 @@ describe("useLogs()", () => {
     await hook.waitForNextUpdate();
 
     await act(() => {
-      hook.result.current.tagsUpdater.import({ tags: testTags });
       hook.result.current.logUpdater.import({ items: testItems });
       hook.result.current.settingsState.importSettings(testSettings);
     });
@@ -186,10 +139,8 @@ describe("useLogs()", () => {
     // @ts-ignore
     const calledJson = FileSystem.writeAsStringAsync.mock.calls[0][1];
     const expectedJson = {
-      version: '1.0.0',
       items: testItems,
       settings: _.omit(testSettings, ['loaded', 'deviceId']) as ExportSettings,
-      tags: testTags
     }
 
     expect(FileSystem.writeAsStringAsync).toBeCalled()
@@ -205,7 +156,6 @@ describe("useLogs()", () => {
     await hook.waitForNextUpdate();
 
     await act(() => {
-      hook.result.current.tagsUpdater.import({ tags: testTags });
       hook.result.current.logUpdater.import({ items: testItems });
       hook.result.current.settingsState.importSettings(testSettings);
     });
@@ -224,10 +174,6 @@ describe("useLogs()", () => {
       loaded: true,
       items: []
     });
-    expect(hook.result.current.tagsState).toEqual({
-      loaded: true,
-      tags: initalTags
-    });
     expect(hook.result.current.settingsState.settings).toEqual({
       ...INITIAL_STATE,
       deviceId: expect.any(String),
@@ -243,7 +189,6 @@ describe("useLogs()", () => {
     await hook.waitForNextUpdate();
 
     await act(() => {
-      hook.result.current.tagsUpdater.import({ tags: testTags });
       hook.result.current.logUpdater.import({ items: testItems });
       hook.result.current.settingsState.importSettings(testSettings);
     });
@@ -263,39 +208,28 @@ describe("useLogs()", () => {
       items: []
     });
 
-    expect(hook.result.current.tagsState).toEqual({
-      loaded: true,
-      tags: initalTags
-    });
-
     expect(hook.result.current.settingsState.settings).toEqual({
       ...testSettings,
       loaded: true,
     });
   })
 
-  test.only("should `import`", async () => {
+  test("should `import`", async () => {
     const hook = _renderHook();
 
     await hook.waitForNextUpdate();
 
     await act(() => {
       hook.result.current.datagate.import({
-        version: '1.0.0',
+        version: '2.0.0',
         items: testItems,
         settings: testSettings,
-        tags: testTags
       }, { muted: false });
     });
 
     expect(hook.result.current.logState).toEqual({
       loaded: true,
       items: testItems,
-    });
-
-    expect(hook.result.current.tagsState).toEqual({
-      loaded: true,
-      tags: testTags
     });
 
     expect(hook.result.current.settingsState.settings).toEqual({

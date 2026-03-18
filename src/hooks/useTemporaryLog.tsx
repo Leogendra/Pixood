@@ -6,7 +6,6 @@ import { LogEntry } from "./useLogs";
 
 export type TemporaryLogState = Omit<LogEntry, 'rating'> & {
     rating: LogEntry['rating'] | null,
-    selectedCategorizedTagIds?: string[];
 }
 
 

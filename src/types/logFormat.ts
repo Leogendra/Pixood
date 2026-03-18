@@ -16,7 +16,24 @@ export const TagRefSchema = z.object({
 });
 
 
+export const TagCategoryGroupSchema = z.object({
+    category: z.string().min(1),
+    tags: z.array(z.string().min(1)),
+});
+
+
 export const LogEntrySchema = z.object({
+    id: z.string().uuid(),
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    dateTime: z.string().refine((value) => { return isISODate(value) }),
+    rating: z.array(z.number().int().min(1).max(NUMBER_OF_RATINGS)),
+    notes: z.string().default(""),
+    metrics: MetricsSchema.default({}),
+    tags: z.array(TagCategoryGroupSchema).default([]),
+});
+
+
+export const StoredLogEntrySchema = z.object({
     id: z.string().uuid(),
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     dateTime: z.string().refine((value) => { return isISODate(value) }),
@@ -27,4 +44,5 @@ export const LogEntrySchema = z.object({
 });
 
 
-export type LogEntry = z.infer<typeof LogEntrySchema>;
+export type LogEntryImport = z.infer<typeof LogEntrySchema>;
+export type LogEntry = z.infer<typeof StoredLogEntrySchema>;

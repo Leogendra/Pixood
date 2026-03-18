@@ -1,45 +1,96 @@
-import _ from "lodash";
-import { LogEntry } from "@/types/logFormat";
+import { LogEntry, StoredLogEntrySchema } from "@/types/logFormat";
+import { TagCategoriesState } from "@/types/tagCategories";
 import { ImportData } from "./Import";
+import { v4 as uuidv4 } from "uuid";
+import _ from "lodash";
+
 
 interface MigratedData extends ImportData {
-  items: LogEntry[];
+    items: LogEntry[];
+    tagCategories: Omit<TagCategoriesState, 'loaded'>;
 }
 
+const normalizeText = (value?: string) => (value || '').trim();
+const normalizeKey = (value?: string) => normalizeText(value).toLowerCase();
+
 export const migrateImportData = (data: ImportData): MigratedData => {
-  let { items, settings, tags, version } = data;
+    let { items, settings, version } = data;
+    const categoryByName = new Map<string, { id: string; name: string; createdAt: string }>();
+    const categorizedTagByCategoryAndTitle = new Map<string, { id: string; categoryId: string; title: string; isArchived: boolean; createdAt: string }>();
 
-  let newItems = _.clone(items);
+    const getOrCreateCategory = (categoryName: string) => {
+        const key = normalizeKey(categoryName);
+        let category = categoryByName.get(key);
 
-  if (!_.isArray(newItems)) {
-    newItems = _.values(newItems);
-  }
+        if (!category) {
+            category = {
+                id: uuidv4(),
+                name: categoryName,
+                createdAt: new Date().toISOString(),
+            };
+            categoryByName.set(key, category);
+        }
 
-  newItems = newItems.map((item) => {
-    const newItem = { ...item };
+        return category;
+    };
 
-    if (!item?.tags) {
-      newItem.tags = [];
-    }
+    const getOrCreateTag = (categoryId: string, rawTagTitle: string) => {
+        const tagTitle = normalizeText(rawTagTitle);
+        if (!tagTitle) return null;
 
-    return newItem;
-  });
+        const tagKey = `${categoryId}|${normalizeKey(tagTitle)}`;
+        let categorizedTag = categorizedTagByCategoryAndTitle.get(tagKey);
 
-  let _tags = (tags || []).map((tag) => {
-    if (tag.color === "stone") {
-      tag.color = "slate";
-    }
-    return tag;
-  });
+        if (!categorizedTag) {
+            categorizedTag = {
+                id: uuidv4(),
+                categoryId,
+                title: tagTitle,
+                isArchived: false,
+                createdAt: new Date().toISOString(),
+            };
+            categorizedTagByCategoryAndTitle.set(tagKey, categorizedTag);
+        }
 
-  let _settings = _.omit(settings, 'tags');
+        return categorizedTag;
+    };
 
-  if (!_settings.actionsDone) _settings.actionsDone = [];
+    const newItems = (items as any[]).map((item) => {
+        const tagRefs: { tagId: string }[] = [];
 
-  return {
-    version: version || "1.0.0",
-    items: newItems,
-    settings: _settings,
-    tags: _tags
-  };
+        for (const tagGroup of item.tags || []) {
+            const categoryName = normalizeText(tagGroup.category);
+            if (!categoryName) continue;
+
+            const category = getOrCreateCategory(categoryName);
+
+            for (const rawTagTitle of tagGroup.tags || []) {
+                const categorizedTag = getOrCreateTag(category.id, rawTagTitle);
+                if (!categorizedTag) continue;
+                tagRefs.push({ tagId: categorizedTag.id });
+            }
+        }
+
+        return StoredLogEntrySchema.parse({
+            ...item,
+            tags: _.uniqBy(tagRefs, 'tagId'),
+        });
+    });
+
+    let _settings = _.omit(settings, 'tags');
+
+    if (!_settings.actionsDone) _settings.actionsDone = [];
+
+    const tagCategories = {
+        categories: Array.from(categoryByName.values()),
+        tags: Array.from(categorizedTagByCategoryAndTitle.values()),
+        version: 1,
+    };
+
+    return {
+        version: version || "2.0.0",
+        items: newItems,
+        settings: _settings,
+        tagCategories,
+    };
 };

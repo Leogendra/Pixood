@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import Tag from '@/components/Tag';
 import TextHeadline from '@/components/TextHeadline';
-import { Tag as ITag } from '../../../hooks/useTags';
+import { CategorizedTag as ITag } from '@/types/tagCategories';
 
 export const TagsSection = ({
   tags, selectedTags, onSelect,
@@ -25,7 +25,7 @@ export const TagsSection = ({
             selected={selectedTags.map(d => d.id).includes(tag.id)}
             onPress={() => onSelect(tag)}
             key={tag.id}
-            colorName={tag.color}
+            colorName={'slate'}
             title={tag.title} />
         ))}
       </View>

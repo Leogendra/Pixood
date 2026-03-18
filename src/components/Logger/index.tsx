@@ -85,7 +85,6 @@ export const LoggerEdit = ({
 
     const initialItem: TemporaryLogState = {
         ...LogEntry,
-        // selectedCategorizedTagIds: LogEntry.tags.map(tag => tag.tagId), // debug 
     }
 
     const avaliableSteps = getAvailableStepsForEdit({
@@ -179,11 +178,21 @@ export const Logger = ({
             return
         }
 
+        const payload: LogEntry = {
+            id: data.id,
+            date: data.date,
+            dateTime: data.dateTime,
+            rating: data.rating,
+            notes: data.notes,
+            metrics: data.metrics,
+            tags: data.tags,
+        };
+
         if (mode === 'edit') {
-            logUpdater.editLog(data.id, data as LogEntry)
+            logUpdater.editLog(data.id, payload)
         }
         else {
-            logUpdater.addLog(data as LogEntry)
+            logUpdater.addLog(payload)
         }
 
         close()
@@ -243,7 +252,9 @@ export const Logger = ({
                 </View>
                 <EntryLoggerSlide
                     onRatingChange={(rating) => tempLog.update({ rating })}
-                    onTagsChange={(tagIds) => tempLog.update({ selectedCategorizedTagIds: tagIds })}
+                    onTagsChange={(tagIds) => tempLog.update({
+                        tags: tagIds.map((tagId) => ({ tagId })),
+                    })}
                     onMessageChange={(notes) => tempLog.update({ notes })}
                     showDisable={showDisable}
                     onDisableStep={() => {

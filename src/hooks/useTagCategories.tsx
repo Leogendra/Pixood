@@ -1,10 +1,10 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer } from "react";
-import { TAG_CATEGORIES_STORAGE_KEY, DEFAULT_TAGS } from '@/constants/Config';
+import { TAG_CATEGORIES_STORAGE_KEY, TAGS_STORAGE_KEY } from '@/constants/Config';
 import { useLogState, useLogUpdater } from './useLogs';
 import { load, store } from '@/helpers/storage';
 import { useSettings } from './useSettings';
-import { t } from '@/helpers/translation';
 import { v4 as uuidv4 } from "uuid";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
     TagCategoriesState,
     TagCategoriesAction,
@@ -12,6 +12,16 @@ import {
     CategorizedTag,
     TagCategoriesUpdater,
 } from '@/types/tagCategories';
+
+interface LegacyTagItem {
+    id: string;
+    title: string;
+    isArchived?: boolean;
+}
+
+interface LegacyTagsState {
+    tags: LegacyTagItem[];
+}
 
 
 
@@ -167,8 +177,8 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
 
         // Delete the tag from existing logs
         const newItems = logsState.items.map((item) => {
-            if (item.tags.some((tag: any) => tag.id === id)) {
-                const filteredTags = item.tags.filter((tag: any) => tag.id !== id);
+            if (item.tags.some((tag: any) => tag.tagId === id)) {
+                const filteredTags = item.tags.filter((tag: any) => tag.tagId !== id);
                 return { ...item, tags: filteredTags };
             }
             return item;
@@ -225,11 +235,37 @@ export function TagCategoriesProvider({ children }: { children: React.ReactNode 
             if (stored !== null) {
                 // Already has data, just load it (don't override with defaults)
                 dispatch({ type: 'LOAD_DATA', payload: stored });
-            } 
+            }
             else {
-                // First launch: initialize with default data only once
-                const initialState = getInitialState();
-                dispatch({ type: 'LOAD_DATA', payload: initialState });
+                const legacyStored = await load<LegacyTagsState>(TAGS_STORAGE_KEY);
+
+                if (legacyStored?.tags?.length) {
+                    const importedCategoryId = uuidv4();
+                    const now = new Date().toISOString();
+                    const migratedState: TagCategoriesState = {
+                        loaded: true,
+                        categories: [{
+                            id: importedCategoryId,
+                            name: 'Imported',
+                            createdAt: now,
+                        }],
+                        tags: legacyStored.tags.map((tag) => ({
+                            id: tag.id,
+                            categoryId: importedCategoryId,
+                            title: tag.title,
+                            isArchived: !!tag.isArchived,
+                            createdAt: now,
+                        })),
+                        version: 1,
+                    };
+
+                    dispatch({ type: 'LOAD_DATA', payload: migratedState });
+                    await AsyncStorage.removeItem(TAGS_STORAGE_KEY);
+                } else {
+                    // First launch: initialize empty categories state
+                    const initialState = getInitialState();
+                    dispatch({ type: 'LOAD_DATA', payload: initialState });
+                }
             }
         })();
     }, [settings.loaded]);

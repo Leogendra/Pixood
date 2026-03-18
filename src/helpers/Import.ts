@@ -1,46 +1,45 @@
 import { ExportSettings } from '@/hooks/useSettings';
-import { LogEntry } from '@/types/logFormat';
-import { LogsState } from '@/hooks/useLogs';
-import { Tag } from "@/hooks/useTags";
+import { LogEntrySchema } from '@/types/logFormat';
 import { z } from "zod";
 
 
 export interface ImportData {
     version: string;
-    items: LogsState["items"] | {
-        [key: string]: LogsState["items"][number];
-    };
-    tags?: Tag[];
+    items: unknown;
     settings: ExportSettings
 }
 
-// TODO: Update pixySchema to match new LogEntry structure with:
-// - dateTime (ISO string)
-// - rating (number[])
-// - notes (string)
-// - metrics (optional)
-// - tags with tagId instead of id
-export const pixySchema = z.object({
-    version: z.string().optional(),
-    items: z.array(z.any()), // Simplified - will be validated during import
-    tags: z.array(z.object({
-        id: z.string(),
+
+const ExportSettingsSchema = z.object({
+    palettePresetId: z.string().nullable(),
+    customPalette: z.array(z.string()).nullable(),
+    theme: z.enum(['light', 'dark', 'system']),
+    reminderEnabled: z.boolean(),
+    reminderTime: z.string(),
+    actionsDone: z.array(z.object({
         title: z.string(),
-        color: z.string()
-    })).optional(),
-    settings: z.any() // Simplified
+        date: z.string(),
+    }).strict()),
+    steps: z.array(z.enum(['rating', 'tags', 'message', 'reminder'])),
 }).strict();
+
+
+export const PixoodSchema = z.object({
+    version: z.string().optional(),
+    items: z.array(LogEntrySchema),
+    settings: ExportSettingsSchema,
+}).strict();
+
 
 const DEBUG = false;
 
-export function getJSONSchemaType(json: any): 'pixy' | 'unknown' {
-    const result = pixySchema.safeParse(json);
+
+export function getJSONSchemaType(json: any): 'pixood' | 'unknown' {
+    const result = PixoodSchema.safeParse(json);
 
     if (!result.success && DEBUG) {
         console.error(result.error.issues)
     }
 
-    return result.success ? 'pixy' : 'unknown';
+    return result.success ? 'pixood' : 'unknown';
 }
-
-

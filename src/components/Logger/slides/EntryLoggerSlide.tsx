@@ -101,7 +101,7 @@ export const EntryLoggerSlide = ({
                             {t('log_modal_tags_question')}
                         </SlideHeadline>
                         <CategoryTagSelector
-                            selectedTagIds={tempLog.data.selectedCategorizedTagIds || []}
+                            selectedTagIds={(tempLog.data.tags || []).map((tag) => tag.tagId)}
                             onTagsChange={onTagsChange}
                             showDisable={showDisable}
                             onDisableStep={onDisableStep}

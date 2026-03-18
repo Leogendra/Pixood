@@ -1,11 +1,11 @@
 import _ from "lodash";
 import { LogEntry } from "../useLogs";
-import { Tag } from "../useTags";
+import { CategorizedTag } from "@/types/tagCategories";
 
 export interface TagsDistributionData {
   tags: {
     id: string;
-    details: Tag;
+    details: CategorizedTag;
     count: number;
   }[];
 }
@@ -20,8 +20,10 @@ export const dummyTagsDistributionData: TagsDistributionData = {
       id: "1",
       details: {
         id: "1",
+        categoryId: "c-1",
         title: "Tag 1",
-        color: 'yellow',
+        isArchived: false,
+        createdAt: new Date().toISOString(),
       },
       count: 10,
     },
@@ -29,8 +31,10 @@ export const dummyTagsDistributionData: TagsDistributionData = {
       id: "2",
       details: {
         id: "2",
+        categoryId: "c-1",
         title: "Tag 2",
-        color: 'red',
+        isArchived: false,
+        createdAt: new Date().toISOString(),
       },
       count: 5,
     },
@@ -38,8 +42,10 @@ export const dummyTagsDistributionData: TagsDistributionData = {
       id: "3",
       details: {
         id: "3",
+        categoryId: "c-2",
         title: "Tag 3",
-        color: 'blue',
+        isArchived: false,
+        createdAt: new Date().toISOString(),
       },
       count: 3,
     },
@@ -47,15 +53,17 @@ export const dummyTagsDistributionData: TagsDistributionData = {
       id: "4",
       details: {
         id: "4",
+        categoryId: "c-2",
         title: "Tag 4",
-        color: 'green',
+        isArchived: false,
+        createdAt: new Date().toISOString(),
       },
       count: 2,
     },
   ],
 }
 
-export const getTagsDistributionData = (items: LogEntry[], tags: Tag[]): TagsDistributionData => {
+export const getTagsDistributionData = (items: LogEntry[], tags: CategorizedTag[]): TagsDistributionData => {
   const distribution = _.countBy(
     items.flatMap((item) => item?.tags?.map((tag) => tag?.tagId))
   );

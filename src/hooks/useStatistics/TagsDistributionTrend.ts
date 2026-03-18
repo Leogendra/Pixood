@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
 import _ from "lodash";
 import { LogEntry } from "../useLogs";
-import { Tag } from "../useTags";
+import { CategorizedTag } from "@/types/tagCategories";
 
-interface DistributionTag extends Tag {
+interface DistributionTag extends CategorizedTag {
   periode1Count: number;
   periode2Count: number;
   total: number;
@@ -20,7 +20,7 @@ export const defaultTagsDistributionTrendData: TagsDistributionTrendData = {
 };
 
 interface TagCounter {
-  [key: Tag["id"]]: Tag & {
+  [key: string]: CategorizedTag & {
     count: number;
   };
 }
@@ -30,7 +30,7 @@ const SCALE_RANGE = 8;
 
 export const getTagsDistributionTrendData = (
   items: LogEntry[],
-  tags: Tag[]
+  tags: CategorizedTag[]
 ): TagsDistributionTrendData => {
   const distributionPeriode1: TagCounter = _.zipObject(
     tags.map((d) => d.id),

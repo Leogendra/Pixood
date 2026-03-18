@@ -1,6 +1,6 @@
 import { LogEntry } from '@/hooks/useLogs';
 import { dummyTagsDistributionData, getTagsDistributionData } from '@/hooks/useStatistics/TagsDistribution';
-import { useTagsState } from '@/hooks/useTags';
+import { useTagCategoriesState } from '@/hooks/useTagCategories';
 import { TagDistributionContent } from '../../screens/Statistics/TagsDistributionCard';
 import { BigCard } from '../BigCard';
 import { NotEnoughDataOverlay } from './NotEnoughDataOverlay';
@@ -16,7 +16,7 @@ export const TagDistribution = ({
     subtitle: string
     items: LogEntry[],
 }) => {
-    const tagState = useTagsState();
+    const tagState = useTagCategoriesState();
 
     const data = getTagsDistributionData(items, tagState.tags);
 

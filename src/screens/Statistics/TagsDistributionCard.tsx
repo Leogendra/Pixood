@@ -7,7 +7,6 @@ import { useCalendarFilters } from '../../hooks/useCalendarFilters';
 import useColors from '../../hooks/useColors';
 import useHaptics from '../../hooks/useHaptics';
 import { TagsDistributionData } from '../../hooks/useStatistics/TagsDistribution';
-import { Tag } from '../../hooks/useTags';
 
 
 export const TagDistributionContent = ({
@@ -22,7 +21,7 @@ export const TagDistributionContent = ({
     const calendarFilters = useCalendarFilters()
     const navigation = useNavigation()
 
-    const onPress = (tagId: Tag['id']) => {
+    const onPress = (tagId: string) => {
         haptic.selection()
         calendarFilters.set({
             ...calendarFilters.data,
@@ -51,7 +50,7 @@ export const TagDistributionContent = ({
                     >
                         <View
                             style={{
-                                backgroundColor: colors.tags[tag?.details?.color]?.background,
+                                backgroundColor: colors.statisticsTagsTrendMutedBackground,
                                 height: 32,
                                 width: tag.count / data.tags[0].count * 100 + '%',
                                 borderRadius: 4,
@@ -61,7 +60,7 @@ export const TagDistributionContent = ({
                         </View>
                         <Text
                             style={{
-                                color: colors.tags[tag?.details?.color]?.text,
+                                color: colors.text,
                                 fontSize: 14,
                                 fontWeight: '600',
                                 position: 'relative',

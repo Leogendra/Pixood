@@ -9,7 +9,6 @@ import { Onboarding } from '../screens/Onboarding';
 import { useSettings } from '@/hooks/useSettings';
 import { RootStackParamList } from '../../types';
 import { StepsScreen } from '../screens/Steps';
-import { useTagsState } from '@/hooks/useTags';
 import Providers from '@/components/Providers';
 import { ToastProvider } from '@/hooks/useToast';
 import { Platform, View } from 'react-native';
@@ -20,7 +19,6 @@ import { BackButton } from './BackButton';
 import { BottomTabs } from './BottomTabs';
 import Colors from '@/constants/Colors';
 import * as Linking from 'expo-linking';
-import { Tags } from '../screens/Tags';
 import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import {
@@ -34,11 +32,7 @@ import {
     ReminderScreen,
     SettingsScreen,
     StatisticsHighlights,
-    TagCreate,
-    TagEdit,
-    TagCategories,
-    SettingsTags,
-    SettingsTagsArchive
+    TagCategories
 } from '../screens';
 
 enableScreens();
@@ -69,9 +63,6 @@ const NAVIGATION_LINKING = {
             LogList: 'days/:date',
             LogCreate: 'logs/create/:dateTime',
             LogEdit: 'logs/:id/edit',
-            Tags: 'tags',
-            TagEdit: 'tags/:id',
-            TagCreate: 'tags/create',
         },
     },
 };
@@ -114,7 +105,6 @@ function RootNavigator() {
     const { settings, hasActionDone } = useSettings();
     const navigation = useNavigation();
     const logState = useLogState();
-    const { tags } = useTagsState();
 
     const defaultOptions = {
         headerTintColor: colors.text,
@@ -204,17 +194,6 @@ function RootNavigator() {
 
                 <Stack.Group
                     screenOptions={{
-                        presentation: 'formSheet',
-                        headerShown: false,
-                    }}
-                >
-                    <Stack.Screen name="Tags" component={Tags} />
-                    <Stack.Screen name="TagCreate" component={TagCreate} />
-                    <Stack.Screen name="TagEdit" component={TagEdit} />
-                </Stack.Group>
-
-                <Stack.Group
-                    screenOptions={{
                         ...defaultOptions,
                         headerBackTitle: '',
                     }}
@@ -285,26 +264,10 @@ function RootNavigator() {
                         }}
                     />
                     <Stack.Screen
-                        name="SettingsTags"
-                        component={SettingsTags}
-                        options={{
-                            title: t('tags'),
-                            ...defaultPageOptions,
-                        }}
-                    />
-                    <Stack.Screen
                         name="TagCategories"
                         component={TagCategories}
                         options={{
                             title: t('tag_categories_management'),
-                            ...defaultPageOptions,
-                        }}
-                    />
-                    <Stack.Screen
-                        name="SettingsTagsArchive"
-                        component={SettingsTagsArchive}
-                        options={{
-                            title: t('archive_tag'),
                             ...defaultPageOptions,
                         }}
                     />

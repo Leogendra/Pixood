@@ -28,7 +28,7 @@ export const TagsDistributionTrend = ({
                         <Text
                             style={{
                                 fontSize: 17,
-                                color: colors.tags[tag?.color]?.text,
+                                color: colors.text,
                             }}
                         >
                             &nbsp;{tag?.title}&nbsp;
@@ -50,7 +50,6 @@ export const TagsDistributionTrend = ({
                 >
                     <TagBar
                         width={`${(tag.periode2Count / tag.total) * 100}%`}
-                        colorName={tag.color}
                         size={'large'}
                         label={'This Month'}
                     >

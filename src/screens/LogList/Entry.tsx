@@ -1,6 +1,6 @@
+import { ScrollView, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Edit, Trash } from "lucide-react-native";
-import { ScrollView, Text, View } from "react-native";
 import LinkButton from "@/components/LinkButton";
 import { LogEntry } from "@/hooks/useLogs";
 import useColors from "@/hooks/useColors";

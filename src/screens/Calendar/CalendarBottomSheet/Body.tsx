@@ -2,7 +2,7 @@ import _ from "lodash";
 import { useCallback, useState } from "react";
 import { View } from "react-native";
 import { useCalendarFilters } from "../../../hooks/useCalendarFilters";
-import { useTagsState } from "../../../hooks/useTags";
+import { useTagCategoriesState } from "../../../hooks/useTagCategories";
 import { Header } from "./Header";
 import { RatingSection } from "./RatingSection";
 import { ResultsSection } from "./ResultsSection";
@@ -11,7 +11,7 @@ import { TagsSection } from "./TagsSection";
 
 export const Body = () => {
     const calendarFilters = useCalendarFilters();
-    const { tags } = useTagsState();
+    const { tags } = useTagCategoriesState();
 
     const _tags = tags.filter((tag) => !tag.isArchived);
 
