@@ -2,7 +2,7 @@
   "expo": {
     "name": "Pixood",
     "slug": "pixood",
-    "version": "1.86.0",
+    "version": "2.0.0-alpha",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "pixood",
@@ -21,7 +21,7 @@
     ],
     "android": {
       "package": "com.gatienh.pixood",
-      "versionCode": 480018600,
+      "versionCode": 480018601,
       "allowBackup": false,
       "permissions": [],
       "icon": "./assets/images/icon.png",
