@@ -1,23 +1,29 @@
-import { DATE_FORMAT } from '@/constants/Config';
 import { askToCancel, askToDisableStep, askToRemove } from '@/helpers/prompts';
-import useColors from '@/hooks/useColors';
-import { useLogState, useLogUpdater } from '@/hooks/useLogs';
-import { LogEntry } from '@/types/logFormat';
-import { useSettings } from '@/hooks/useSettings';
 import { TemporaryLogState, useTemporaryLog } from '@/hooks/useTemporaryLog';
-import { useNavigation } from '@react-navigation/native';
-import dayjs from 'dayjs';
-import { useRef } from 'react';
-import { Keyboard, Platform, Text, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { v4 as uuidv4 } from "uuid";
-import { SlideAction } from './components/SlideAction';
+import { useLogState, useLogUpdater } from '@/hooks/useLogs';
+import { EntryLoggerSlide } from './slides/EntryLoggerSlide';
+import { useNavigation } from '@react-navigation/native';
 import { SlideHeader } from './components/SlideHeader';
+import { SlideAction } from './components/SlideAction';
+import { Platform, Text, View } from 'react-native';
+import { useSettings } from '@/hooks/useSettings';
+import { DATE_FORMAT } from '@/constants/Config';
+import { LogEntry } from '@/types/logFormat';
+import { useToast } from '@/hooks/useToast';
+import useColors from '@/hooks/useColors';
+import { t } from '@/helpers/translation';
 import { LoggerStep } from './config';
-import { UnifiedLoggerSlide } from './slides/UnifiedLoggerSlide';
+import { v4 as uuidv4 } from "uuid";
+import { useRef } from 'react';
+import dayjs from 'dayjs';
+
+
+
 
 export type LoggerMode = 'create' | 'edit'
 export type LoggerInterface = 'unified'
+
 
 const getAvailableStepsForCreate = ({
     date,
@@ -36,6 +42,7 @@ const getAvailableStepsForCreate = ({
 
     return slides;
 }
+
 
 const getAvailableStepsForEdit = ({
     date,
@@ -57,14 +64,13 @@ const getAvailableStepsForEdit = ({
     return slides;
 }
 
+
 export const LoggerEdit = ({
     id,
     initialStep,
-    interfaceType = 'unified',
 }: {
     id: string
     initialStep?: LoggerStep
-    interfaceType?: LoggerInterface
 }) => {
     const logState = useLogState()
     const LogEntry = logState?.items.find(item => item.id === id)
@@ -79,6 +85,7 @@ export const LoggerEdit = ({
 
     const initialItem: TemporaryLogState = {
         ...LogEntry,
+        // selectedCategorizedTagIds: LogEntry.tags.map(tag => tag.tagId), // debug 
     }
 
     const avaliableSteps = getAvailableStepsForEdit({
@@ -92,21 +99,19 @@ export const LoggerEdit = ({
             initialItem={initialItem}
             initialStep={initialStep}
             avaliableSteps={avaliableSteps}
-            interfaceType={interfaceType}
         />
     )
 }
+
 
 export const LoggerCreate = ({
     dateTime,
     initialStep,
     avaliableSteps,
-    interfaceType = 'unified',
 }: {
     dateTime: string
     initialStep?: LoggerStep
     avaliableSteps?: LoggerStep[]
-    interfaceType?: LoggerInterface
 }) => {
     const _id = useRef(uuidv4())
     const createdAt = useRef(dayjs().toISOString())
@@ -131,47 +136,47 @@ export const LoggerCreate = ({
             initialItem={initialItem}
             initialStep={initialStep}
             avaliableSteps={avaliableSteps}
-            interfaceType={interfaceType}
         />
     )
 }
+
 
 export const Logger = ({
     initialItem,
     initialStep,
     avaliableSteps,
     mode,
-    interfaceType = 'unified',
 }: {
     initialItem: TemporaryLogState,
     initialStep?: LoggerStep;
     avaliableSteps: LoggerStep[];
     mode: LoggerMode
-    interfaceType?: LoggerInterface
 }) => {
     const navigation = useNavigation();
     const colors = useColors()
     const insets = useSafeAreaInsets();
+    const toast = useToast();
 
     const logState = useLogState()
     const logUpdater = useLogUpdater()
 
-    const { toggleStep } = useSettings()
-
     const tempLog = useTemporaryLog(initialItem);
 
-    const texAreaRef = useRef<TextInput>(null)
     const isEditing = mode === 'edit'
     const showDisable = logState.items.length <= 3 && !isEditing;
+
 
     const close = async () => {
         tempLog.reset()
         navigation.goBack();
     }
 
+
     const save = (data: TemporaryLogState) => {
+        // Validate that rating is selected
         if (data.rating === null || data.rating.length === 0) {
-            data.rating = [3] // neutral par défaut
+            toast.show(t('rating_required_message'), 'error')
+            return
         }
 
         if (mode === 'edit') {
@@ -184,14 +189,17 @@ export const Logger = ({
         close()
     }
 
+
     const remove = () => {
         logUpdater.deleteLog(tempLog.data.id)
         close()
     }
 
+
     const cancel = () => {
         close()
     }
+
 
     return (
         <View style={{
@@ -233,7 +241,7 @@ export const Logger = ({
                         }}
                     />
                 </View>
-                <UnifiedLoggerSlide
+                <EntryLoggerSlide
                     onRatingChange={(rating) => tempLog.update({ rating })}
                     onTagsChange={(tagIds) => tempLog.update({ selectedCategorizedTagIds: tagIds })}
                     onMessageChange={(notes) => tempLog.update({ notes })}

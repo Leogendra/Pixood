@@ -1,11 +1,13 @@
 import { Dimensions, Platform, Pressable, View } from 'react-native';
+import { NUMBER_OF_RATINGS } from '@/constants/Config';
 import { Check } from 'react-native-feather';
 import useHaptics from '@/hooks/useHaptics';
 import { useTheme } from '@/hooks/useTheme';
 import useScale from '@/hooks/useScale';
 
-const SCREEN_HEIGHT = Dimensions.get('screen').height;
-
+const SCREEN_WIDTH = Dimensions.get('screen').width;
+const PADDING = 40; // 20 on each side
+const GAP = 8;
 
 
 
@@ -20,8 +22,13 @@ export const SlideMoodButton = ({
     const { colors: scale } = useScale();
     const theme = useTheme();
 
-    const height = Math.max(40, SCREEN_HEIGHT * 0.48 / 7);
-    const width = height * 2.4;
+    const width = Math.min(
+        50,
+        Math.max(
+            30,
+            (SCREEN_WIDTH - PADDING - (GAP * (NUMBER_OF_RATINGS - 1))) / NUMBER_OF_RATINGS
+        )
+    );
 
     return (
         <Pressable
@@ -36,7 +43,7 @@ export const SlideMoodButton = ({
                 borderRadius: 12,
                 marginBottom: 8,
                 width,
-                height,
+                aspectRatio: 1,
                 opacity: pressed ? 0.8 : 1,
                 alignItems: 'center',
                 justifyContent: 'center',

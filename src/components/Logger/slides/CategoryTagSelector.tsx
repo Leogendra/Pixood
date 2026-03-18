@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import { CategorizedTag, TagCategory } from '@/types/tagCategories';
+import { useTagCategoriesState } from '@/hooks/useTagCategories';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { t } from '@/helpers/translation';
 import useColors from '@/hooks/useColors';
-import { useTagCategoriesState } from '@/hooks/useTagCategories';
-import { CategorizedTag, TagCategory } from '@/types/tagCategories';
+import React, { useState } from 'react';
+
+
+
 
 interface CategoryTagSelectorProps {
     selectedTagIds: string[];
@@ -12,7 +15,8 @@ interface CategoryTagSelectorProps {
     onDisableStep?: () => void;
 }
 
-export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
+
+export const    CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
     selectedTagIds,
     onTagsChange,
     showDisable = false,
@@ -30,6 +34,7 @@ export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
         );
     };
 
+
     const toggleTag = (tagId: string) => {
         const newSelectedTags = selectedTagIds.includes(tagId)
             ? selectedTagIds.filter(id => id !== tagId)
@@ -38,14 +43,17 @@ export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
         onTagsChange(newSelectedTags);
     };
 
+
     const getCategoryTags = (categoryId: string): CategorizedTag[] => {
         return tagState.tags.filter(tag => tag.categoryId === categoryId && !tag.isArchived);
     };
+
 
     const getSelectedTagsCount = (categoryId: string): number => {
         const categoryTags = getCategoryTags(categoryId);
         return categoryTags.filter(tag => selectedTagIds.includes(tag.id)).length;
     };
+
 
     if (!tagState.loaded) {
         return (
@@ -62,6 +70,7 @@ export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
         );
     }
 
+    
     return (
         <View>
             {tagState.categories.map((category: TagCategory) => {
@@ -72,7 +81,7 @@ export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
                 if (categoryTags.length === 0) return null;
 
                 return (
-                    <View key={category.id} style={{ marginBottom: 16 }}>
+                    <View key={category.id} style={{ marginBottom: 10 }}>
                         {/* Category header */}
                         <TouchableOpacity
                             onPress={() => toggleCategory(category.id)}
@@ -81,10 +90,13 @@ export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
                                 padding: 16,
-                                backgroundColor: colors.background,
-                                borderRadius: 12,
+                                backgroundColor: colors.backgroundSecondary,
+                                borderTopLeftRadius: 12,
+                                borderTopRightRadius: 12,
+                                borderBottomLeftRadius: isExpanded ? 0 : 12,
+                                borderBottomRightRadius: isExpanded ? 0 : 12,
                                 borderWidth: 1,
-                                borderColor: isExpanded ? colors.tint : colors.cardBorder,
+                                borderColor: colors.cardBorder,
                             }}
                         >
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -121,20 +133,21 @@ export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
                                     color: colors.textSecondary,
                                     transform: [{ rotate: isExpanded ? '90deg' : '0deg' }],
                                 }}>
-                                    ›
+                                    ▶
                                 </Text>
                             </View>
                         </TouchableOpacity>
 
-                        {/* Category tags */}
+                        {/* Tags */}
                         {isExpanded && (
                             <View style={{
-                                marginTop: 8,
-                                padding: 16,
+                                padding: 12,
                                 backgroundColor: colors.cardBackground,
-                                borderRadius: 12,
+                                borderBottomLeftRadius: 12,
+                                borderBottomRightRadius: 12,
                                 borderWidth: 1,
                                 borderColor: colors.cardBorder,
+                                borderTopWidth: 0,
                             }}>
                                 <View style={{
                                     flexDirection: 'row',
@@ -159,7 +172,7 @@ export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
                                             >
                                                 <Text style={{
                                                     color: isSelected ? colors.primaryButtonText : colors.text,
-                                                    fontSize: 14,
+                                                    fontSize: 12,
                                                     fontWeight: isSelected ? '600' : '400',
                                                 }}>
                                                     {tag.title}
@@ -183,29 +196,6 @@ export const CategoryTagSelector: React.FC<CategoryTagSelectorProps> = ({
                     </View>
                 );
             })}
-
-            {/* Disable option */}
-            {showDisable && (
-                <TouchableOpacity
-                    onPress={onDisableStep}
-                    style={{
-                        padding: 16,
-                        backgroundColor: colors.cardBackground,
-                        borderRadius: 12,
-                        borderWidth: 1,
-                        borderColor: colors.cardBorder,
-                        marginTop: 8,
-                    }}
-                >
-                    <Text style={{
-                        color: colors.textSecondary,
-                        textAlign: 'center',
-                        fontSize: 14,
-                    }}>
-                        {t('log_tags_disable')}
-                    </Text>
-                </TouchableOpacity>
-            )}
         </View>
     );
 };

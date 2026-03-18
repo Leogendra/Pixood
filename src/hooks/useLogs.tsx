@@ -1,3 +1,4 @@
+import { NUMBER_OF_RATINGS, LOGS_STORAGE_KEY } from "@/constants/Config";
 import { load, store } from "@/helpers/storage";
 import { LogEntry } from "@/types/logFormat";
 import { Buffer } from "buffer";
@@ -11,42 +12,10 @@ import {
     useMemo,
     useReducer,
 } from "react";
-import { v4 as uuidv4 } from "uuid";
 
-export { LogEntry };
+export { LogEntry, LOGS_STORAGE_KEY };
 
-
-export const STORAGE_KEY = "PIXEL_TRACKER_LOGS";
-
-// Deprecated - kept for migration compatibility
-export const RATING_MAPPING = {
-    extremely_good: 6,
-    very_good: 5,
-    good: 4,
-    neutral: 3,
-    bad: 2,
-    very_bad: 1,
-    extremely_bad: 0,
-};
-
-export const SLEEP_QUALITY_MAPPING = {
-    very_good: 4,
-    good: 3,
-    neutral: 2,
-    bad: 1,
-    very_bad: 0,
-};
-
-// Deprecated - Use NUMBER_OF_RATINGS from Config instead
-export const RATING_KEYS = Object.keys(
-    RATING_MAPPING
-) as (keyof typeof RATING_MAPPING)[];
-export const SLEEP_QUALITY_KEYS = Object.keys(
-    SLEEP_QUALITY_MAPPING
-) as (keyof typeof SLEEP_QUALITY_MAPPING)[];
-
-// New: Generate array of rating values dynamically
-import { NUMBER_OF_RATINGS } from "@/constants/Config";
+// New: Generate array of rating values dynamically (1 to NUMBER_OF_RATINGS)
 export const RATING_VALUES = Array.from({ length: NUMBER_OF_RATINGS }, (_, i) => i + 1);
 
 
@@ -55,7 +24,6 @@ export interface LogDay {
     items: LogEntry[];
     ratingAvg: number;
     metricsAvg: Record<string, number>;
-    sleepQualityAvg: number | null;
 }
 
 export interface LogsState {
@@ -178,7 +146,7 @@ function LogsProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         (async () => {
             try {
-                const value = await load<LogsState>(STORAGE_KEY);
+                const value = await load<LogsState>(LOGS_STORAGE_KEY);
                 const size = Buffer.byteLength(JSON.stringify(value));
                 const megaBytes = Math.round((size / 1024 / 1024) * 100) / 100;
                 if (value !== null) {
@@ -202,7 +170,7 @@ function LogsProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (state.loaded) {
-            store<Omit<LogsState, "loaded">>(STORAGE_KEY, _.omit(state, "loaded"));
+            store<Omit<LogsState, "loaded">>(LOGS_STORAGE_KEY, _.omit(state, "loaded"));
         }
     }, [JSON.stringify(state)]);
 

@@ -3,15 +3,15 @@ import { renderHook, act } from "@testing-library/react-hooks";
 import {
   LogsProvider,
   useLogState,
-  STORAGE_KEY as STORAGE_KEY_LOGS,
+  LOGS_STORAGE_KEY,
   LogsState,
 } from "../hooks/useLogs";
 import {
   SettingsProvider,
   useSettings,
-  STORAGE_KEY as STORAGE_KEY_SETTINGS,
   INITIAL_STATE as INITIAL_STATE_SETTINGS,
 } from "../hooks/useSettings";
+import { SETTINGS_STORAGE_KEY } from "@/constants/Config";
 
 import {
   STORAGE_KEY as STORAGE_KEY_TAGS,
@@ -104,7 +104,7 @@ describe("useTags()", () => {
     }];
 
     AsyncStorage.setItem(
-      STORAGE_KEY_SETTINGS,
+      SETTINGS_STORAGE_KEY,
       JSON.stringify({
         ...INITIAL_STATE_SETTINGS,
         tags: _testTags,
@@ -140,7 +140,7 @@ describe("useTags()", () => {
   });
 
   test("should updateTag", async () => {
-    AsyncStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify({ items: testItems }));
+    AsyncStorage.setItem(LOGS_STORAGE_KEY, JSON.stringify({ items: testItems }));
 
     let hook = _renderHook();
     await hook.waitForNextUpdate();
@@ -158,7 +158,7 @@ describe("useTags()", () => {
   });
 
   test("should deleteTag", async () => {
-    AsyncStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify({ items: testItems }));
+    AsyncStorage.setItem(LOGS_STORAGE_KEY, JSON.stringify({ items: testItems }));
 
     let hook = _renderHook();
     await hook.waitForNextUpdate();

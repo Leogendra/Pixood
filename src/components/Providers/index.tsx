@@ -1,30 +1,34 @@
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { CalendarFiltersProvider } from "@/hooks/useCalendarFilters";
-import { LogsProvider } from "@/hooks/useLogs";
-import { SettingsProvider } from "@/hooks/useSettings";
-import { StatisticsProvider } from "@/hooks/useStatistics";
-import { TagsProvider } from "@/hooks/useTags";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { TagCategoriesProvider } from "@/hooks/useTagCategories";
 import { TemporaryLogProvider } from "@/hooks/useTemporaryLog";
+import { StatisticsProvider } from "@/hooks/useStatistics";
+import { SettingsProvider } from "@/hooks/useSettings";
+import { LogsProvider } from "@/hooks/useLogs";
+import { TagsProvider } from "@/hooks/useTags";
+
+
+
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <SafeAreaProvider>
-      <SettingsProvider>
-        <LogsProvider>
-            <TagsProvider>
-              <TagCategoriesProvider>
-                <TemporaryLogProvider>
-                  <CalendarFiltersProvider>
-                    <StatisticsProvider>{children}</StatisticsProvider>
-                  </CalendarFiltersProvider>
-                </TemporaryLogProvider>
-              </TagCategoriesProvider>
-            </TagsProvider>
-          </LogsProvider>
-      </SettingsProvider>
-    </SafeAreaProvider>
-  );
+    return (
+        <SafeAreaProvider>
+            <SettingsProvider>
+                <LogsProvider>
+                    <TagsProvider>
+                        <TagCategoriesProvider>
+                            <TemporaryLogProvider>
+                                <CalendarFiltersProvider>
+                                    <StatisticsProvider>{children}</StatisticsProvider>
+                                </CalendarFiltersProvider>
+                            </TemporaryLogProvider>
+                        </TagCategoriesProvider>
+                    </TagsProvider>
+                </LogsProvider>
+            </SettingsProvider>
+        </SafeAreaProvider>
+    );
 };
+
 
 export default Providers;

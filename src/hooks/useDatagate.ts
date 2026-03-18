@@ -1,16 +1,17 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import dayjs from "dayjs";
-import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system";
-import * as Sharing from "expo-sharing";
-import { Alert, Platform } from "react-native";
-import { getJSONSchemaType, ImportData } from "@/helpers/Import";
-import { migrateImportData } from "@/helpers/migration";
 import { askToImport, askToReset, showImportError, showImportSuccess, showResetSuccess } from "@/helpers/prompts";
+import { LOGS_STORAGE_KEY, TAGS_STORAGE_KEY, SETTINGS_STORAGE_KEY } from "@/constants/Config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LogsState, useLogState, useLogUpdater } from "./useLogs";
+import { getJSONSchemaType, ImportData } from "@/helpers/Import";
+import { Tag, useTagsState, useTagsUpdater } from "./useTags";
+import { ExportSettings, useSettings } from "./useSettings";
+import { migrateImportData } from "@/helpers/migration";
+import * as DocumentPicker from "expo-document-picker";
+import { Alert, Platform } from "react-native";
+import * as FileSystem from "expo-file-system";
 import { t } from "@/helpers/translation";
-import { LogsState, STORAGE_KEY as STORAGE_KEY_LOGS, useLogState, useLogUpdater } from "./useLogs";
-import { ExportSettings, STORAGE_KEY as STORAGE_KEY_SETTINGS, useSettings } from "./useSettings";
-import { STORAGE_KEY as STORAGE_KEY_TAGS, Tag, useTagsState, useTagsUpdater } from "./useTags";
+import * as Sharing from "expo-sharing";
+import dayjs from "dayjs";
 
 type ResetType = "factory" | "data"
 
@@ -38,20 +39,20 @@ export const useDatagate = (): {
 
     const dangerouslyImportDirectlyToAsyncStorage = async (data: ImportData) => {
         await AsyncStorage.multiRemove([
-            STORAGE_KEY_TAGS,
-            STORAGE_KEY_LOGS,
-            STORAGE_KEY_SETTINGS,
+            TAGS_STORAGE_KEY,
+            LOGS_STORAGE_KEY,
+            SETTINGS_STORAGE_KEY,
         ]);
 
         await AsyncStorage.setItem(
-            STORAGE_KEY_LOGS,
+            LOGS_STORAGE_KEY,
             JSON.stringify({
                 items: data.items,
             })
         );
 
         await AsyncStorage.setItem(
-            STORAGE_KEY_SETTINGS,
+            SETTINGS_STORAGE_KEY,
             JSON.stringify({
                 ...data.settings,
                 actionsDone: [{

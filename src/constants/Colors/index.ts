@@ -56,6 +56,7 @@ const light = {
     backgroundTertiary: colors.neutral[50],
     link: tintColorLight,
     tint: tintColorLight,
+    tintSecondary: colors.red[500],
 
     loadingIndicator: colors.neutral[500],
 
@@ -77,6 +78,13 @@ const light = {
     logActionBackground: colors.neutral[200],
     logActionBorder: tintColorLight,
     logActionText: colors.neutral[500],
+
+    toastBackgroundError: "#EF4444",
+    toastBackgroundSuccess: "#22C55E",
+    toastBackgroundInfo: "#3B82F6",
+    toastTextError: '#FFF',
+    toastTextSuccess: '#FFF',
+    toastTextInfo: '#FFF',
 
     tagBackground: colors.white,
     tagText: colors.neutral[800],
@@ -253,9 +261,6 @@ const light = {
     chatBotMessageBackground: colors.white,
     chatBotMessageText: colors.black,
 
-    sleepQualityEmpty: colors.indigo[100],
-    sleepQualityFull: colors.indigo[500],
-
     switchThumbColor: '#333',
     scales: scales.light,
     tags: tagsLight,
@@ -277,9 +282,10 @@ const dark: IColors & {
     textSecondary: colors.neutral[400],
     background: '#000',
     backgroundSecondary: colors.neutral[800],
-    backgroundTertiary: colors.neutral[800],
+    backgroundTertiary: colors.neutral[700],
     link: tintColorDark,
     tint: tintColorDark,
+    tintSecondary: colors.red[500],
 
     loadingIndicator: '#fff',
 
@@ -301,6 +307,13 @@ const dark: IColors & {
     logActionBackground: colors.neutral[800],
     logActionBorder: tintColorDark,
     logActionText: colors.neutral[300],
+
+    toastBackgroundError: "#EF4444",
+    toastBackgroundSuccess: "#22C55E",
+    toastBackgroundInfo: "#3B82F6",
+    toastTextError: '#FFF',
+    toastTextSuccess: '#FFF',
+    toastTextInfo: '#FFF',
 
     tagBackground: colors.neutral[900],
     tagText: colors.neutral[200],
@@ -378,7 +391,7 @@ const dark: IColors & {
     dangerButtonText: colors.red[500],
     dangerButtonBorder: colors.neutral[800],
 
-    textInputBackground: colors.neutral[800],
+    textInputBackground: colors.neutral[700],
     textInputText: colors.neutral[200],
     textInputPlaceholder: colors.neutral[500],
     textInputBorder: colors.neutral[900],
@@ -475,9 +488,6 @@ const dark: IColors & {
     chatBotMessageText: colors.white,
     chatUserMessageBackground: colors.blue[800],
     chatUserMessageText: colors.white,
-
-    sleepQualityEmpty: colors.indigo[800],
-    sleepQualityFull: colors.indigo[400],
 
     switchThumbColor: '#FFF',
     scales: scales.dark,

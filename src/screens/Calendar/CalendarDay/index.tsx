@@ -30,15 +30,19 @@ const CalendarDay = memo(function CalendarDay({
 
     const _isFiltered = (!isFiltered && isFiltering)
 
+
     const day = useMemo(() => dayjs(dateString).date(), [dateString]);
+
 
     const isFuture = useMemo(() => {
         return dayjs(dateString).isAfter(dayjs(), 'day');
     }, [dateString, dayjs().format(DATE_FORMAT)]);
 
+
     const isToday = useMemo(() => {
         return dayjs(dateString).isSame(dayjs(), 'day');
     }, [dateString, dayjs().format(DATE_FORMAT)]);
+
 
     const backgroundColor = useMemo(() => (
         isFuture || _isFiltered || (!rating && isFiltering) ?
@@ -54,6 +58,7 @@ const CalendarDay = memo(function CalendarDay({
             )
     ), [colors, isFuture, _isFiltered, isFiltering, rating, scaleColors]);
 
+
     const containerStyles = useStyle(() => [
         styles.container,
         {
@@ -63,6 +68,7 @@ const CalendarDay = memo(function CalendarDay({
             borderColor: (!isFiltering && !rating) ? scaleColors.empty.border : 'transparent',
         }
     ], [rating, isFuture, isFiltering, backgroundColor, colors, scaleColors])
+
 
     const textColor = useMemo(() => (
         _isFiltered ? (
@@ -74,6 +80,7 @@ const CalendarDay = memo(function CalendarDay({
         )
     ), [rating, scaleColors, colors])
 
+
     const dayNumberBackgroundColor = useMemo(() => (
         isToday ?
             (chroma(backgroundColor).luminance() < 0.5 ?
@@ -82,12 +89,14 @@ const CalendarDay = memo(function CalendarDay({
             ) : 'transparent'
     ), [isToday, backgroundColor])
 
+
     const dayNumberParent2Styles = useStyle(() => [
         styles.dayNumberParent2,
         {
             backgroundColor: dayNumberBackgroundColor,
         }
     ], [dayNumberBackgroundColor])
+
 
     const dayNumberTextStyles = useStyle(() => [
         {
@@ -109,12 +118,14 @@ const CalendarDay = memo(function CalendarDay({
         }
     ], [isToday, isFuture, _isFiltered, isFiltering, rating, backgroundColor, textColor])
 
+
     const _onPress = useCallback(() => {
         if (!isFuture) {
             haptics.selection()
             onPress()
         }
     }, [dateString, isFuture, onPress])
+
 
     return (
         <Pressable
@@ -130,6 +141,7 @@ const CalendarDay = memo(function CalendarDay({
         </Pressable>
     );
 })
+
 
 const styles = StyleSheet.create({
     container: {
@@ -159,5 +171,6 @@ const styles = StyleSheet.create({
         borderRadius: 100,
     }
 });
+
 
 export default CalendarDay;

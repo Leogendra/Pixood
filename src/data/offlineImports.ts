@@ -11,6 +11,7 @@ export interface OfflineImportUser {
 const baseSettings = {
     palettePresetId: INITIAL_STATE.palettePresetId,
     customPalette: INITIAL_STATE.customPalette,
+    theme: INITIAL_STATE.theme,
     reminderEnabled: INITIAL_STATE.reminderEnabled,
     reminderTime: INITIAL_STATE.reminderTime,
     actionsDone: [],

@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 import useColors from "@/hooks/useColors";
-import { RATING_KEYS } from "@/hooks/useLogs";
+import { NUMBER_OF_RATINGS } from "@/constants/Config";
 import { Bar } from "./Bar";
 
 export const Content = ({
@@ -8,7 +8,7 @@ export const Content = ({
 }: {
   data: {
     values: {
-      [key: string]: number;
+      [key: number]: number;
     };
     total: number;
   };
@@ -28,12 +28,11 @@ export const Content = ({
           marginTop: 16,
         }}
       >
-        {[...RATING_KEYS].reverse().map((ratingName) => (
+        {Array.from({ length: NUMBER_OF_RATINGS }, (_, i) => NUMBER_OF_RATINGS - i).map((ratingValue) => (
           <Bar
-            key={`rating-bar-${ratingName}`}
-            // @ts-ignore
-            height={data.values[ratingName] / data.total * 400}
-            ratingName={ratingName} />
+            key={`rating-bar-${ratingValue}`}
+            height={data.values[ratingValue] / data.total * 400}
+            ratingValue={ratingValue} />
         ))}
       </View>
       <View
@@ -44,28 +43,28 @@ export const Content = ({
           paddingHorizontal: 16,
         }}
       >
-        {[...RATING_KEYS].reverse().map((ratingName) => (
+        {Array.from({ length: NUMBER_OF_RATINGS }, (_, i) => NUMBER_OF_RATINGS - i).map((ratingValue) => (
           <View
             style={{
               alignItems: "center",
               justifyContent: "flex-end",
-              flex: RATING_KEYS.length,
+              flex: NUMBER_OF_RATINGS,
               marginHorizontal: 2,
             }}
-            key={`rating-count-${ratingName}`}
+            key={`rating-count-${ratingValue}`}
           >
             <Text
-              key={`text-${ratingName}`}
+              key={`text-${ratingValue}`}
               style={{
                 width: '100%',
                 marginTop: 8,
                 color: colors.text,
-                opacity: data.values[ratingName] === 0 ? 0.3 : 1,
+                opacity: data.values[ratingValue] === 0 ? 0.3 : 1,
                 textAlign: "center",
                 fontSize: 12,
                 fontWeight: "bold",
               }}
-            >{data.values[ratingName]}x</Text>
+            >{data.values[ratingValue]}x</Text>
           </View>
         ))}
       </View>

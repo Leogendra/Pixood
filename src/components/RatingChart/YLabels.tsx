@@ -1,4 +1,4 @@
-import { RATING_KEYS } from '@/hooks/useLogs';
+import { NUMBER_OF_RATINGS } from '@/constants/Config';
 import useScale from '@/hooks/useScale';
 import { Rect } from 'react-native-svg';
 
@@ -12,7 +12,7 @@ export const YLabels = ({
 
     return (
         <>
-            {[...RATING_KEYS].reverse().map((rating, index) => {
+            {Array.from({ length: NUMBER_OF_RATINGS }, (_, i) => NUMBER_OF_RATINGS - i).map((rating, index) => {
                 const y = relativeY(index);
                 return (
                     <Rect

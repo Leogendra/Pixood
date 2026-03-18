@@ -19,7 +19,6 @@ import {
   TagsDistributionData
 } from "./TagsDistribution";
 import { getTagsPeaksData, TagsPeakData } from "./TagsPeaks";
-import { SleepQualityDistributionData, defaultSleepQualityDistributionDataForXDays, getSleepQualityDistributionForXDays } from "./SleepQualityDistribution";
 import { DATE_FORMAT } from "@/constants/Config";
 
 const DELAY_LOADING = 1 * 1000;
@@ -42,7 +41,6 @@ interface StatisticsState {
   moodPeaksNegativeData: MoodPeaksNegativeData;
   tagsPeaksData: TagsPeakData;
   tagsDistributionData: TagsDistributionData;
-  sleepQualityDistributionData: SleepQualityDistributionData;
   streaks: StreaksData;
 }
 
@@ -74,7 +72,6 @@ export function StatisticsProvider({
     moodPeaksPositiveData: defaultMoodPeaksPositiveData,
     moodPeaksNegativeData: defaultMoodPeaksNegativeData,
     tagsDistributionData: defaultTagsDistributionData,
-    sleepQualityDistributionData: defaultSleepQualityDistributionDataForXDays(),
     streaks: defaultStreaksData,
     tagsPeaksData: {
       tags: [],
@@ -108,8 +105,6 @@ export function StatisticsProvider({
       tags
     );
 
-    const sleepQualityDistributionData = getSleepQualityDistributionForXDays(highlightItems, dayjs().subtract(14, "day").format(DATE_FORMAT), 30);
-
     const newState = {
       loaded: true,
       itemsCount: highlightItems.length,
@@ -118,7 +113,6 @@ export function StatisticsProvider({
       moodPeaksNegativeData,
       tagsPeaksData,
       tagsDistributionData,
-      sleepQualityDistributionData,
       streaks: {
         longest: getLongestStreak(logState.items),
         current: getCurrentStreak(logState.items),
@@ -151,9 +145,6 @@ export function StatisticsProvider({
     }
     if (type === "tags_distribution") {
       return state.tagsDistributionData?.tags.length > 0;
-    }
-    if (type === "sleep_quality_distribution") {
-      return state.sleepQualityDistributionData?.length > 7;
     }
     return false;
   };

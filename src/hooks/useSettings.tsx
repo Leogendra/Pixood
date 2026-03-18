@@ -1,6 +1,6 @@
 import { adjustPaletteSizeInterpolate } from "@/constants/Colors/PaletteUtils";
 import { LoggerStep, STEP_OPTIONS } from "@/components/Logger/config";
-import { STORAGE_KEY, COLOR_PALETTE_PRESETS } from "@/constants/Config";
+import { SETTINGS_STORAGE_KEY, COLOR_PALETTE_PRESETS } from "@/constants/Config";
 import { load, store } from "@/helpers/storage";
 import "react-native-get-random-values";
 import { v4 as uuidv4 } from "uuid";
@@ -53,7 +53,6 @@ export const INITIAL_STATE: SettingsState = {
     actionsDone: [],
     steps: [
         "rating",
-        "sleep",
         "tags",
         "message"
     ],
@@ -98,7 +97,7 @@ function SettingsProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         (async () => {
-            const json = await load<SettingsState>(STORAGE_KEY);
+            const json = await load<SettingsState>(SETTINGS_STORAGE_KEY);
             if (json !== null) {
                 if (!json.deviceId) {
                     json.deviceId = uuidv4();
@@ -120,7 +119,7 @@ function SettingsProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         if (settings.loaded) {
-            store(STORAGE_KEY, _.omit(settings, 'loaded'));
+            store(SETTINGS_STORAGE_KEY, _.omit(settings, 'loaded'));
         }
     }, [JSON.stringify(settings)]);
 

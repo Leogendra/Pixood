@@ -1,12 +1,10 @@
-import * as Localization from 'expo-localization';
-import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat'
+import * as Localization from 'expo-localization';
 import weekOfYear from 'dayjs/plugin/weekOfYear'
+import dayjs from 'dayjs';
 
-const translations: Record<string, Record<string, string>> = {
-    en: require('../../assets/locales/en.json'),
-    fr: require('../../assets/locales/fr.json'),
-};
+
+
 
 // https://unicode.org/Public/cldr/37/core.zip
 const firstDayOfWeek = {
@@ -32,21 +30,26 @@ const firstDayOfWeek = {
     ],
 }
 
+
+const translations: Record<string, Record<string, string>> = {
+    en: require('../../assets/locales/en.json'),
+    fr: require('../../assets/locales/fr.json'),
+};
+
+
 const dayjs_locales = {
     en: require('dayjs/locale/en'),
     fr: require('dayjs/locale/fr'),
 }
 
 
-const getLocale = () => {
+function getLocale() {
     let locale = Localization.locale || 'en';
     if (locale.includes('-')) locale = locale.split('-')[0];
     if (!translations[locale]) locale = 'en';
     return locale;
 };
 
-export const locale = getLocale();
-export const language = locale;
 
 const _getFirstDayOfWeek = (region: string): number => {
     for (const dayStr in firstDayOfWeek) {
@@ -59,6 +62,7 @@ const _getFirstDayOfWeek = (region: string): number => {
     return 1;
 }
 
+
 export const initializeDayjs = () => {
     let locale = Localization.locale;
     if (locale.includes('-')) locale = locale.split('-')[0];
@@ -68,7 +72,8 @@ export const initializeDayjs = () => {
         if (dayjs.Ls[locale] && Localization.region !== null) {
             dayjs.Ls[locale].weekStart = _getFirstDayOfWeek(Localization.region);
         }
-    } else {
+    } 
+    else {
         dayjs.locale('en')
     }
 
@@ -76,10 +81,11 @@ export const initializeDayjs = () => {
     dayjs.extend(localizedFormat)
 }
 
+
 export function t(key: string, options?: Record<string, any>): string {
     const locale = getLocale();
     const dict = translations[locale] || {};
-    let value = dict[key] || key;
+    let value = dict[key] || `[${key}]`; // Default value to better see when a key is missing
     if (options) {
         Object.keys(options).forEach(k => {
             value = value.replace(`{{${k}}}`, options[k]);
@@ -87,3 +93,9 @@ export function t(key: string, options?: Record<string, any>): string {
     }
     return value;
 }
+
+
+
+
+export const locale = getLocale();
+export const language = locale;

@@ -1,8 +1,8 @@
-// Removed AsyncStorage import
+import { INITIAL_STATE, SettingsProvider, useSettings } from '../hooks/useSettings';
+import { SETTINGS_STORAGE_KEY } from "@/constants/Config";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { act, renderHook } from '@testing-library/react-hooks'
 import _ from 'lodash'
-import { INITIAL_STATE, SettingsProvider, STORAGE_KEY, useSettings } from '../hooks/useSettings'
 
 const wrapper = ({ children }) => (
   <SettingsProvider>
@@ -47,7 +47,7 @@ describe('useSettings()', () => {
   })
 
   test('should load from settings async storage & initialize device id if missing', async () => {
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({
+    AsyncStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({
       ...INITIAL_STATE,
       reminderTime: '12:00',
     }))
@@ -65,7 +65,7 @@ describe('useSettings()', () => {
   })
 
   test('should initiate with empty `settings` when async storage is falsely', async () => {
-    AsyncStorage.setItem(STORAGE_KEY, '🐇')
+    AsyncStorage.setItem(SETTINGS_STORAGE_KEY, '🐇')
     const hook = _renderHook()
     await hook.waitForNextUpdate()
     expect(console.error).toHaveBeenCalled();
@@ -99,7 +99,7 @@ describe('useSettings()', () => {
     }]
 
     expect(hook.result.current.state.settings.actionsDone).toEqual(ACTIONS_DONE)
-    const json = await AsyncStorage.getItem(STORAGE_KEY)
+    const json = await AsyncStorage.getItem(SETTINGS_STORAGE_KEY)
     expect(JSON.parse(json!)).toEqual({
       ..._.omit(LOADED_STATE, 'loaded'),
       actionsDone: ACTIONS_DONE,
@@ -124,7 +124,7 @@ describe('useSettings()', () => {
     }]
 
     expect(hook.result.current.state.settings.actionsDone).toEqual(ACTIONS_DONE)
-    const json = await AsyncStorage.getItem(STORAGE_KEY)
+    const json = await AsyncStorage.getItem(SETTINGS_STORAGE_KEY)
     expect(JSON.parse(json!)).toEqual({
       ..._.omit(LOADED_STATE, 'loaded'),
       actionsDone: ACTIONS_DONE,
@@ -183,8 +183,6 @@ describe('useSettings()', () => {
 
     expect(hook.result.current.state.settings.steps).toEqual([
       "rating",
-      "sleep",
-      "emotions",
       "tags",
       "message",
     ])

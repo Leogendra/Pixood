@@ -1,6 +1,5 @@
 import { adjustPaletteSizeInterpolate, getTextColor, getSecondaryTextColor } from './PaletteUtils';
 import { COLOR_PALETTE_PRESETS, NUMBER_OF_RATINGS } from '../Config';
-import { useTheme } from "@/hooks/useTheme";
 import colors from './TailwindColors';
 import chroma from 'chroma-js';
 
@@ -72,9 +71,7 @@ export default {
 };
 
 
-export function getCustomScale(palette: string[]): IScale {
-    const theme = useTheme();
-
+export function getCustomScale(palette: string[], theme: 'light' | 'dark'): IScale {
     let emptyColor: string = colors.neutral[100];
     if (theme === 'dark') {
         emptyColor = colors.neutral[800]
