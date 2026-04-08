@@ -5,7 +5,7 @@ Pixood is a minimalist mood tracking app to log your daily moods and visualize t
 - All data is stored locally on the device (no cloud sync)
 - Supports iOS, Android, and Web
 
-This project is a **fork** of the original [Pixy Mood Tracker](https://github.com/mrzmyr/pixy-mood-tracker) app. It aims to maintain and simplify the app while removing all cloud dependencies with a **fully local storage**, and preparing for future enhancements. For more information, visit the original mrzmyr's repository.
+This project is a **hard fork** of the [Pixy Mood Tracker](https://github.com/mrzmyr/pixy-mood-tracker) app. It aims to maintain and simplify the app while removing all cloud dependencies with a **fully local storage**, and preparing for future enhancements. For more information, visit the original mrzmyr's repository.
 
 ## Prerequisites
 
