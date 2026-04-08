@@ -61,7 +61,7 @@
     "expo-status-bar": "~1.4.4",
     "expo-store-review": "~6.2.1",
     "jotai": "^2.0.2",
-    "lodash": "^4.17.21",
+    "lodash": "^4.18.1",
     "lucide-react-native": "^0.104.0",
     "react": "18.2.0",
     "react-color-palette": "^7.3.1",
